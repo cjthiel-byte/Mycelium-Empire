@@ -747,7 +747,7 @@
     /* ── Particles ── */
     .particle {
       position: fixed;
-      font-size: 12px;
+      font-size: 18px;
       font-weight: 500;
       color: #9FE1CB;
       pointer-events: none;
@@ -836,7 +836,7 @@
       <div id="progress-bar">
         <div id="progress-fill"></div>
       </div>
-      <div id="pulse-info">Hivemind pulse: 0%</div>
+      <div id="pulse-info">Hivemind pulse: 0% · Next pulse: —</div>
       <div id="sporulate-wrap">
         <button id="sporulate-btn" onclick="toggleSporulatePanel()">🧬 Sporulate — Ascend &amp; Evolve</button>
         <div id="sporulate-panel">
@@ -852,7 +852,8 @@
         </div>
       </div>
       <div id="save-info">Auto-saves every 30s</div>
-      <button id="reset-btn" onclick="resetGame()">Reset game</button>
+      <button id="reset-btn" onclick="resetGame()" style="margin-top:auto;opacity:0.5;"
+        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">Reset game</button>
     </div>
     <div id="right">
       <div id="tabs">
@@ -1344,8 +1345,8 @@
         btn.classList.toggle('disabled', !can);
         btn.classList.toggle('can-afford', can);
         btn.querySelector('[data-cost]').textContent = fmt(cost) + ' sp';
-        const sps = (p.baseSps * getSeasonMult(p.id) * BIOMES[state.biomeIdx].prodMult * getPrestigeMult()).toFixed(1);
-        btn.querySelector('[data-owned]').textContent = `Owned: ${p.owned}  ·  +${sps}/s each`;
+        const sps = (p.baseSps * getSeasonMult(p.id) * BIOMES[state.biomeIdx].prodMult * getPrestigeMult());
+        btn.querySelector('[data-owned]').textContent = `Owned: ${p.owned}  ·  +${fmt(sps)}/s each`;
       });
     }
 
@@ -1496,7 +1497,8 @@
       document.getElementById('total-spores').textContent = fmt(state.spores);
       document.getElementById('sps').textContent = fmt(getSps()) + '/s';
       document.getElementById('progress-fill').style.width = state.hivemind + '%';
-      document.getElementById('pulse-info').textContent = `Hivemind pulse: ${Math.floor(state.hivemind)}%`;
+      const predictedBonus = Math.ceil(getSps() * 30 + getClickValue() * 50);
+      document.getElementById('pulse-info').textContent = `Hivemind pulse: ${Math.floor(state.hivemind)}% · Next pulse: +${fmt(predictedBonus)} sp`;
     }
 
     function updateBiomeTag() {
