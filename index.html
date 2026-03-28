@@ -507,51 +507,80 @@
     function getCost(p) { return Math.ceil(p.baseCost * Math.pow(1.15, p.owned)); }
     function getSps() { return state.producers.reduce((s, p) => s + p.baseSps * p.owned, 0); }
 
-    function makeItem(onTap, canAfford, nameHTML, costText, descText, ownedText) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'item' + (canAfford ? '' : ' disabled');
-      btn.innerHTML = `
-        <div class="item-top">
-          <span class="item-name">${nameHTML}</span>
-          <span class="item-cost">${costText}</span>
-        </div>
-        <div class="item-desc">${descText}</div>
-        ${ownedText ? `<div class="item-owned">${ownedText}</div>` : ''}
-      `;
-      btn.addEventListener('click', onTap);
-      return btn;
-    }
-
-    function renderProducers() {
+    // Build producer buttons once, update in place each tick
+    function buildProducers() {
       const c = document.getElementById('tab-producers');
       c.innerHTML = '';
       state.producers.forEach(p => {
-        const cost = getCost(p);
-        c.appendChild(makeItem(
-          () => buyProducer(p.id), state.spores >= cost,
-          `${p.emoji} ${p.name}`, `${fmt(cost)} sp`,
-          p.desc, `Owned: ${p.owned} &nbsp;·&nbsp; +${p.baseSps.toFixed(1)}/s each`
-        ));
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'item disabled';
+        btn.dataset.id = p.id;
+        btn.innerHTML = `
+          <div class="item-top">
+            <span class="item-name">${p.emoji} ${p.name}</span>
+            <span class="item-cost" data-cost></span>
+          </div>
+          <div class="item-desc">${p.desc}</div>
+          <div class="item-owned" data-owned></div>
+        `;
+        btn.addEventListener('click', () => buyProducer(p.id));
+        c.appendChild(btn);
       });
     }
 
-    function renderUpgrades() {
-      const c = document.getElementById('tab-upgrades');
-      c.innerHTML = '';
+    function updateProducers() {
+      state.producers.forEach(p => {
+        const btn = document.querySelector(`#tab-producers [data-id="${p.id}"]`);
+        if (!btn) return;
+        const cost = getCost(p);
+        const can = state.spores >= cost;
+        btn.classList.toggle('disabled', !can);
+        btn.querySelector('[data-cost]').textContent = fmt(cost) + ' sp';
+        btn.querySelector('[data-owned]').textContent = `Owned: ${p.owned} · +${p.baseSps.toFixed(1)}/s each`;
+      });
+    }
+
+    let lastUpgradeKey = '';
+    function buildUpgrades() {
       const visible = UPGRADES_DEF.filter(u => {
         const su = state.upgrades.find(x => x.id === u.id);
         return !su.bought && u.req(state);
       });
+      const key = visible.map(u => u.id).join(',');
+      if (key === lastUpgradeKey) return; // list unchanged — skip rebuild
+      lastUpgradeKey = key;
+
+      const c = document.getElementById('tab-upgrades');
+      c.innerHTML = '';
       if (!visible.length) {
         c.innerHTML = '<div style="padding:1rem;font-size:13px;color:#4a7a55">Keep growing to unlock upgrades...</div>';
         return;
       }
       visible.forEach(u => {
-        c.appendChild(makeItem(
-          () => buyUpgrade(u.id), state.spores >= u.cost,
-          `✦ ${u.name}`, `${fmt(u.cost)} sp`, u.desc, null
-        ));
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'item disabled';
+        btn.dataset.id = u.id;
+        btn.innerHTML = `
+          <div class="item-top">
+            <span class="item-name">✦ ${u.name}</span>
+            <span class="item-cost" data-cost></span>
+          </div>
+          <div class="item-desc">${u.desc}</div>
+        `;
+        btn.addEventListener('click', () => buyUpgrade(u.id));
+        c.appendChild(btn);
+      });
+    }
+
+    function updateUpgrades() {
+      document.querySelectorAll('#tab-upgrades [data-id]').forEach(btn => {
+        const u = UPGRADES_DEF.find(x => x.id === btn.dataset.id);
+        if (!u) return;
+        const can = state.spores >= u.cost;
+        btn.classList.toggle('disabled', !can);
+        btn.querySelector('[data-cost]').textContent = fmt(u.cost) + ' sp';
       });
     }
 
@@ -560,7 +589,8 @@
       const cost = getCost(p);
       if (state.spores < cost) return;
       state.spores -= cost; p.owned++;
-      render();
+      updateProducers();
+      updateStats();
     }
 
     function buyUpgrade(id) {
@@ -568,7 +598,10 @@
       const su = state.upgrades.find(x => x.id === id);
       if (!uDef || su.bought || state.spores < uDef.cost) return;
       state.spores -= uDef.cost; su.bought = true; uDef.apply(state);
-      render();
+      lastUpgradeKey = ''; // force rebuild
+      buildUpgrades();
+      updateUpgrades();
+      updateStats();
     }
 
     function switchTab(tab) {
@@ -621,13 +654,18 @@
       render();
     });
 
-    function render() {
+    function updateStats() {
       document.getElementById('total-spores').textContent = fmt(state.spores);
       document.getElementById('sps').textContent = fmt(getSps()) + '/s';
       document.getElementById('progress-fill').style.width = state.hivemind + '%';
       document.getElementById('pulse-info').textContent = `Hivemind pulse: ${Math.floor(state.hivemind)}%`;
-      renderProducers();
-      renderUpgrades();
+    }
+
+    function render() {
+      updateStats();
+      updateProducers();
+      buildUpgrades();
+      updateUpgrades();
       drawMycelium();
     }
 
@@ -660,13 +698,16 @@
     setInterval(() => {
       const sps = getSps();
       if (sps > 0) { const g = sps / 20; state.spores += g; state.totalEarned += g; }
-      render();
+      updateStats();
+      updateProducers();
+      buildUpgrades();
+      updateUpgrades();
     }, 50);
 
     setInterval(() => { if (++msgTimer % 8 === 0) showMessage(); }, 1000);
     setInterval(saveGame, 30000);
 
-    loadGame(); render(); showMessage();
+    loadGame(); buildProducers(); render(); showMessage();
   </script>
 </body>
 
