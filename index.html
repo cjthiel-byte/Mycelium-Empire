@@ -19,7 +19,7 @@
       touch-action: manipulation;
       -webkit-text-size-adjust: 100%;
       font-family: system-ui, -apple-system, sans-serif;
-      background: #0d1a0f;
+      background: #0a1209;
       color: #d4edd8;
     }
 
@@ -35,20 +35,66 @@
       font-size: 1.4rem;
       font-weight: 500;
       color: #9FE1CB;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       margin-bottom: 0.75rem;
       text-align: center;
+      text-shadow: 0 0 20px #1D9E7560;
     }
 
+    /* ── Layout ── */
     #game {
       display: grid;
-      grid-template-columns: 1fr 230px;
+      grid-template-columns: 1fr 235px;
       width: 100%;
-      max-width: 780px;
-      border: 1px solid #1D9E7555;
+      max-width: 800px;
+      border: 1px solid #1D9E7540;
       border-radius: 12px;
       overflow: hidden;
-      background: #111f13;
+      background: #0f1e11;
+      position: relative;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      15% {
+        transform: translate(-5px, 2px) rotate(-0.3deg);
+      }
+
+      30% {
+        transform: translate(5px, -2px) rotate(0.3deg);
+      }
+
+      45% {
+        transform: translate(-4px, 3px) rotate(-0.2deg);
+      }
+
+      60% {
+        transform: translate(4px, -1px) rotate(0.2deg);
+      }
+
+      80% {
+        transform: translate(-2px, 1px) rotate(-0.1deg);
+      }
+    }
+
+    #game.shake {
+      animation: shake 0.45s ease-out;
+    }
+
+    #flash-overlay {
+      position: absolute;
+      inset: 0;
+      background: #1D9E75;
+      opacity: 0;
+      pointer-events: none;
+      border-radius: 12px;
+      transition: opacity 0.05s;
+      z-index: 10;
     }
 
     @media (max-width: 560px) {
@@ -69,7 +115,7 @@
       #left {
         padding: 0.75rem;
         gap: 0.55rem;
-        border-bottom: 1px solid #1D9E7533;
+        border-bottom: 1px solid #1D9E7530;
       }
 
       #right {
@@ -87,7 +133,7 @@
       }
 
       #mycelium-canvas {
-        height: 55px;
+        height: 60px;
       }
 
       .pulse-ring {
@@ -105,14 +151,17 @@
     }
 
     #right {
-      background: #0d1a0f;
-      border-left: 1px solid #1D9E7533;
+      background: #0a1209;
+      border-left: 1px solid #1D9E7530;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
-      max-height: 600px;
+      max-height: 640px;
+      display: flex;
+      flex-direction: column;
     }
 
+    /* ── Stats ── */
     #stats {
       width: 100%;
       display: grid;
@@ -121,15 +170,15 @@
     }
 
     .stat-card {
-      background: #0d1a0f;
+      background: #0a1209;
       border-radius: 8px;
       padding: 8px 10px;
-      border: 1px solid #1D9E7533;
+      border: 1px solid #1D9E7530;
     }
 
     .stat-label {
       font-size: 10px;
-      color: #7aad85;
+      color: #6a9d75;
       margin-bottom: 2px;
     }
 
@@ -139,13 +188,15 @@
       color: #9FE1CB;
     }
 
+    /* ── Canvas ── */
     #mycelium-canvas {
       width: 100%;
-      height: 80px;
+      height: 85px;
       border-radius: 8px;
       display: block;
     }
 
+    /* ── Spore button ── */
     #btn-wrap {
       position: relative;
       display: flex;
@@ -154,12 +205,24 @@
       flex-shrink: 0;
     }
 
+    @keyframes bio-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px #1D9E7540, 0 0 25px #1D9E7520;
+      }
+
+      50% {
+        box-shadow: 0 0 22px #1D9E7570, 0 0 50px #1D9E7535, 0 0 80px #9FE1CB18;
+      }
+    }
+
     #spore-btn {
       width: 130px;
       height: 130px;
       border-radius: 50%;
       border: 2px solid #1D9E75;
-      background: #0d2e1a;
+      background: #0a2218;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -170,15 +233,16 @@
       user-select: none;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      animation: bio-glow 2.8s ease-in-out infinite;
     }
 
     #spore-btn:hover {
-      background: #143d20;
+      background: #112d1a;
     }
 
     #spore-btn:active {
-      transform: scale(0.92);
-      background: #1D9E7533;
+      transform: scale(0.91);
+      background: #1D9E7525;
     }
 
     #spore-icon {
@@ -193,31 +257,38 @@
       pointer-events: none;
     }
 
+    /* ── Ticker ── */
     #ticker {
       font-size: 11px;
-      color: #7aad85;
-      min-height: 32px;
+      color: #6a9d75;
+      min-height: 30px;
       text-align: center;
       line-height: 1.6;
       padding: 0 6px;
       font-style: italic;
       width: 100%;
+      transition: color 0.3s;
     }
 
+    #ticker.pulse-msg {
+      color: #9FE1CB;
+    }
+
+    /* ── Progress ── */
     #progress-bar {
       width: 100%;
       height: 5px;
-      background: #0d1a0f;
+      background: #0a1209;
       border-radius: 3px;
       overflow: hidden;
-      border: 1px solid #1D9E7533;
+      border: 1px solid #1D9E7530;
     }
 
     #progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #1D9E75, #9FE1CB);
       border-radius: 3px;
-      transition: width 0.3s;
+      transition: width 0.25s;
       width: 0%;
     }
 
@@ -230,7 +301,7 @@
 
     #save-info {
       font-size: 10px;
-      color: #3d6645;
+      color: #3a5e42;
       text-align: center;
     }
 
@@ -238,7 +309,7 @@
       font-size: 10px;
       color: #7a4a4a;
       background: none;
-      border: 1px solid #7a4a4a55;
+      border: 1px solid #7a4a4a44;
       border-radius: 6px;
       padding: 4px 10px;
       cursor: pointer;
@@ -249,13 +320,15 @@
     }
 
     #reset-btn:hover {
-      background: #3d1a1a;
+      background: #2e1010;
       color: #e07070;
     }
 
+    /* ── Right panel tabs ── */
     #tabs {
       display: flex;
-      border-bottom: 1px solid #1D9E7533;
+      border-bottom: 1px solid #1D9E7530;
+      flex-shrink: 0;
     }
 
     .tab {
@@ -265,7 +338,7 @@
       font-weight: 500;
       text-align: center;
       cursor: pointer;
-      color: #7aad85;
+      color: #6a9d75;
       border: none;
       border-bottom: 2px solid transparent;
       background: none;
@@ -277,24 +350,27 @@
 
     .tab.active {
       color: #9FE1CB;
-      background: #111f13;
+      background: #0f1e11;
       border-bottom: 2px solid #1D9E75;
     }
 
     .tab-content {
       display: none;
+      flex: 1;
+      overflow-y: auto;
     }
 
     .tab-content.active {
       display: block;
     }
 
+    /* ── Shop items ── */
     .item {
       display: block;
       width: 100%;
       padding: 10px 12px;
       border: none;
-      border-bottom: 1px solid #1D9E7522;
+      border-bottom: 1px solid #1D9E7518;
       background: transparent;
       color: inherit;
       cursor: pointer;
@@ -306,16 +382,20 @@
     }
 
     .item:hover:not(.disabled) {
-      background: #111f13;
+      background: #0f1e11;
     }
 
     .item:active:not(.disabled) {
-      background: #1a2e1d;
+      background: #152819;
     }
 
     .item.disabled {
-      opacity: 0.4;
+      opacity: 0.38;
       cursor: not-allowed;
+    }
+
+    .item.can-afford {
+      border-left: 2px solid #1D9E7560;
     }
 
     .item-top {
@@ -341,7 +421,7 @@
 
     .item-desc {
       font-size: 11px;
-      color: #7aad85;
+      color: #6a9d75;
       line-height: 1.4;
       text-align: left;
     }
@@ -352,46 +432,69 @@
       margin-top: 2px;
     }
 
+    .upgrade-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 500;
+      background: #1D9E7525;
+      color: #5DCAA5;
+      border: 1px solid #1D9E7540;
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    /* ── Particles ── */
     .particle {
       position: fixed;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       color: #9FE1CB;
       pointer-events: none;
-      animation: float-up 0.9s ease-out forwards;
+      animation: float-up 1s ease-out forwards;
       z-index: 999;
+    }
+
+    .particle.dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #5DCAA5;
+      font-size: 0;
     }
 
     @keyframes float-up {
       0% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate(0, 0) scale(1);
       }
 
       100% {
         opacity: 0;
-        transform: translateY(-55px);
+        transform: translate(var(--dx, 0px), var(--dy, -60px)) scale(0.4);
       }
     }
 
+    /* ── Pulse ring ── */
     .pulse-ring {
       position: absolute;
       width: 130px;
       height: 130px;
       border-radius: 50%;
       border: 2px solid #1D9E75;
-      animation: pulse-ring 0.65s ease-out forwards;
+      animation: pulse-ring 0.7s ease-out forwards;
       pointer-events: none;
     }
 
     @keyframes pulse-ring {
       0% {
         transform: scale(1);
-        opacity: 0.8;
+        opacity: 0.9;
       }
 
       100% {
-        transform: scale(1.65);
+        transform: scale(1.8);
         opacity: 0;
       }
     }
@@ -402,6 +505,7 @@
   <h1>🍄 Mycelium Empire</h1>
 
   <div id="game">
+    <div id="flash-overlay"></div>
     <div id="left">
       <div id="stats">
         <div class="stat-card">
@@ -443,23 +547,52 @@
   </div>
 
   <script>
+    // ═══════════════════════════════════════════
+    //  DATA
+    // ═══════════════════════════════════════════
     const PRODUCERS_DEF = [
       { id: 'threads', name: 'Mycelium Threads', emoji: '🕸', desc: 'Passive rot spreads through organic matter.', baseCost: 15, baseSps: 0.1 },
       { id: 'fruiting', name: 'Fruiting Bodies', emoji: '🍄', desc: 'Mushrooms shed spores automatically.', baseCost: 100, baseSps: 0.5 },
-      { id: 'woodweb', name: 'Wood Wide Web', emoji: '🌳', desc: 'Tap into tree root networks for massive flow.', baseCost: 600, baseSps: 3 },
-      { id: 'sporestorm', name: 'Spore Storm', emoji: '💨', desc: 'Clouds colonise distant regions.', baseCost: 3000, baseSps: 12 },
-      { id: 'hivemind', name: 'Underground City', emoji: '🏙', desc: 'Your network becomes sentient infrastructure.', baseCost: 15000, baseSps: 50 },
-      { id: 'cordyceps', name: 'Cordyceps Protocol', emoji: '🐜', desc: 'Influence insects to spread spores.', baseCost: 75000, baseSps: 200 },
+      { id: 'woodweb', name: 'Wood Wide Web', emoji: '🌳', desc: 'Tap into living tree root networks.', baseCost: 600, baseSps: 3 },
+      { id: 'sporestorm', name: 'Spore Storm', emoji: '💨', desc: 'Spore clouds colonise distant regions.', baseCost: 3000, baseSps: 12 },
+      { id: 'undercity', name: 'Underground City', emoji: '🏙', desc: 'Sentient mycelial infrastructure hums below.', baseCost: 15000, baseSps: 50 },
+      { id: 'cordyceps', name: 'Cordyceps Protocol', emoji: '🐜', desc: 'Insects carry your spores across the land.', baseCost: 75000, baseSps: 200 },
+      { id: 'planetary', name: 'Planetary Mycelium', emoji: '🌍', desc: 'Your network wraps the entire globe.', baseCost: 500000, baseSps: 900 },
+      { id: 'voidspore', name: 'Void Spore', emoji: '🌌', desc: 'Spores drift through dimensions beyond knowing.', baseCost: 4000000, baseSps: 4500 },
     ];
 
     const UPGRADES_DEF = [
-      { id: 'u1', name: 'Chitin Filaments', desc: 'Threads are 2x more efficient.', cost: 200, req: s => s.producers.find(p => p.id === 'threads').owned >= 5, apply: s => { s.producers.find(p => p.id === 'threads').baseSps *= 2; } },
-      { id: 'u2', name: 'Bioluminescence', desc: 'Clicking gives 2x spores.', cost: 500, req: s => s.totalEarned >= 300, apply: s => { s.sporesPerClick *= 2; } },
-      { id: 'u3', name: 'Mycorrhizal Boost', desc: 'Wood Wide Web gives 3x yield.', cost: 5000, req: s => s.producers.find(p => p.id === 'woodweb').owned >= 3, apply: s => { s.producers.find(p => p.id === 'woodweb').baseSps *= 3; } },
-      { id: 'u4', name: 'Spore Coating', desc: 'Fruiting Bodies work 2x faster.', cost: 2000, req: s => s.producers.find(p => p.id === 'fruiting').owned >= 8, apply: s => { s.producers.find(p => p.id === 'fruiting').baseSps *= 2; } },
-      { id: 'u5', name: 'Quantum Entanglement', desc: 'Clicking gives 5x spores.', cost: 50000, req: s => s.totalEarned >= 25000, apply: s => { s.sporesPerClick *= 5; } },
-      { id: 'u6', name: 'Neural Mesh', desc: 'All producers +50% output.', cost: 200000, req: s => s.totalEarned >= 100000, apply: s => { s.producers.forEach(p => p.baseSps *= 1.5); } },
+      // Threads
+      { id: 'u1', name: 'Chitin Filaments', desc: 'Mycelium Threads are 2x more efficient.', cost: 150, tier: 'threads', req: s => s.producers.find(p => p.id === 'threads').owned >= 5, apply: s => { mult(s, 'threads', 2); } },
+      { id: 'u1b', name: 'Hyphal Weave', desc: 'Mycelium Threads are 3x more efficient.', cost: 2500, tier: 'threads', req: s => s.producers.find(p => p.id === 'threads').owned >= 25, apply: s => { mult(s, 'threads', 3); } },
+      // Fruiting
+      { id: 'u2', name: 'Spore Coating', desc: 'Fruiting Bodies produce 2x more.', cost: 800, tier: 'fruiting', req: s => s.producers.find(p => p.id === 'fruiting').owned >= 5, apply: s => { mult(s, 'fruiting', 2); } },
+      { id: 'u2b', name: 'Myco-Bloom', desc: 'Fruiting Bodies produce 3x more.', cost: 12000, tier: 'fruiting', req: s => s.producers.find(p => p.id === 'fruiting').owned >= 25, apply: s => { mult(s, 'fruiting', 3); } },
+      // Click
+      { id: 'u3', name: 'Bioluminescence', desc: 'Your clicks release 2x more spores.', cost: 500, tier: 'click', req: s => s.totalEarned >= 200, apply: s => { s.sporesPerClick *= 2; } },
+      { id: 'u3b', name: 'Phosphor Touch', desc: 'Your clicks release 5x more spores.', cost: 25000, tier: 'click', req: s => s.totalEarned >= 10000, apply: s => { s.sporesPerClick *= 5; } },
+      { id: 'u3c', name: 'Quantum Entanglement', desc: 'Your clicks release 10x more spores.', cost: 500000, tier: 'click', req: s => s.totalEarned >= 200000, apply: s => { s.sporesPerClick *= 10; } },
+      // Wood web
+      { id: 'u4', name: 'Mycorrhizal Boost', desc: 'Wood Wide Web gives 3x yield.', cost: 5000, tier: 'woodweb', req: s => s.producers.find(p => p.id === 'woodweb').owned >= 3, apply: s => { mult(s, 'woodweb', 3); } },
+      { id: 'u4b', name: 'Ancient Grove Pact', desc: 'Wood Wide Web gives 5x yield.', cost: 80000, tier: 'woodweb', req: s => s.producers.find(p => p.id === 'woodweb').owned >= 15, apply: s => { mult(s, 'woodweb', 5); } },
+      // Global
+      { id: 'u5', name: 'Neural Mesh', desc: 'All producers +50% output.', cost: 100000, tier: 'global', req: s => s.totalEarned >= 50000, apply: s => { s.producers.forEach(p => p.baseSps *= 1.5); } },
+      { id: 'u5b', name: 'Hive Ascension', desc: 'All producers double their output.', cost: 2000000, tier: 'global', req: s => s.totalEarned >= 1000000, apply: s => { s.producers.forEach(p => p.baseSps *= 2); } },
+      // Sporestorm
+      { id: 'u6', name: 'Jet Stream Riders', desc: 'Spore Storms are 4x more effective.', cost: 20000, tier: 'storm', req: s => s.producers.find(p => p.id === 'sporestorm').owned >= 5, apply: s => { mult(s, 'sporestorm', 4); } },
+      // Cordyceps
+      { id: 'u7', name: 'Ant Colony Symbiosis', desc: 'Cordyceps Protocol is 5x more effective.', cost: 300000, tier: 'cordyceps', req: s => s.producers.find(p => p.id === 'cordyceps').owned >= 5, apply: s => { mult(s, 'cordyceps', 5); } },
+      // Planetary
+      { id: 'u8', name: 'Global Fungal Layer', desc: 'Planetary Mycelium is 4x more effective.', cost: 3000000, tier: 'planetary', req: s => s.producers.find(p => p.id === 'planetary').owned >= 3, apply: s => { mult(s, 'planetary', 4); } },
     ];
+
+    function mult(s, id, x) { s.producers.find(p => p.id === id).baseSps *= x; }
+
+    const TIER_LABELS = {
+      threads: 'Threads', fruiting: 'Fruiting', woodweb: 'Wood Web',
+      click: 'Click', storm: 'Storm', cordyceps: 'Cordyceps',
+      planetary: 'Planetary', global: 'Global', voidspore: 'Void',
+    };
 
     const MESSAGES = [
       'The log beneath you begins to soften.',
@@ -467,13 +600,21 @@
       'Somewhere, a tree shudders.',
       'The forest is listening.',
       'Your threads reach deeper.',
-      'An ant pauses and looks around.',
-      'The Wood Wide Web stirs.',
+      'An ant pauses and tilts its head.',
+      'The Wood Wide Web stirs in its sleep.',
       'You are becoming the forest.',
       'Something ancient notices you.',
       'The roots remember everything.',
+      'Phosphorescence blooms in the dark.',
+      'Every mushroom is a window.',
+      'The network breathes.',
+      'Your spores drift across the sky.',
+      'The soil is no longer empty.',
     ];
 
+    // ═══════════════════════════════════════════
+    //  STATE
+    // ═══════════════════════════════════════════
     function defaultState() {
       return {
         spores: 0, totalEarned: 0, sporesPerClick: 1, hivemind: 0, msgIdx: 0,
@@ -517,17 +658,34 @@
       } catch (e) { console.warn('Load failed', e); }
     }
 
+    function resetGame() {
+      if (!confirm('Reset everything and start over?')) return;
+      localStorage.removeItem('myceliumEmpire');
+      state = defaultState();
+      lastUpgradeKey = null;
+      branches = [];
+      buildProducers();
+      render();
+      showMessage();
+    }
+
+    // ═══════════════════════════════════════════
+    //  HELPERS
+    // ═══════════════════════════════════════════
     function fmt(n) {
       if (n < 1000) return Math.floor(n).toString();
       if (n < 1e6) return (n / 1000).toFixed(1) + 'k';
       if (n < 1e9) return (n / 1e6).toFixed(2) + 'M';
-      return (n / 1e9).toFixed(2) + 'B';
+      if (n < 1e12) return (n / 1e9).toFixed(2) + 'B';
+      return (n / 1e12).toFixed(2) + 'T';
     }
 
     function getCost(p) { return Math.ceil(p.baseCost * Math.pow(1.15, p.owned)); }
     function getSps() { return state.producers.reduce((s, p) => s + p.baseSps * p.owned, 0); }
 
-    // Build producer buttons once, update in place each tick
+    // ═══════════════════════════════════════════
+    //  UI — PRODUCERS
+    // ═══════════════════════════════════════════
     function buildProducers() {
       const c = document.getElementById('tab-producers');
       c.innerHTML = '';
@@ -537,13 +695,13 @@
         btn.className = 'item disabled';
         btn.dataset.id = p.id;
         btn.innerHTML = `
-          <div class="item-top">
-            <span class="item-name">${p.emoji} ${p.name}</span>
-            <span class="item-cost" data-cost></span>
-          </div>
-          <div class="item-desc">${p.desc}</div>
-          <div class="item-owned" data-owned></div>
-        `;
+        <div class="item-top">
+          <span class="item-name">${p.emoji} ${p.name}</span>
+          <span class="item-cost" data-cost></span>
+        </div>
+        <div class="item-desc">${p.desc}</div>
+        <div class="item-owned" data-owned></div>
+      `;
         btn.addEventListener('click', () => buyProducer(p.id));
         c.appendChild(btn);
       });
@@ -556,51 +714,9 @@
         const cost = getCost(p);
         const can = state.spores >= cost;
         btn.classList.toggle('disabled', !can);
+        btn.classList.toggle('can-afford', can);
         btn.querySelector('[data-cost]').textContent = fmt(cost) + ' sp';
-        btn.querySelector('[data-owned]').textContent = `Owned: ${p.owned} · +${p.baseSps.toFixed(1)}/s each`;
-      });
-    }
-
-    let lastUpgradeKey = '';
-    function buildUpgrades() {
-      const visible = UPGRADES_DEF.filter(u => {
-        const su = state.upgrades.find(x => x.id === u.id);
-        return !su.bought && u.req(state);
-      });
-      const key = visible.map(u => u.id).join(',');
-      if (key === lastUpgradeKey) return; // list unchanged — skip rebuild
-      lastUpgradeKey = key;
-
-      const c = document.getElementById('tab-upgrades');
-      c.innerHTML = '';
-      if (!visible.length) {
-        c.innerHTML = '<div style="padding:1rem;font-size:13px;color:#4a7a55">Keep growing to unlock upgrades...</div>';
-        return;
-      }
-      visible.forEach(u => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'item disabled';
-        btn.dataset.id = u.id;
-        btn.innerHTML = `
-          <div class="item-top">
-            <span class="item-name">✦ ${u.name}</span>
-            <span class="item-cost" data-cost></span>
-          </div>
-          <div class="item-desc">${u.desc}</div>
-        `;
-        btn.addEventListener('click', () => buyUpgrade(u.id));
-        c.appendChild(btn);
-      });
-    }
-
-    function updateUpgrades() {
-      document.querySelectorAll('#tab-upgrades [data-id]').forEach(btn => {
-        const u = UPGRADES_DEF.find(x => x.id === btn.dataset.id);
-        if (!u) return;
-        const can = state.spores >= u.cost;
-        btn.classList.toggle('disabled', !can);
-        btn.querySelector('[data-cost]').textContent = fmt(u.cost) + ' sp';
+        btn.querySelector('[data-owned]').textContent = `Owned: ${p.owned}  ·  +${p.baseSps.toFixed(1)}/s each`;
       });
     }
 
@@ -613,12 +729,61 @@
       updateStats();
     }
 
+    // ═══════════════════════════════════════════
+    //  UI — UPGRADES
+    // ═══════════════════════════════════════════
+    let lastUpgradeKey = null;
+
+    function buildUpgrades() {
+      const visible = UPGRADES_DEF.filter(u => {
+        const su = state.upgrades.find(x => x.id === u.id);
+        return !su.bought && u.req(state);
+      });
+      const key = visible.map(u => u.id).join(',') || '__empty__';
+      if (key === lastUpgradeKey) return;
+      lastUpgradeKey = key;
+
+      const c = document.getElementById('tab-upgrades');
+      c.innerHTML = '';
+      if (!visible.length) {
+        c.innerHTML = '<div style="padding:1rem;font-size:12px;color:#4a7a55;font-style:italic">Keep growing to unlock upgrades...</div>';
+        return;
+      }
+      visible.forEach(u => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'item disabled';
+        btn.dataset.id = u.id;
+        const tier = TIER_LABELS[u.tier] || '';
+        btn.innerHTML = `
+        <div class="item-top">
+          <span class="item-name">✦ ${u.name}<span class="upgrade-badge">${tier}</span></span>
+          <span class="item-cost" data-cost></span>
+        </div>
+        <div class="item-desc">${u.desc}</div>
+      `;
+        btn.addEventListener('click', () => buyUpgrade(u.id));
+        c.appendChild(btn);
+      });
+    }
+
+    function updateUpgrades() {
+      document.querySelectorAll('#tab-upgrades [data-id]').forEach(btn => {
+        const u = UPGRADES_DEF.find(x => x.id === btn.dataset.id);
+        if (!u) return;
+        const can = state.spores >= u.cost;
+        btn.classList.toggle('disabled', !can);
+        btn.classList.toggle('can-afford', can);
+        btn.querySelector('[data-cost]').textContent = fmt(u.cost) + ' sp';
+      });
+    }
+
     function buyUpgrade(id) {
       const uDef = UPGRADES_DEF.find(x => x.id === id);
       const su = state.upgrades.find(x => x.id === id);
       if (!uDef || su.bought || state.spores < uDef.cost) return;
       state.spores -= uDef.cost; su.bought = true; uDef.apply(state);
-      lastUpgradeKey = ''; // force rebuild
+      lastUpgradeKey = null;
       buildUpgrades();
       updateUpgrades();
       updateStats();
@@ -634,54 +799,89 @@
     document.getElementById('tab-btn-producers').addEventListener('click', () => switchTab('producers'));
     document.getElementById('tab-btn-upgrades').addEventListener('click', () => switchTab('upgrades'));
 
-    function spawnParticle(x, y, val) {
-      const el = document.createElement('div');
-      el.className = 'particle';
-      el.textContent = '+' + fmt(val);
-      el.style.left = (x - 20) + 'px'; el.style.top = (y - 10) + 'px';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 900);
+    // ═══════════════════════════════════════════
+    //  EFFECTS
+    // ═══════════════════════════════════════════
+
+    // Spore burst — multiple particles spraying out
+    function spawnBurst(x, y, val) {
+      // Central "+N" label
+      const label = document.createElement('div');
+      label.className = 'particle';
+      label.textContent = '+' + fmt(val);
+      label.style.left = (x - 18) + 'px';
+      label.style.top = (y - 10) + 'px';
+      label.style.setProperty('--dx', '0px');
+      label.style.setProperty('--dy', '-55px');
+      document.body.appendChild(label);
+      setTimeout(() => label.remove(), 1000);
+
+      // Dot particles shooting outward
+      const count = Math.min(6 + Math.floor(val / 2), 12);
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        const dist = 35 + Math.random() * 30;
+        const dot = document.createElement('div');
+        dot.className = 'particle dot';
+        dot.style.left = (x - 3) + 'px';
+        dot.style.top = (y - 3) + 'px';
+        dot.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        dot.style.setProperty('--dy', Math.sin(angle) * dist - 20 + 'px');
+        dot.style.animationDuration = (0.6 + Math.random() * 0.4) + 's';
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 1100);
+      }
     }
 
     function spawnPulseRing() {
       const ring = document.createElement('div');
       ring.className = 'pulse-ring';
       document.getElementById('btn-wrap').appendChild(ring);
-      setTimeout(() => ring.remove(), 700);
+      setTimeout(() => ring.remove(), 750);
+    }
+
+    // Screen shake + green flash
+    function screenShake() {
+      const game = document.getElementById('game');
+      const flash = document.getElementById('flash-overlay');
+      game.classList.remove('shake');
+      void game.offsetWidth; // reflow to restart animation
+      game.classList.add('shake');
+      flash.style.opacity = '0.12';
+      setTimeout(() => { flash.style.opacity = '0'; }, 120);
+      setTimeout(() => game.classList.remove('shake'), 500);
     }
 
     function triggerPulse() {
       state.hivemind = 0;
-      const bonus = Math.ceil(getSps() * 30);
+      const bonus = Math.ceil(getSps() * 30 + state.sporesPerClick * 50);
       state.spores += bonus; state.totalEarned += bonus;
-      document.getElementById('ticker').textContent = `HIVEMIND PULSE! +${fmt(bonus)} spores surged through the network!`;
+      const ticker = document.getElementById('ticker');
+      ticker.textContent = `HIVEMIND PULSE! +${fmt(bonus)} spores surged through the network!`;
+      ticker.classList.add('pulse-msg');
+      setTimeout(() => ticker.classList.remove('pulse-msg'), 2000);
+      screenShake();
       spawnPulseRing();
+      spawnPulseRing();
+      setTimeout(spawnPulseRing, 150);
     }
 
-    function resetGame() {
-      if (!confirm('Reset everything and start over?')) return;
-      localStorage.removeItem('myceliumEmpire');
-      state = defaultState();
-      lastUpgradeKey = '';
-      buildProducers();
-      render();
-      showMessage();
-    }
-    function showMessage() {
-      document.getElementById('ticker').textContent = MESSAGES[state.msgIdx % MESSAGES.length];
-      state.msgIdx++;
-    }
-
+    // ═══════════════════════════════════════════
+    //  CLICK HANDLER
+    // ═══════════════════════════════════════════
     document.getElementById('spore-btn').addEventListener('click', e => {
       const gain = state.sporesPerClick;
       state.spores += gain; state.totalEarned += gain;
       state.hivemind = Math.min(100, state.hivemind + 0.5);
-      spawnParticle(e.clientX, e.clientY, gain);
+      spawnBurst(e.clientX, e.clientY, gain);
       spawnPulseRing();
       if (state.hivemind >= 100) triggerPulse();
-      render();
+      updateStats();
     });
 
+    // ═══════════════════════════════════════════
+    //  STATS
+    // ═══════════════════════════════════════════
     function updateStats() {
       document.getElementById('total-spores').textContent = fmt(state.spores);
       document.getElementById('sps').textContent = fmt(getSps()) + '/s';
@@ -694,35 +894,147 @@
       updateProducers();
       buildUpgrades();
       updateUpgrades();
-      drawMycelium();
     }
 
+    // ═══════════════════════════════════════════
+    //  ANIMATED MYCELIUM CANVAS
+    // ═══════════════════════════════════════════
     const canvas = document.getElementById('mycelium-canvas');
     const ctx = canvas.getContext('2d');
 
-    function drawMycelium() {
-      const W = canvas.offsetWidth || 260, H = canvas.offsetHeight || 80;
-      canvas.width = W; canvas.height = H;
-      ctx.clearRect(0, 0, W, H);
-      const total = state.producers.reduce((s, p) => s + p.owned, 0);
+    let branches = [];
+    let animTime = 0;
+    let lastTotal = -1;
+
+    function makeBranch(x1, y1, angle, len, depth, delay) {
+      return { x1, y1, angle, len, depth, delay, progress: 0, done: false, children: [] };
+    }
+
+    function seedBranches(total) {
+      const W = canvas.offsetWidth || 260;
+      const H = canvas.offsetHeight || 85;
       const cx = W / 2, cy = H / 2;
-      ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2);
-      ctx.fillStyle = '#1D9E75'; ctx.fill();
-      const count = Math.min(total * 4, 80);
-      for (let i = 0; i < count; i++) {
-        const angle = (i / Math.max(count, 1)) * Math.PI * 2 + i * 0.4;
-        const len = 15 + (i % 7) * 6;
-        const x2 = cx + Math.cos(angle) * len, y2 = cy + Math.sin(angle) * len * 0.55;
-        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x2, y2);
-        ctx.strokeStyle = i % 3 === 0 ? '#9FE1CB55' : '#1D9E7588';
-        ctx.lineWidth = 0.8; ctx.stroke();
-        if (i % 2 === 0) {
-          ctx.beginPath(); ctx.arc(x2, y2, 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#5DCAA5'; ctx.fill();
+      branches = [];
+      const armCount = Math.min(4 + Math.floor(total / 3), 24);
+      for (let i = 0; i < armCount; i++) {
+        const baseAngle = (i / armCount) * Math.PI * 2;
+        const len = 18 + (i % 5) * 7;
+        const b = makeBranch(cx, cy, baseAngle, len, 0, i * 0.04);
+        // sub-branches
+        if (total > 5) {
+          for (let j = 0; j < 2; j++) {
+            const subAngle = baseAngle + (j === 0 ? 0.5 : -0.5) + (Math.random() - 0.5) * 0.3;
+            const subLen = len * 0.55;
+            b.children.push(makeBranch(
+              cx + Math.cos(baseAngle) * len,
+              cy + Math.sin(baseAngle) * len * 0.6,
+              subAngle, subLen, 1, b.delay + 0.3
+            ));
+          }
         }
+        if (total > 15) {
+          b.children.forEach(child => {
+            const grandAngle = child.angle + (Math.random() - 0.5) * 0.6;
+            child.children.push(makeBranch(
+              child.x1 + Math.cos(child.angle) * child.len,
+              child.y1 + Math.sin(child.angle) * child.len * 0.6,
+              grandAngle, child.len * 0.5, 2, child.delay + 0.25
+            ));
+          });
+        }
+        branches.push(b);
       }
     }
 
+    function drawBranch(b, t, alpha) {
+      if (t < b.delay) return;
+      b.progress = Math.min(1, (t - b.delay) / 0.6);
+      const x2 = b.x1 + Math.cos(b.angle) * b.len * b.progress;
+      const y2 = b.y1 + Math.sin(b.angle) * b.len * b.progress * 0.6;
+
+      const grad = ctx.createLinearGradient(b.x1, b.y1, x2, y2);
+      grad.addColorStop(0, `rgba(29,158,117,${0.7 * alpha})`);
+      grad.addColorStop(1, `rgba(159,225,203,${0.25 * alpha})`);
+
+      ctx.beginPath();
+      ctx.moveTo(b.x1, b.y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = Math.max(0.4, 1.2 - b.depth * 0.4);
+      ctx.stroke();
+
+      // Tip node with bioluminescent pulse
+      if (b.progress >= 1) {
+        b.done = true;
+        const pulse = 0.5 + 0.5 * Math.sin(t * 3 + b.angle * 7);
+        const r = 1.5 + pulse * 1.2;
+        ctx.beginPath();
+        ctx.arc(x2, y2, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(93,202,165,${(0.4 + pulse * 0.5) * alpha})`;
+        ctx.fill();
+      }
+
+      // Draw children once parent is done
+      if (b.progress > 0.85) {
+        b.children.forEach(child => {
+          child.x1 = b.x1 + Math.cos(b.angle) * b.len;
+          child.y1 = b.y1 + Math.sin(b.angle) * b.len * 0.6;
+          drawBranch(child, t, alpha * 0.75);
+        });
+      }
+    }
+
+    function animateMycelium(timestamp) {
+      const W = canvas.offsetWidth || 260;
+      const H = canvas.offsetHeight || 85;
+
+      // Re-seed if producer count changed
+      const total = state.producers.reduce((s, p) => s + p.owned, 0);
+      if (total !== lastTotal) {
+        canvas.width = W; canvas.height = H;
+        seedBranches(total);
+        animTime = 0;
+        lastTotal = total;
+      }
+
+      animTime += 0.016;
+      canvas.width = W; canvas.height = H;
+      ctx.clearRect(0, 0, W, H);
+
+      const cx = W / 2, cy = H / 2;
+
+      // Centre spore node
+      const corePulse = 0.5 + 0.5 * Math.sin(animTime * 2.5);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 4 + corePulse, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(29,158,117,${0.8 + corePulse * 0.2})`;
+      ctx.fill();
+
+      if (total === 0) {
+        // Idle — just a gentle single ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, 8 + corePulse * 4, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(29,158,117,${0.15 + corePulse * 0.1})`;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      } else {
+        branches.forEach(b => drawBranch(b, animTime, 1));
+      }
+
+      requestAnimationFrame(animateMycelium);
+    }
+
+    // ═══════════════════════════════════════════
+    //  GAME LOOPS
+    // ═══════════════════════════════════════════
+    let msgTimer = 0;
+    function showMessage() {
+      const ticker = document.getElementById('ticker');
+      ticker.textContent = MESSAGES[state.msgIdx % MESSAGES.length];
+      state.msgIdx++;
+    }
+
+    // Passive income + UI refresh every 50ms
     setInterval(() => {
       const sps = getSps();
       if (sps > 0) { const g = sps / 20; state.spores += g; state.totalEarned += g; }
@@ -732,10 +1044,20 @@
       updateUpgrades();
     }, 50);
 
+    // Flavor messages
     setInterval(() => { if (++msgTimer % 8 === 0) showMessage(); }, 1000);
+
+    // Autosave
     setInterval(saveGame, 30000);
 
-    loadGame(); buildProducers(); render(); showMessage();
+    // ═══════════════════════════════════════════
+    //  BOOT
+    // ═══════════════════════════════════════════
+    loadGame();
+    buildProducers();
+    render();
+    showMessage();
+    requestAnimationFrame(animateMycelium);
   </script>
 </body>
 
