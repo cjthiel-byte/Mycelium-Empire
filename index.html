@@ -41,12 +41,11 @@
       text-shadow: 0 0 20px #1D9E7560;
     }
 
-    /* ── Layout ── */
     #game {
       display: grid;
-      grid-template-columns: 1fr 240px;
+      grid-template-columns: 1fr 245px;
       width: 100%;
-      max-width: 820px;
+      max-width: 830px;
       border: 1px solid #1D9E7540;
       border-radius: 12px;
       background: #0f1e11;
@@ -128,7 +127,7 @@
       }
 
       #mycelium-canvas {
-        height: 60px;
+        height: 55px;
       }
 
       .pulse-ring {
@@ -137,13 +136,12 @@
       }
     }
 
-    /* ── Panels ── */
     #left {
       padding: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.6rem;
     }
 
     #right {
@@ -152,12 +150,12 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
-      max-height: 660px;
+      max-height: 680px;
       display: flex;
       flex-direction: column;
     }
 
-    /* ── Stats ── */
+    /* Stats */
     #stats {
       width: 100%;
       display: grid;
@@ -184,7 +182,7 @@
       color: #9FE1CB;
     }
 
-    /* ── Season bar ── */
+    /* Season bar */
     #season-bar {
       width: 100%;
       background: #0a1209;
@@ -198,7 +196,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     #season-name-row {
@@ -234,33 +232,140 @@
       width: 0%;
     }
 
-    /* ── Biome tag ── */
-    #biome-tag {
+    /* Event toast */
+    #event-toast {
       display: none;
       width: 100%;
       background: #0a1209;
-      border: 1px solid #1D9E7530;
       border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 11px;
-      color: #6a9d75;
-      text-align: center;
+      padding: 7px 10px;
+      border: 1px solid #1D9E7530;
+      transition: border-color 0.4s;
     }
 
-    #biome-tag span {
-      color: #9FE1CB;
+    #event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    #event-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: #d4edd8;
+    }
+
+    #event-timer {
+      font-size: 10px;
+      color: #6a9d75;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #event-desc-txt {
+      font-size: 10px;
+      color: #6a9d75;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    #event-bar-wrap {
+      height: 3px;
+      background: #1D9E7515;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    #event-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.5s;
+      background: #1D9E75;
+    }
+
+    /* Mode toggle */
+    #mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .mode-label {
+      font-size: 10px;
       font-weight: 500;
     }
 
-    /* ── Canvas ── */
+    #mode-colony {
+      color: #5DCAA5;
+    }
+
+    #mode-disaster {
+      color: #e07070;
+    }
+
+    .mode-switch {
+      position: relative;
+      width: 38px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .mode-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .mode-slider {
+      position: absolute;
+      inset: 0;
+      background: #1D9E7530;
+      border: 1px solid #1D9E7550;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .mode-slider::before {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left: 2px;
+      top: 2px;
+      background: #5DCAA5;
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    input:checked~.mode-slider {
+      background: #3d0f0f;
+      border-color: #e0707050;
+    }
+
+    input:checked~.mode-slider::before {
+      transform: translateX(18px);
+      background: #e07070;
+    }
+
+    /* Biome path */
+    #biome-path {
+      display: none;
+      width: 100%;
+      padding: 4px 0;
+    }
+
+    /* Canvas */
     #mycelium-canvas {
       width: 100%;
-      height: 85px;
+      height: 80px;
       border-radius: 8px;
       display: block;
     }
 
-    /* ── Spore button ── */
+    /* Spore button */
     #btn-wrap {
       position: relative;
       display: flex;
@@ -321,7 +426,7 @@
       pointer-events: none;
     }
 
-    /* ── Ticker ── */
+    /* Ticker */
     #ticker {
       font-size: 11px;
       color: #6a9d75;
@@ -338,7 +443,7 @@
       color: #9FE1CB;
     }
 
-    /* ── Progress ── */
+    /* Progress */
     #progress-bar {
       width: 100%;
       height: 5px;
@@ -363,7 +468,7 @@
       text-align: center;
     }
 
-    /* ── Sporulate ── */
+    /* Sporulate */
     #sporulate-wrap {
       display: none;
       width: 100%;
@@ -440,21 +545,13 @@
       color: #9FE1CB;
     }
 
-    #spor-yes:hover {
-      background: #152e1c;
-    }
-
     #spor-no {
       background: #1a1209;
       border-color: #7a4a4a55;
       color: #c47a4a;
     }
 
-    #spor-no:hover {
-      background: #2e1010;
-    }
-
-    /* ── Save / Reset ── */
+    /* Save / Reset */
     #save-info {
       font-size: 10px;
       color: #3a5e42;
@@ -472,24 +569,34 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       font-family: inherit;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.15s, color 0.15s, opacity 0.2s;
+      opacity: 0.45;
+      margin-top: auto;
     }
 
     #reset-btn:hover {
       background: #2e1010;
       color: #e07070;
+      opacity: 1;
     }
 
-    /* ── Right panel tabs (4 tabs) ── */
+    /* Tabs — scrollable, 7 tabs */
     #tabs {
       display: flex;
       border-bottom: 1px solid #1D9E7530;
       flex-shrink: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    #tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .tab {
-      flex: 1;
-      padding: 8px 2px;
+      flex-shrink: 0;
+      padding: 8px 10px;
       font-size: 10px;
       font-weight: 500;
       text-align: center;
@@ -502,6 +609,7 @@
       -webkit-tap-highlight-color: transparent;
       transition: color 0.15s, background 0.15s;
       font-family: inherit;
+      white-space: nowrap;
     }
 
     .tab.active {
@@ -512,15 +620,13 @@
 
     .tab-content {
       display: none;
-      flex: 1;
-      overflow-y: auto;
     }
 
     .tab-content.active {
       display: block;
     }
 
-    /* ── Shop items ── */
+    /* Shop items */
     .item {
       display: block;
       width: 100%;
@@ -600,7 +706,113 @@
       vertical-align: middle;
     }
 
-    /* ── Symbiosis ── */
+    /* Research tree */
+    #tab-research {
+      padding: 10px;
+    }
+
+    .research-tier {
+      margin-bottom: 10px;
+    }
+
+    .research-tier-label {
+      font-size: 9px;
+      font-weight: 500;
+      color: #4a7a55;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+
+    .research-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .rn-card {
+      flex: 1;
+      min-width: 90px;
+      background: #0a1209;
+      border: 1px solid #1D9E7530;
+      border-radius: 8px;
+      padding: 8px;
+      position: relative;
+    }
+
+    .rn-card.bought {
+      border-color: #1D9E7560;
+      background: #0a1e12;
+    }
+
+    .rn-card.locked {
+      opacity: 0.4;
+    }
+
+    .rn-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: #d4edd8;
+      margin-bottom: 3px;
+    }
+
+    .rn-desc {
+      font-size: 10px;
+      color: #6a9d75;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .rn-cost {
+      font-size: 10px;
+      color: #5DCAA5;
+      margin-bottom: 5px;
+    }
+
+    .rn-btn {
+      display: block;
+      width: 100%;
+      padding: 4px 0;
+      background: #0f2e1a;
+      border: 1px solid #1D9E7550;
+      border-radius: 5px;
+      color: #9FE1CB;
+      font-size: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+      transition: background 0.1s;
+    }
+
+    .rn-btn:hover:not(:disabled) {
+      background: #152e1c;
+    }
+
+    .rn-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .rn-bought-badge {
+      font-size: 9px;
+      color: #5DCAA5;
+      text-align: center;
+      padding: 3px 0;
+    }
+
+    .rn-connector {
+      width: 100%;
+      text-align: center;
+      color: #1D9E7540;
+      font-size: 14px;
+      margin-bottom: 4px;
+      letter-spacing: 2px;
+    }
+
+    /* Symbiosis */
     .sym-card {
       padding: 10px 12px;
       border-bottom: 1px solid #1D9E7518;
@@ -721,7 +933,108 @@
       transition: width 0.5s, background 0.5s;
     }
 
-    /* ── Owned tab ── */
+    /* Achievements */
+    #tab-goals {
+      padding: 8px;
+    }
+
+    .ach-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .ach-card {
+      background: #0a1209;
+      border: 1px solid #1D9E7520;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .ach-card.unlocked {
+      border-color: #1D9E7550;
+      background: #0a1e12;
+    }
+
+    .ach-card.locked {
+      opacity: 0.35;
+    }
+
+    .ach-top {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 3px;
+    }
+
+    .ach-emoji {
+      font-size: 16px;
+    }
+
+    .ach-name {
+      font-size: 10px;
+      font-weight: 500;
+      color: #d4edd8;
+      line-height: 1.2;
+    }
+
+    .ach-desc {
+      font-size: 9px;
+      color: #6a9d75;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .ach-bonus {
+      font-size: 9px;
+      color: #5DCAA5;
+    }
+
+    .ach-lore {
+      font-size: 9px;
+      color: #4a7a55;
+      font-style: italic;
+      line-height: 1.3;
+      margin-top: 3px;
+    }
+
+    /* Codex */
+    #tab-lore {
+      padding: 8px 12px;
+    }
+
+    .codex-entry {
+      margin-bottom: 12px;
+      border-bottom: 1px solid #1D9E7515;
+      padding-bottom: 10px;
+    }
+
+    .codex-entry:last-child {
+      border-bottom: none;
+    }
+
+    .codex-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: #9FE1CB;
+      margin-bottom: 4px;
+    }
+
+    .codex-text {
+      font-size: 11px;
+      color: #6a9d75;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .codex-locked {
+      font-size: 11px;
+      color: #2a4a35;
+      font-style: italic;
+      padding: 8px 0;
+    }
+
+    /* Owned */
     .owned-group {
       padding: 6px 12px 2px;
       font-size: 9px;
@@ -747,7 +1060,7 @@
       color: #6a9d75;
     }
 
-    /* ── Particles ── */
+    /* Particles */
     .particle {
       position: fixed;
       font-size: 18px;
@@ -778,7 +1091,6 @@
       }
     }
 
-    /* ── Pulse ring ── */
     .pulse-ring {
       position: absolute;
       width: 120px;
@@ -819,16 +1131,20 @@
         </div>
       </div>
       <div id="season-bar">
-        <div id="season-header">
-          <span id="season-name-row">🌱 Spring</span>
-          <span id="season-time">1:30</span>
-        </div>
+        <div id="season-header"><span id="season-name-row">🌱 Spring</span><span id="season-time">1:30</span></div>
         <div id="season-desc">Threads thrive · Fruiting blooms</div>
         <div id="season-track">
           <div id="season-fill"></div>
         </div>
       </div>
-      <div id="biome-tag">Biome: <span id="biome-label">Ancient Forest 🌲</span></div>
+      <div id="event-toast">
+        <div id="event-header"><span id="event-title">Event</span><span id="event-timer">0s</span></div>
+        <div id="event-desc-txt"></div>
+        <div id="event-bar-wrap">
+          <div id="event-bar-fill"></div>
+        </div>
+      </div>
+      <svg id="biome-path" height="28" viewBox="0 0 220 28" xmlns="http://www.w3.org/2000/svg"></svg>
       <canvas id="mycelium-canvas"></canvas>
       <div id="btn-wrap">
         <button id="spore-btn" aria-label="Harvest spores">
@@ -847,28 +1163,38 @@
           <div class="spor-row">Next biome: <strong id="spor-biome">—</strong></div>
           <div class="spor-row" id="spor-biome-desc"></div>
           <div class="spor-row">Legacy multiplier: <strong id="spor-mult">—</strong></div>
-          <div class="spor-row warn">All spores, producers &amp; upgrades reset. Symbiosis bonds reset. Prestige
-            multiplier is permanent.</div>
+          <div class="spor-row warn">Spores, producers, upgrades &amp; research reset. Achievements &amp; prestige
+            multiplier are permanent.</div>
           <div id="spor-confirm-btns">
             <button id="spor-yes" onclick="doSporulate()">Confirm Sporulation</button>
             <button id="spor-no" onclick="toggleSporulatePanel()">Cancel</button>
           </div>
         </div>
       </div>
+      <div id="mode-row">
+        <span class="mode-label" id="mode-colony">Colony</span>
+        <label class="mode-switch"><input type="checkbox" id="mode-check" /><span class="mode-slider"></span></label>
+        <span class="mode-label" id="mode-disaster">Disaster</span>
+      </div>
       <div id="save-info">Auto-saves every 30s</div>
-      <button id="reset-btn" onclick="resetGame()" style="margin-top:auto;opacity:0.5;"
-        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">Reset game</button>
+      <button id="reset-btn" onclick="resetGame()">Reset game</button>
     </div>
     <div id="right">
       <div id="tabs">
-        <button class="tab active" id="tab-btn-producers">Producers</button>
+        <button class="tab active" id="tab-btn-producers">Prod</button>
         <button class="tab" id="tab-btn-upgrades">Upgrades</button>
+        <button class="tab" id="tab-btn-research">Research</button>
         <button class="tab" id="tab-btn-symbiosis">Bonds</button>
+        <button class="tab" id="tab-btn-goals">Goals</button>
+        <button class="tab" id="tab-btn-lore">Lore</button>
         <button class="tab" id="tab-btn-owned">Owned</button>
       </div>
       <div id="tab-producers" class="tab-content active"></div>
       <div id="tab-upgrades" class="tab-content"></div>
+      <div id="tab-research" class="tab-content"></div>
       <div id="tab-symbiosis" class="tab-content"></div>
+      <div id="tab-goals" class="tab-content"></div>
+      <div id="tab-lore" class="tab-content"></div>
       <div id="tab-owned" class="tab-content"></div>
     </div>
   </div>
@@ -889,53 +1215,51 @@
     ];
 
     const UPGRADES_DEF = [
-      { id: 'u1', tier: 'threads', name: 'Chitin Filaments', desc: 'Threads 2x more efficient.', cost: 150, req: s => prod(s, 'threads').owned >= 5, apply: s => mult(s, 'threads', 2) },
-      { id: 'u1b', tier: 'threads', name: 'Hyphal Weave', desc: 'Threads 3x more efficient.', cost: 2500, req: s => prod(s, 'threads').owned >= 25, apply: s => mult(s, 'threads', 3) },
-      { id: 'u2', tier: 'fruiting', name: 'Spore Coating', desc: 'Fruiting Bodies 2x more.', cost: 800, req: s => prod(s, 'fruiting').owned >= 5, apply: s => mult(s, 'fruiting', 2) },
-      { id: 'u2b', tier: 'fruiting', name: 'Myco-Bloom', desc: 'Fruiting Bodies 3x more.', cost: 12000, req: s => prod(s, 'fruiting').owned >= 25, apply: s => mult(s, 'fruiting', 3) },
+      { id: 'u1', tier: 'threads', name: 'Chitin Filaments', desc: 'Threads 2x more efficient.', cost: 150, req: s => p(s, 'threads').owned >= 5, apply: s => mp(s, 'threads', 2) },
+      { id: 'u1b', tier: 'threads', name: 'Hyphal Weave', desc: 'Threads 3x more efficient.', cost: 2500, req: s => p(s, 'threads').owned >= 25, apply: s => mp(s, 'threads', 3) },
+      { id: 'u2', tier: 'fruiting', name: 'Spore Coating', desc: 'Fruiting Bodies 2x more.', cost: 800, req: s => p(s, 'fruiting').owned >= 5, apply: s => mp(s, 'fruiting', 2) },
+      { id: 'u2b', tier: 'fruiting', name: 'Myco-Bloom', desc: 'Fruiting Bodies 3x more.', cost: 12000, req: s => p(s, 'fruiting').owned >= 25, apply: s => mp(s, 'fruiting', 3) },
       { id: 'u3', tier: 'click', name: 'Bioluminescence', desc: 'Clicks give 2x more spores.', cost: 500, req: s => s.totalEarned >= 200, apply: s => { s.sporesPerClick *= 2; } },
       { id: 'u3b', tier: 'click', name: 'Phosphor Touch', desc: 'Clicks give 5x more spores.', cost: 25000, req: s => s.totalEarned >= 10000, apply: s => { s.sporesPerClick *= 5; } },
       { id: 'u3c', tier: 'click', name: 'Quantum Entanglement', desc: 'Clicks give 10x more spores.', cost: 500000, req: s => s.totalEarned >= 200000, apply: s => { s.sporesPerClick *= 10; } },
-      { id: 'u4', tier: 'woodweb', name: 'Mycorrhizal Boost', desc: 'Wood Wide Web 3x yield.', cost: 5000, req: s => prod(s, 'woodweb').owned >= 3, apply: s => mult(s, 'woodweb', 3) },
-      { id: 'u4b', tier: 'woodweb', name: 'Ancient Grove Pact', desc: 'Wood Wide Web 5x yield.', cost: 80000, req: s => prod(s, 'woodweb').owned >= 15, apply: s => mult(s, 'woodweb', 5) },
-      { id: 'u5', tier: 'global', name: 'Neural Mesh', desc: 'All producers +50% output.', cost: 100000, req: s => s.totalEarned >= 50000, apply: s => { s.producers.forEach(p => p.baseSps *= 1.5); } },
-      { id: 'u5b', tier: 'global', name: 'Hive Ascension', desc: 'All producers double output.', cost: 2000000, req: s => s.totalEarned >= 1000000, apply: s => { s.producers.forEach(p => p.baseSps *= 2); } },
-      { id: 'u6', tier: 'storm', name: 'Jet Stream Riders', desc: 'Spore Storms 4x more effective.', cost: 20000, req: s => prod(s, 'sporestorm').owned >= 5, apply: s => mult(s, 'sporestorm', 4) },
-      { id: 'u7', tier: 'cordyceps', name: 'Colony Integration', desc: 'Cordyceps Protocol 5x more.', cost: 300000, req: s => prod(s, 'cordyceps').owned >= 5, apply: s => mult(s, 'cordyceps', 5) },
-      { id: 'u8', tier: 'planetary', name: 'Global Fungal Layer', desc: 'Planetary Mycelium 4x more.', cost: 3000000, req: s => prod(s, 'planetary').owned >= 3, apply: s => mult(s, 'planetary', 4) },
+      { id: 'u4', tier: 'woodweb', name: 'Mycorrhizal Boost', desc: 'Wood Wide Web 3x yield.', cost: 5000, req: s => p(s, 'woodweb').owned >= 3, apply: s => mp(s, 'woodweb', 3) },
+      { id: 'u4b', tier: 'woodweb', name: 'Ancient Grove Pact', desc: 'Wood Wide Web 5x yield.', cost: 80000, req: s => p(s, 'woodweb').owned >= 15, apply: s => mp(s, 'woodweb', 5) },
+      { id: 'u5', tier: 'global', name: 'Neural Mesh', desc: 'All producers +50% output.', cost: 100000, req: s => s.totalEarned >= 50000, apply: s => { s.producers.forEach(x => x.baseSps *= 1.5); } },
+      { id: 'u5b', tier: 'global', name: 'Hive Ascension', desc: 'All producers double output.', cost: 2000000, req: s => s.totalEarned >= 1000000, apply: s => { s.producers.forEach(x => x.baseSps *= 2); } },
+      { id: 'u6', tier: 'storm', name: 'Jet Stream Riders', desc: 'Spore Storms 4x more effective.', cost: 20000, req: s => p(s, 'sporestorm').owned >= 5, apply: s => mp(s, 'sporestorm', 4) },
+      { id: 'u7', tier: 'cordyceps', name: 'Colony Integration', desc: 'Cordyceps Protocol 5x more.', cost: 300000, req: s => p(s, 'cordyceps').owned >= 5, apply: s => mp(s, 'cordyceps', 5) },
+      { id: 'u8', tier: 'planetary', name: 'Global Fungal Layer', desc: 'Planetary Mycelium 4x more.', cost: 3000000, req: s => p(s, 'planetary').owned >= 3, apply: s => mp(s, 'planetary', 4) },
     ];
 
     const TIER_LABELS = { threads: 'Threads', fruiting: 'Fruiting', woodweb: 'Wood Web', click: 'Click', storm: 'Storm', cordyceps: 'Cordyceps', planetary: 'Planetary', global: 'Global' };
 
+    const RESEARCH_DEF = [
+      // Tier 1
+      { id: 'r1', tier: 1, prereqs: [], name: 'Spore Synthesis', desc: '+25% all producer output.', cost: 500, applyMult: m => { m.prod *= 1.25; } },
+      { id: 'r2', tier: 1, prereqs: [], name: 'Efficient Growth', desc: 'Producer costs -15%.', cost: 800, applyMult: m => { m.cost *= 0.85; } },
+      // Tier 2
+      { id: 'r3', tier: 2, prereqs: ['r1'], name: 'Mycelial Highways', desc: '+75% all producer output.', cost: 8000, applyMult: m => { m.prod *= 1.75; } },
+      { id: 'r4', tier: 2, prereqs: ['r2'], name: 'Click Resonance', desc: '+100% click power.', cost: 5000, applyMult: m => { m.click *= 2; } },
+      { id: 'r5', tier: 2, prereqs: ['r1'], name: 'Bond Amplifier', desc: 'Symbiont SPS doubled.', cost: 10000, applyMult: m => { m.symbiosis *= 2; } },
+      // Tier 3
+      { id: 'r6', tier: 3, prereqs: ['r3', 'r5'], name: 'Fungal Singularity', desc: '+150% all producers.', cost: 80000, applyMult: m => { m.prod *= 2.5; } },
+      { id: 'r7', tier: 3, prereqs: ['r4'], name: 'Pulse Amplifier', desc: 'Hivemind pulse gives 3x.', cost: 60000, applyMult: m => { m.pulse *= 3; } },
+      { id: 'r8', tier: 3, prereqs: ['r3', 'r4'], name: 'Quantum Mycelium', desc: '+200% all output + 2x clicks.', cost: 200000, applyMult: m => { m.prod *= 3; m.click *= 2; } },
+    ];
+
     const SEASONS = [
-      {
-        id: 'spring', name: 'Spring', emoji: '🌱', color: '#5DCAA5', duration: 90,
-        mults: { threads: 1.5, fruiting: 1.25, woodweb: 1.1, sporestorm: 0.8 },
-        desc: 'Threads thrive · Fruiting blooms'
-      },
-      {
-        id: 'summer', name: 'Summer', emoji: '☀️', color: '#EF9F27', duration: 90,
-        mults: { sporestorm: 1.75, woodweb: 1.3, cordyceps: 1.2, threads: 0.8, undercity: 0.85 },
-        desc: 'Storms rage · Roots push hard'
-      },
-      {
-        id: 'fall', name: 'Fall', emoji: '🍂', color: '#D85A30', duration: 90,
-        mults: { fruiting: 2.0, cordyceps: 1.5, undercity: 1.25, woodweb: 0.9 },
-        desc: 'Golden harvest · Mushrooms surge'
-      },
-      {
-        id: 'winter', name: 'Winter', emoji: '❄️', color: '#7FC4D8', duration: 90,
-        mults: { undercity: 2.5, voidspore: 1.5, threads: 0.4, fruiting: 0.5, sporestorm: 0.3, woodweb: 0.7 },
-        desc: 'Surface sleeps · Underground rules'
-      },
+      { id: 'spring', name: 'Spring', emoji: '🌱', color: '#5DCAA5', duration: 90, mults: { threads: 1.5, fruiting: 1.25, woodweb: 1.1, sporestorm: 0.8 }, desc: 'Threads thrive · Fruiting blooms' },
+      { id: 'summer', name: 'Summer', emoji: '☀️', color: '#EF9F27', duration: 90, mults: { sporestorm: 1.75, woodweb: 1.3, cordyceps: 1.2, threads: 0.8, undercity: 0.85 }, desc: 'Storms rage · Roots push hard' },
+      { id: 'fall', name: 'Fall', emoji: '🍂', color: '#D85A30', duration: 90, mults: { fruiting: 2.0, cordyceps: 1.5, undercity: 1.25, woodweb: 0.9 }, desc: 'Golden harvest · Mushrooms surge' },
+      { id: 'winter', name: 'Winter', emoji: '❄️', color: '#7FC4D8', duration: 90, mults: { undercity: 2.5, voidspore: 1.5, threads: 0.4, fruiting: 0.5, sporestorm: 0.3, woodweb: 0.7 }, desc: 'Surface sleeps · Underground rules' },
     ];
 
     const BIOMES = [
       { id: 'forest', name: 'Ancient Forest', emoji: '🌲', clickMult: 1, prodMult: 1, noSeasons: false, desc: 'The origin. Balanced and fertile.' },
-      { id: 'desert', name: 'Arid Desert', emoji: '🏜', clickMult: 3, prodMult: 0.65, noSeasons: false, desc: 'Clicks are powerful. Producers struggle in the heat.' },
-      { id: 'ocean', name: 'Deep Ocean', emoji: '🌊', clickMult: 1, prodMult: 2.0, noSeasons: true, desc: 'No seasons deep below. Producers flourish in the dark.' },
-      { id: 'arctic', name: 'Frozen Tundra', emoji: '🧊', clickMult: 1, prodMult: 1.0, noSeasons: false, arcticMode: true, desc: 'Winter bonuses doubled. Summer is brutal.' },
-      { id: 'void', name: 'The Void', emoji: '🌌', clickMult: 2, prodMult: 3.0, noSeasons: false, desc: 'Tripled production. Strange laws apply here.' },
+      { id: 'desert', name: 'Arid Desert', emoji: '🏜', clickMult: 3, prodMult: 0.65, noSeasons: false, desc: 'Clicks powerful. Producers struggle.' },
+      { id: 'ocean', name: 'Deep Ocean', emoji: '🌊', clickMult: 1, prodMult: 2.0, noSeasons: true, desc: 'No seasons. Producers flourish in the dark.' },
+      { id: 'arctic', name: 'Frozen Tundra', emoji: '🧊', clickMult: 1, prodMult: 1.0, noSeasons: false, arcticMode: true, desc: 'Winter bonuses doubled. Summer brutal.' },
+      { id: 'void', name: 'The Void', emoji: '🌌', clickMult: 2, prodMult: 3.0, noSeasons: false, desc: 'Tripled production. Strange laws here.' },
     ];
 
     const SYMBIONTS = [
@@ -944,37 +1268,70 @@
       { id: 'antcolony', name: 'Ant Colony', emoji: '🐜', desc: 'An entire colony works to expand your reach.', unlockAt: 30000, pactCost: 15000, bonusSps: 100, feedCost: 3000, feedEvery: 75 },
     ];
 
-    function mult(s, id, x) { s.producers.find(p => p.id === id).baseSps *= x; }
+    // Events
+    const EVENTS_POSITIVE = [
+      { id: 'rain', name: 'Rainstorm', emoji: '🌧', color: '#7FC4D8', duration: 30, desc: 'Rain boosts your fruiting bodies and threads.', mults: { fruiting: 1.5, threads: 1.3 } },
+      { id: 'wind', name: 'Spore Wind', emoji: '💨', color: '#9FE1CB', duration: 20, desc: 'A wind carries your spores across the forest.', mults: {}, bonusSpores: 500 },
+      { id: 'roots', name: 'Root Surge', emoji: '🌳', color: '#5DCAA5', duration: 25, desc: 'Tree roots pulse with renewed energy.', mults: { woodweb: 2, threads: 1.2 } },
+      { id: 'glow', name: 'Bioluminescence', emoji: '✨', color: '#9FE1CB', duration: 30, desc: 'The whole network glows. All output doubled.', mults: {}, globalMult: 2 },
+      { id: 'ant', name: 'Ant Migration', emoji: '🐜', color: '#5DCAA5', duration: 20, desc: 'A migration swarm fans out your spores.', mults: { cordyceps: 2, sporestorm: 1.5 } },
+    ];
+    const EVENTS_NEGATIVE = [
+      { id: 'fire', name: 'Forest Fire', emoji: '🔥', color: '#D85A30', duration: 25, desc: 'Fire scorches the surface. Threads suffer badly.', mults: { threads: 0.3, fruiting: 0.5, woodweb: 0.6 } },
+      { id: 'drought', name: 'Drought', emoji: '☀️', color: '#EF9F27', duration: 20, desc: 'Drought shrivels your fruiting bodies.', mults: { fruiting: 0.2, sporestorm: 0.5 } },
+      { id: 'pest', name: 'Pest Invasion', emoji: '🪲', color: '#c47a4a', duration: 15, desc: 'Pests consume 8% of your stored spores!', mults: {}, stealPct: 0.08 },
+      { id: 'freeze', name: 'Sudden Freeze', emoji: '❄️', color: '#7FC4D8', duration: 20, desc: 'A snap freeze locks the surface down.', mults: { threads: 0.4, fruiting: 0.3, woodweb: 0.5, sporestorm: 0.2 } },
+    ];
 
-    const TIER_LABELS = {
-      threads: 'Threads', fruiting: 'Fruiting', woodweb: 'Wood Web',
-      click: 'Click', storm: 'Storm', cordyceps: 'Cordyceps',
-      planetary: 'Planetary', global: 'Global', voidspore: 'Void',
-    };
+    // Achievements
+    const ACHIEVEMENTS_DEF = [
+      { id: 'a1', name: 'First Pulse', emoji: '🍄', desc: 'Earn 100 total spores.', bonusDesc: '+5% clicks', req: s => s.totalEarned >= 100, lore: 'The spore lands. Something begins.', bonus: m => { m.click *= 1.05; } },
+      { id: 'a2', name: 'Rot Spreads', emoji: '🕸', desc: 'Own 5 Mycelium Threads.', bonusDesc: '+5% all output', req: s => p(s, 'threads').owned >= 5, lore: 'The wood softens. You are not alone.', bonus: m => { m.prod *= 1.05; } },
+      { id: 'a3', name: 'First Fruiting', emoji: '🌿', desc: 'Own 5 Fruiting Bodies.', bonusDesc: '+5% all output', req: s => p(s, 'fruiting').owned >= 5, lore: 'A cap emerges. The forest notices.', bonus: m => { m.prod *= 1.05; } },
+      { id: 'a4', name: 'Storm Walker', emoji: '💨', desc: 'Own 5 Spore Storms.', bonusDesc: '+8% all output', req: s => p(s, 'sporestorm').owned >= 5, lore: 'The wind carries your will now.', bonus: m => { m.prod *= 1.08; } },
+      { id: 'a5', name: 'Network Mind', emoji: '⚡', desc: 'Trigger the Hivemind Pulse 3 times.', bonusDesc: '+25% pulse bonus', req: s => s.allTimePulses >= 3, lore: 'The pulse echoes further each time.', bonus: m => { m.pulse *= 1.25; } },
+      { id: 'a6', name: 'First Bond', emoji: '🪱', desc: 'Form your first Symbiosis pact.', bonusDesc: '+5% all output', req: s => s.symbiosis.some(x => x.active || x.broken), lore: 'You are not the only living thing here.', bonus: m => { m.prod *= 1.05; } },
+      { id: 'a7', name: 'Thousand Spores', emoji: '✨', desc: 'Earn 1,000 total spores.', bonusDesc: '+10% all output', req: s => s.totalEarned >= 1000, lore: 'The count is meaningless now. You grow.', bonus: m => { m.prod *= 1.1; } },
+      { id: 'a8', name: 'Deep Roots', emoji: '🌲', desc: 'Own 10 Wood Wide Web.', bonusDesc: '+10% all output', req: s => p(s, 'woodweb').owned >= 10, lore: 'The trees speak. You answer.', bonus: m => { m.prod *= 1.1; } },
+      { id: 'a9', name: 'Pulse Master', emoji: '🌀', desc: 'Trigger the Hivemind Pulse 10 times.', bonusDesc: '+50% pulse, +10%', req: s => s.allTimePulses >= 10, lore: 'You no longer wait for the pulse. You are the pulse.', bonus: m => { m.pulse *= 1.5; m.prod *= 1.1; } },
+      { id: 'a10', name: 'Million Mind', emoji: '🧠', desc: 'Earn 1,000,000 total spores.', bonusDesc: '+15% all, +20% click', req: s => s.totalEarned >= 1000000, lore: 'The numbers lost meaning long ago.', bonus: m => { m.prod *= 1.15; m.click *= 1.2; } },
+      { id: 'a11', name: 'Ascendant', emoji: '🧬', desc: 'Sporulate for the first time.', bonusDesc: '+20% all output', req: s => s.prestigeCount >= 1, lore: 'Death is not an end. It is a dispersal.', bonus: m => { m.prod *= 1.2; } },
+      { id: 'a12', name: 'Many Lives', emoji: '♾', desc: 'Sporulate 3 times.', bonusDesc: '+25% all output', req: s => s.prestigeCount >= 3, lore: 'Each spore carries the weight of worlds.', bonus: m => { m.prod *= 1.25; } },
+      { id: 'a13', name: 'Winter Survivor', emoji: '❄️', desc: 'Earn spores during Winter.', bonusDesc: '+10% all output', req: s => s.winterSurvived, lore: 'Even under the ice, the network breathes.', bonus: m => { m.prod *= 1.1; } },
+      { id: 'a14', name: 'Antlord', emoji: '🐜', desc: 'Form a pact with the Ant Colony.', bonusDesc: '+15% all output', req: s => { const sc = s.symbiosis.find(x => x.id === 'antcolony'); return sc && (sc.active || sc.broken); }, lore: 'They serve the mycelium now.', bonus: m => { m.prod *= 1.15; } },
+      { id: 'a15', name: 'Beyond the Void', emoji: '🌌', desc: 'Own 1 Void Spore.', bonusDesc: '+20% all, +30% click', req: s => p(s, 'voidspore').owned >= 1, lore: 'There is no language for what you have seen.', bonus: m => { m.prod *= 1.2; m.click *= 1.3; } },
+    ];
+
+    // Codex
+    const CODEX_DEF = [
+      { id: 'c1', title: 'Origin', unlockAt: s => s.totalEarned >= 50, text: 'You are a spore. A single point of possibility, landed on a fallen log at the edge of a dying forest. You do not know this yet. You are already growing.' },
+      { id: 'c2', title: 'The Threads', unlockAt: s => p(s, 'threads').owned >= 1, text: 'Mycelium does not grow. It reaches. Each thread is a question sent into the dark — and the dark always answers.' },
+      { id: 'c3', title: 'Fruiting', unlockAt: s => p(s, 'fruiting').owned >= 1, text: 'The mushroom is a mistake. A miscalculation. The network grew so dense, so hungry, that it needed to exhale. The mushroom is your breath.' },
+      { id: 'c4', title: 'The Wood Wide Web', unlockAt: s => s.totalEarned >= 5000, text: 'The trees knew before we did. They have been speaking for millennia — exchanging sugars, warnings, grief. You have joined their conversation.' },
+      { id: 'c5', title: 'The Pulse', unlockAt: s => s.allTimePulses >= 1, text: 'The hivemind pulse is not a decision. It is a reflex. The network has grown so interconnected that sometimes it simply... fires. Like a heartbeat.' },
+      { id: 'c6', title: 'The Colony', unlockAt: s => s.totalEarned >= 50000, text: 'You began with rot. Now insects carry you. They do not know they carry you. They only know they are drawn to certain paths. The paths are yours.' },
+      { id: 'c7', title: 'Symbiosis', unlockAt: s => s.symbiosis.some(x => x.active || x.broken), text: 'A symbiosis is a lie that becomes true. Two organisms telling each other they are one. After long enough, the lie is indistinguishable from fact.' },
+      { id: 'c8', title: 'Winter', unlockAt: s => s.winterSurvived, text: 'Everything dies in winter. Everything except the underground. The network has never been warmer. Death is just the surface.' },
+      { id: 'c9', title: 'Sporulation', unlockAt: s => s.prestigeCount >= 1, text: 'The spore does not die when it leaves. It carries everything. The memory of the forest, the geometry of the network. When it lands, it already knows.' },
+      { id: 'c10', title: 'What We Became', unlockAt: s => s.totalEarned >= 1000000, text: 'There was a log. There was a spore. There was a moment of contact. Now there is everything else. The log is gone. The forest is gone. We are the forest.' },
+    ];
 
     const MESSAGES = [
-      'The log beneath you begins to soften.',
-      'A faint glow pulses through the soil.',
-      'Somewhere, a tree shudders.',
-      'The forest is listening.',
-      'Your threads reach deeper.',
-      'An ant pauses and tilts its head.',
-      'The Wood Wide Web stirs in its sleep.',
-      'You are becoming the forest.',
-      'Something ancient notices you.',
-      'The roots remember everything.',
-      'Phosphorescence blooms in the dark.',
-      'Every mushroom is a window.',
-      'The network breathes.',
-      'Your spores drift across the sky.',
+      'The log beneath you begins to soften.', 'A faint glow pulses through the soil.',
+      'Somewhere, a tree shudders.', 'The forest is listening.',
+      'Your threads reach deeper.', 'An ant pauses and tilts its head.',
+      'The Wood Wide Web stirs in its sleep.', 'You are becoming the forest.',
+      'Something ancient notices you.', 'The roots remember everything.',
+      'Phosphorescence blooms in the dark.', 'Every mushroom is a window.',
+      'The network breathes.', 'Your spores drift across the sky.',
       'The soil is no longer empty.',
     ];
 
     // ═══════════════════════════════════════════════════════
     //  HELPERS
     // ═══════════════════════════════════════════════════════
-    function prod(s, id) { return s.producers.find(p => p.id === id); }
-    function mult(s, id, x) { prod(s, id).baseSps *= x; }
+    function p(s, id) { return s.producers.find(x => x.id === id); }
+    function mp(s, id, x) { p(s, id).baseSps *= x; }
     function fmt(n) {
       if (n < 1000) return Math.floor(n).toString();
       if (n < 1e6) return (n / 1000).toFixed(1) + 'k';
@@ -982,34 +1339,133 @@
       if (n < 1e12) return (n / 1e9).toFixed(2) + 'B';
       return (n / 1e12).toFixed(2) + 'T';
     }
-    function getCost(p) { return Math.ceil(p.baseCost * Math.pow(1.15, p.owned)); }
 
     // ═══════════════════════════════════════════════════════
     //  STATE
     // ═══════════════════════════════════════════════════════
-    function defaultState() {
+    function defaultRunState() {
       return {
         spores: 0, totalEarned: 0, sporesPerClick: 1, hivemind: 0, msgIdx: 0,
         seasonIdx: 0, seasonTimer: 0,
-        prestigeCount: 0, biomeIdx: 0,
-        showSporulatePanel: false,
-        producers: PRODUCERS_DEF.map(p => ({ ...p, owned: 0 })),
-        upgrades: UPGRADES_DEF.map(u => ({ id: u.id, bought: false })),
-        symbiosis: SYMBIONTS.map(s => ({ id: s.id, active: false, hungry: false, feedTimer: 0, broken: false })),
+        producers: PRODUCERS_DEF.map(x => ({ ...x, owned: 0 })),
+        upgrades: UPGRADES_DEF.map(x => ({ id: x.id, bought: false })),
+        symbiosis: SYMBIONTS.map(x => ({ id: x.id, active: false, hungry: false, feedTimer: 0, broken: false })),
+        research: RESEARCH_DEF.map(x => ({ id: x.id, bought: false })),
+        activeEvent: null, eventCooldown: 120,
       };
     }
+    function defaultMetaState() {
+      return {
+        prestigeCount: 0, biomeIdx: 0,
+        achievementsUnlocked: [],
+        allTimePulses: 0,
+        winterSurvived: false,
+        disasterMode: false,
+        showSporulatePanel: false,
+      };
+    }
+    function defaultState() { return { ...defaultRunState(), ...defaultMetaState() }; }
+
     let state = defaultState();
 
+    // Memoised multiplier caches — invalidated when their source changes
+    let _rMults = null, _aMults = null;
+    function invalidateMults() { _rMults = null; _aMults = null; }
+
+    function getResearchMults() {
+      if (_rMults) return _rMults;
+      const m = { prod: 1, click: 1, pulse: 1, cost: 1, symbiosis: 1 };
+      state.research.forEach(r => {
+        if (!r.bought) return;
+        const def = RESEARCH_DEF.find(d => d.id === r.id);
+        if (def) def.applyMult(m);
+      });
+      return (_rMults = m);
+    }
+
+    function getAchievementMults() {
+      if (_aMults) return _aMults;
+      const m = { prod: 1, click: 1, pulse: 1 };
+      state.achievementsUnlocked.forEach(id => {
+        const def = ACHIEVEMENTS_DEF.find(d => d.id === id);
+        if (def) def.bonus(m);
+      });
+      return (_aMults = m);
+    }
+
+    function getEventMult(producerId) {
+      if (!state.activeEvent) return 1;
+      return state.activeEvent.mults[producerId] || 1;
+    }
+    function getEventGlobalMult() {
+      return state.activeEvent?.globalMult || 1;
+    }
+
+    function getSeasonMult(producerId) {
+      const biome = BIOMES[state.biomeIdx];
+      if (biome.noSeasons) return 1;
+      const season = SEASONS[state.seasonIdx];
+      let m = season.mults[producerId] || 1;
+      if (biome.arcticMode) {
+        if (state.seasonIdx === 3) m = 1 + (m - 1) * 2 + 1;
+        if (state.seasonIdx === 1) m *= 0.5;
+      }
+      return m;
+    }
+
+    function getPrestigeMult() { return 1 + state.prestigeCount * 0.5; }
+    function getCost(pr) { return Math.ceil(pr.baseCost * Math.pow(1.15, pr.owned) * getResearchMults().cost); }
+
+    function getSymbiosisSps() {
+      const sm = getResearchMults().symbiosis;
+      return state.symbiosis.reduce((t, sym) => {
+        if (!sym.active || sym.broken) return t;
+        const def = SYMBIONTS.find(s => s.id === sym.id);
+        return t + (def ? def.bonusSps * sm : 0);
+      }, 0);
+    }
+
+    function getSps() {
+      const biome = BIOMES[state.biomeIdx];
+      const rm = getResearchMults(), am = getAchievementMults();
+      const base = state.producers.reduce((s, pr) =>
+        s + pr.baseSps * pr.owned * getSeasonMult(pr.id) * getEventMult(pr.id), 0);
+      return base * biome.prodMult * getPrestigeMult() * rm.prod * am.prod * getEventGlobalMult()
+        + getSymbiosisSps();
+    }
+
+    function getClickValue() {
+      const biome = BIOMES[state.biomeIdx];
+      const rm = getResearchMults(), am = getAchievementMults();
+      return state.sporesPerClick * biome.clickMult * getPrestigeMult() * rm.click * am.click;
+    }
+
+    function getPulseMult() {
+      const rm = getResearchMults(), am = getAchievementMults();
+      return rm.pulse * am.pulse;
+    }
+
+    function sporulationThreshold() { return 1000000 * Math.pow(5, state.prestigeCount); }
+    function canSporulate() { return state.totalEarned >= sporulationThreshold(); }
+
+    // ═══════════════════════════════════════════════════════
+    //  SAVE / LOAD / RESET
+    // ═══════════════════════════════════════════════════════
     function saveGame() {
       try {
-        localStorage.setItem('myceliumEmpire', JSON.stringify({
+        localStorage.setItem('myceliumEmpireV4', JSON.stringify({
           spores: state.spores, totalEarned: state.totalEarned,
           sporesPerClick: state.sporesPerClick, hivemind: state.hivemind, msgIdx: state.msgIdx,
           seasonIdx: state.seasonIdx, seasonTimer: state.seasonTimer,
           prestigeCount: state.prestigeCount, biomeIdx: state.biomeIdx,
-          producers: state.producers.map(p => ({ id: p.id, owned: p.owned, baseSps: p.baseSps })),
-          upgrades: state.upgrades.map(u => ({ id: u.id, bought: u.bought })),
-          symbiosis: state.symbiosis.map(s => ({ ...s })),
+          achievementsUnlocked: state.achievementsUnlocked,
+          allTimePulses: state.allTimePulses, winterSurvived: state.winterSurvived,
+          disasterMode: state.disasterMode,
+          eventCooldown: state.eventCooldown,
+          producers: state.producers.map(x => ({ id: x.id, owned: x.owned, baseSps: x.baseSps })),
+          upgrades: state.upgrades.map(x => ({ id: x.id, bought: x.bought })),
+          symbiosis: state.symbiosis.map(x => ({ ...x })),
+          research: state.research.map(x => ({ id: x.id, bought: x.bought })),
         }));
         document.getElementById('save-info').textContent = 'Saved ' + new Date().toLocaleTimeString();
       } catch (e) { }
@@ -1017,82 +1473,29 @@
 
     function loadGame() {
       try {
-        const raw = localStorage.getItem('myceliumEmpire');
+        const raw = localStorage.getItem('myceliumEmpireV4');
         if (!raw) return;
         const sv = JSON.parse(raw);
-        state.spores = sv.spores || 0;
-        state.totalEarned = sv.totalEarned || 0;
-        state.sporesPerClick = sv.sporesPerClick || 1;
-        state.hivemind = sv.hivemind || 0;
-        state.msgIdx = sv.msgIdx || 0;
-        state.seasonIdx = sv.seasonIdx || 0;
-        state.seasonTimer = sv.seasonTimer || 0;
-        state.prestigeCount = sv.prestigeCount || 0;
-        state.biomeIdx = sv.biomeIdx || 0;
-        (sv.producers || []).forEach(sp => {
-          const p = state.producers.find(x => x.id === sp.id);
-          if (p) { p.owned = sp.owned; p.baseSps = sp.baseSps; }
-        });
-        (sv.upgrades || []).forEach(su => {
-          const u = state.upgrades.find(x => x.id === su.id);
-          if (u) u.bought = su.bought;
-        });
-        (sv.symbiosis || []).forEach(ss => {
-          const sym = state.symbiosis.find(x => x.id === ss.id);
-          if (sym) Object.assign(sym, ss);
-        });
+        const keys = ['spores', 'totalEarned', 'sporesPerClick', 'hivemind', 'msgIdx', 'seasonIdx', 'seasonTimer', 'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown'];
+        keys.forEach(k => { if (sv[k] !== undefined) state[k] = sv[k]; });
+        if (sv.achievementsUnlocked) state.achievementsUnlocked = sv.achievementsUnlocked;
+        (sv.producers || []).forEach(sp => { const x = p(state, sp.id); if (x) { x.owned = sp.owned; x.baseSps = sp.baseSps; } });
+        (sv.upgrades || []).forEach(su => { const x = state.upgrades.find(u => u.id === su.id); if (x) x.bought = su.bought; });
+        (sv.symbiosis || []).forEach(ss => { const x = state.symbiosis.find(s => s.id === ss.id); if (x) Object.assign(x, ss); });
+        (sv.research || []).forEach(sr => { const x = state.research.find(r => r.id === sr.id); if (x) x.bought = sr.bought; });
+        invalidateMults();
       } catch (e) { console.warn('Load failed', e); }
     }
 
     function resetGame() {
       if (!confirm('Reset everything and start over?')) return;
-      localStorage.removeItem('myceliumEmpire');
+      localStorage.removeItem('myceliumEmpireV4');
       state = defaultState();
-      lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null;
+      invalidateMults();
+      lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
       branches = [];
       bootUI();
     }
-
-    // ═══════════════════════════════════════════════════════
-    //  GAME MATH
-    // ═══════════════════════════════════════════════════════
-    function getSeasonMult(producerId) {
-      const biome = BIOMES[state.biomeIdx];
-      if (biome.noSeasons) return 1;
-      const season = SEASONS[state.seasonIdx];
-      let m = season.mults[producerId] || 1;
-      if (biome.arcticMode) {
-        if (state.seasonIdx === 3) m = 1 + (m - 1) * 2 + 1; // winter doubled in arctic: apply extra buff
-        if (state.seasonIdx === 1) m *= 0.5; // summer halved
-      }
-      return m;
-    }
-
-    function getPrestigeMult() { return 1 + state.prestigeCount * 0.5; }
-
-    function getSymbiosisSps() {
-      return state.symbiosis.reduce((total, sym) => {
-        if (!sym.active || sym.broken) return total;
-        const def = SYMBIONTS.find(s => s.id === sym.id);
-        return total + (def ? def.bonusSps : 0);
-      }, 0);
-    }
-
-    function getSps() {
-      const biome = BIOMES[state.biomeIdx];
-      const prestige = getPrestigeMult();
-      const base = state.producers.reduce((s, p) => s + p.baseSps * p.owned * getSeasonMult(p.id), 0);
-      return base * biome.prodMult * prestige + getSymbiosisSps();
-    }
-
-    function getClickValue() {
-      const biome = BIOMES[state.biomeIdx];
-      return state.sporesPerClick * biome.clickMult * getPrestigeMult();
-    }
-
-    function sporulationThreshold() { return 1000000 * Math.pow(5, state.prestigeCount); }
-    function canSporulate() { return state.totalEarned >= sporulationThreshold(); }
-    function nextBiomeIdx() { return (state.biomeIdx + 1) % BIOMES.length; }
 
     // ═══════════════════════════════════════════════════════
     //  SPORULATION
@@ -1103,39 +1506,32 @@
     }
 
     function doSporulate() {
-      const next = BIOMES[nextBiomeIdx()];
-      state.prestigeCount++;
-      state.biomeIdx = nextBiomeIdx() === 0 ? 0 : (state.biomeIdx + 1) % BIOMES.length;
-      // Actually set biomeIdx to the one we computed before incrementing prestige
-      state.biomeIdx = (state.biomeIdx) % BIOMES.length;
-
-      state.spores = 0; state.totalEarned = 0; state.sporesPerClick = 1;
-      state.hivemind = 0; state.seasonIdx = 0; state.seasonTimer = 0;
-      state.showSporulatePanel = false;
-      state.producers = PRODUCERS_DEF.map(p => ({ ...p, owned: 0 }));
-      state.upgrades = UPGRADES_DEF.map(u => ({ id: u.id, bought: false }));
-      state.symbiosis = SYMBIONTS.map(s => ({ id: s.id, active: false, hungry: false, feedTimer: 0, broken: false }));
-
-      lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null;
+      const nextIdx = (state.biomeIdx + 1) % BIOMES.length;
+      const meta = {
+        prestigeCount: state.prestigeCount + 1,
+        biomeIdx: nextIdx,
+        achievementsUnlocked: [...state.achievementsUnlocked],
+        allTimePulses: state.allTimePulses,
+        winterSurvived: state.winterSurvived,
+        disasterMode: state.disasterMode,
+        showSporulatePanel: false,
+      };
+      state = { ...defaultRunState(), ...meta };
+      invalidateMults();
+      lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
       branches = [];
-
-      bootUI();
-      screenShake();
-
-      const ticker = document.getElementById('ticker');
-      ticker.textContent = `🧬 Sporulated! You enter ${next.emoji} ${next.name}. Legacy: ${getPrestigeMult().toFixed(1)}x`;
-      ticker.classList.add('pulse-msg');
-      setTimeout(() => ticker.classList.remove('pulse-msg'), 4000);
+      bootUI(); screenShake();
+      const next = BIOMES[state.biomeIdx];
+      tick('🧬 Sporulated! You enter ' + next.emoji + ' ' + next.name + '. Legacy: ' + getPrestigeMult().toFixed(1) + 'x', true);
     }
 
     function updateSporulateUI() {
       const wrap = document.getElementById('sporulate-wrap');
       if (!canSporulate()) { wrap.style.display = 'none'; return; }
       wrap.style.display = 'block';
-      const panel = document.getElementById('sporulate-panel');
-      panel.style.display = state.showSporulatePanel ? 'block' : 'none';
+      document.getElementById('sporulate-panel').style.display = state.showSporulatePanel ? 'block' : 'none';
       if (state.showSporulatePanel) {
-        const next = BIOMES[nextBiomeIdx()];
+        const next = BIOMES[(state.biomeIdx + 1) % BIOMES.length];
         document.getElementById('spor-biome').textContent = next.emoji + ' ' + next.name;
         document.getElementById('spor-biome-desc').textContent = next.desc;
         document.getElementById('spor-mult').textContent = (1 + (state.prestigeCount + 1) * 0.5).toFixed(1) + 'x (currently ' + getPrestigeMult().toFixed(1) + 'x)';
@@ -1146,232 +1542,316 @@
     //  SEASONS
     // ═══════════════════════════════════════════════════════
     function tickSeason(dt) {
+      const biome = BIOMES[state.biomeIdx];
+      if (biome.noSeasons) { updateSeasonBar(); return; }
       state.seasonTimer += dt;
       const dur = SEASONS[state.seasonIdx].duration;
       if (state.seasonTimer >= dur) {
         state.seasonTimer -= dur;
+        const prev = state.seasonIdx;
         state.seasonIdx = (state.seasonIdx + 1) % SEASONS.length;
+        if (prev === 3) state.winterSurvived = true; // survived winter
         onSeasonChange();
       }
+      if (state.seasonIdx === 3 && state.totalEarned > 100) state.winterSurvived = true;
       updateSeasonBar();
     }
 
     function onSeasonChange() {
       const s = SEASONS[state.seasonIdx];
-      const ticker = document.getElementById('ticker');
-      ticker.textContent = `${s.emoji} ${s.name} begins. ${s.desc}.`;
-      ticker.classList.add('pulse-msg');
-      setTimeout(() => ticker.classList.remove('pulse-msg'), 3000);
+      tick(s.emoji + ' ' + s.name + ' begins. ' + s.desc + '.', true);
       const flash = document.getElementById('flash-overlay');
-      flash.style.background = s.color;
-      flash.style.opacity = '0.1';
+      flash.style.background = s.color; flash.style.opacity = '0.1';
       setTimeout(() => { flash.style.opacity = '0'; flash.style.background = '#1D9E75'; }, 400);
     }
 
     function updateSeasonBar() {
-      const biome = BIOMES[state.biomeIdx];
-      const season = SEASONS[state.seasonIdx];
-      document.getElementById('season-bar').style.borderColor = biome.noSeasons ? '#1D9E7320' : season.color + '55';
-      document.getElementById('season-name-row').textContent = biome.noSeasons ? '— No Seasons' : season.emoji + ' ' + season.name;
-      document.getElementById('season-desc').textContent = biome.noSeasons ? 'The deep ocean ignores the surface.' : season.desc;
-      const pct = biome.noSeasons ? 100 : (state.seasonTimer / season.duration) * 100;
+      const biome = BIOMES[state.biomeIdx], season = SEASONS[state.seasonIdx];
+      const noSeason = biome.noSeasons;
+      document.getElementById('season-bar').style.borderColor = noSeason ? '#1D9E7320' : season.color + '55';
+      document.getElementById('season-name-row').textContent = noSeason ? '— No Seasons' : season.emoji + ' ' + season.name;
+      document.getElementById('season-desc').textContent = noSeason ? 'The deep ocean ignores the surface.' : season.desc;
+      const pct = noSeason ? 100 : (state.seasonTimer / season.duration) * 100;
       document.getElementById('season-fill').style.width = pct + '%';
-      document.getElementById('season-fill').style.background = biome.noSeasons ? '#1D9E7560' : season.color;
+      document.getElementById('season-fill').style.background = noSeason ? '#1D9E7560' : season.color;
       const rem = Math.max(0, Math.ceil(season.duration - state.seasonTimer));
       const m = Math.floor(rem / 60), sec = rem % 60;
-      document.getElementById('season-time').textContent = biome.noSeasons ? '—' : m + ':' + String(sec).padStart(2, '0');
+      document.getElementById('season-time').textContent = noSeason ? '—' : m + ':' + String(sec).padStart(2, '0');
     }
 
     // ═══════════════════════════════════════════════════════
-    //  SYMBIOSIS
+    //  RANDOM EVENTS
     // ═══════════════════════════════════════════════════════
-    let lastSymKey = null;
+    const EVENT_COOLDOWN_COLONY = () => 90 + Math.random() * 60;
+    const EVENT_COOLDOWN_DISASTER = () => 60 + Math.random() * 50;
 
-    function symKey() {
-      return state.symbiosis.map(s => `${s.id}:${s.active}:${s.hungry}:${s.broken}`).join('|')
-        + '|' + state.totalEarned.toFixed(0);
-    }
+    document.getElementById('mode-check').addEventListener('change', () => {
+      state.disasterMode = document.getElementById('mode-check').checked;
+      if (state.disasterMode) {
+        tick('⚠️ Disaster Mode activated. Events can now harm your colony.', true);
+      } else {
+        tick('🌿 Colony Mode active. Only beneficial events will occur.', true);
+      }
+    });
 
-    function buildSymbiosis() {
-      const c = document.getElementById('tab-symbiosis');
-      c.innerHTML = '';
-      SYMBIONTS.forEach((def, i) => {
-        const card = document.createElement('div');
-        card.className = 'sym-card';
-        card.dataset.symId = def.id;
-        card.innerHTML = `
-        <div class="sym-top">
-          <span class="sym-name">${def.emoji} ${def.name}</span>
-          <span class="sym-status-badge locked" data-sym-status="${def.id}">Locked</span>
-        </div>
-        <div class="sym-desc">${def.desc}</div>
-        <div class="sym-stats">+${def.bonusSps}/s &nbsp;·&nbsp; Feed ${fmt(def.feedCost)} sp every ${def.feedEvery}s &nbsp;·&nbsp; Pact costs ${fmt(def.pactCost)} sp</div>
-        <div data-sym-actions="${def.id}"></div>
-        <div class="sym-feed-track" data-sym-track="${def.id}" style="display:none">
-          <div class="sym-feed-fill" data-sym-fill="${def.id}" style="width:0%"></div>
-        </div>
-      `;
-        c.appendChild(card);
-      });
-    }
-
-    function updateSymbiosis() {
-      const key = symKey();
-      const needsRebuildButtons = key !== lastSymKey;
-      lastSymKey = key;
-
-      SYMBIONTS.forEach((def, i) => {
-        const sym = state.symbiosis[i];
-        const unlocked = state.totalEarned >= def.unlockAt;
-
-        const statusEl = document.querySelector(`[data-sym-status="${def.id}"]`);
-        const actionsEl = document.querySelector(`[data-sym-actions="${def.id}"]`);
-        const trackEl = document.querySelector(`[data-sym-track="${def.id}"]`);
-        const fillEl = document.querySelector(`[data-sym-fill="${def.id}"]`);
-        if (!statusEl) return;
-
-        // Status badge
-        let statusClass = 'locked', statusText = 'Locked';
-        if (unlocked && !sym.active && !sym.broken) { statusClass = 'available'; statusText = 'Available'; }
-        else if (sym.active && !sym.hungry) { statusClass = 'active'; statusText = 'Active'; }
-        else if (sym.hungry) { statusClass = 'hungry'; statusText = 'Hungry!'; }
-        else if (sym.broken) { statusClass = 'broken'; statusText = 'Bond Broken'; }
-        statusEl.className = 'sym-status-badge ' + statusClass;
-        statusEl.textContent = statusText;
-
-        // Action buttons — only rebuild when state changes
-        if (needsRebuildButtons) {
-          actionsEl.innerHTML = '';
-          if (unlocked && !sym.active && !sym.broken) {
-            const btn = document.createElement('button');
-            btn.className = 'sym-btn pact'; btn.type = 'button';
-            btn.textContent = `Form Pact (${fmt(def.pactCost)} sp)`;
-            btn.disabled = state.spores < def.pactCost;
-            btn.addEventListener('click', () => formPact(i));
-            actionsEl.appendChild(btn);
-          } else if (sym.hungry) {
-            const btn = document.createElement('button');
-            btn.className = 'sym-btn feed'; btn.type = 'button';
-            btn.textContent = `Feed (${fmt(def.feedCost)} sp)`;
-            btn.disabled = state.spores < def.feedCost;
-            btn.addEventListener('click', () => feedSymbiont(i));
-            actionsEl.appendChild(btn);
-          } else if (sym.broken && unlocked) {
-            const btn = document.createElement('button');
-            btn.className = 'sym-btn restore'; btn.type = 'button';
-            btn.textContent = `Restore Pact (${fmt(def.pactCost)} sp)`;
-            btn.disabled = state.spores < def.pactCost;
-            btn.addEventListener('click', () => formPact(i));
-            actionsEl.appendChild(btn);
-          }
-        } else {
-          // Just update disabled state on existing buttons
-          const btn = actionsEl.querySelector('button');
-          if (btn) {
-            const cost = sym.hungry ? def.feedCost : def.pactCost;
-            btn.disabled = state.spores < cost;
-          }
+    function tickEvents(dt) {
+      // Tick active event
+      if (state.activeEvent) {
+        state.activeEvent.elapsed += dt;
+        const ev = state.activeEvent;
+        const remaining = Math.max(0, ev.duration - ev.elapsed);
+        const pct = (ev.elapsed / ev.duration) * 100;
+        document.getElementById('event-toast').style.display = 'block';
+        document.getElementById('event-title').textContent = ev.emoji + ' ' + ev.name;
+        document.getElementById('event-timer').textContent = Math.ceil(remaining) + 's';
+        document.getElementById('event-desc-txt').textContent = ev.desc;
+        document.getElementById('event-bar-fill').style.width = (100 - pct) + '%';
+        document.getElementById('event-bar-fill').style.background = ev.color;
+        document.getElementById('event-toast').style.borderColor = ev.color + '66';
+        if (ev.elapsed >= ev.duration) {
+          state.activeEvent = null;
+          state.eventCooldown = state.disasterMode ? EVENT_COOLDOWN_DISASTER() : EVENT_COOLDOWN_COLONY();
+          document.getElementById('event-toast').style.display = 'none';
         }
-
-        // Feed timer bar
-        if (sym.active) {
-          trackEl.style.display = 'block';
-          const pct = Math.min(100, (sym.feedTimer / def.feedEvery) * 100);
-          fillEl.style.width = pct + '%';
-          fillEl.style.background = sym.hungry ? '#EF9F27' : '#5DCAA5';
-        } else {
-          trackEl.style.display = 'none';
-        }
-      });
+        return;
+      }
+      // Count down cooldown
+      state.eventCooldown -= dt;
+      if (state.eventCooldown <= 0) fireEvent();
     }
 
-    function tickSymbiosis(dt) {
+    function fireEvent() {
+      const pool = state.disasterMode
+        ? [...EVENTS_POSITIVE, ...EVENTS_NEGATIVE]
+        : EVENTS_POSITIVE;
+      const ev = { ...pool[Math.floor(Math.random() * pool.length)], elapsed: 0 };
+      state.activeEvent = ev;
+      // One-time spore bonus/steal
+      if (ev.bonusSpores) {
+        const bonus = ev.bonusSpores * getPrestigeMult() * getResearchMults().prod;
+        state.spores += bonus; state.totalEarned += bonus;
+      }
+      if (ev.stealPct) {
+        const loss = state.spores * ev.stealPct;
+        state.spores = Math.max(0, state.spores - loss);
+      }
+      tick(ev.emoji + ' ' + ev.name + '! ' + ev.desc, true);
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  ACHIEVEMENTS
+    // ═══════════════════════════════════════════════════════
+    let lastAchKey = null;
+
+    function checkAchievements() {
       let changed = false;
-      state.symbiosis.forEach((sym, i) => {
-        if (!sym.active || sym.broken) return;
-        const def = SYMBIONTS[i];
-        sym.feedTimer += dt;
-        if (!sym.hungry && sym.feedTimer >= def.feedEvery) {
-          sym.hungry = true; changed = true;
-          const ticker = document.getElementById('ticker');
-          ticker.textContent = `${def.emoji} ${def.name} is hungry! Feed it to keep your bond.`;
-          ticker.classList.add('pulse-msg');
-          setTimeout(() => ticker.classList.remove('pulse-msg'), 3000);
-        }
-        // 30s grace period after hunger before bond breaks
-        if (sym.hungry && sym.feedTimer >= def.feedEvery + 30) {
-          sym.broken = true; sym.active = false; changed = true;
-          const ticker = document.getElementById('ticker');
-          ticker.textContent = `💔 Bond with ${def.name} broken. Restore the pact to reconnect.`;
-          ticker.classList.add('pulse-msg');
-          setTimeout(() => ticker.classList.remove('pulse-msg'), 4000);
+      ACHIEVEMENTS_DEF.forEach(def => {
+        if (state.achievementsUnlocked.includes(def.id)) return;
+        if (def.req(state)) {
+          state.achievementsUnlocked.push(def.id);
+          changed = true;
+          invalidateMults();
+          tick('🏆 Achievement: ' + def.name + '!', true);
         }
       });
-      return changed;
+      if (changed) buildAchievements();
     }
 
-    function formPact(i) {
-      const def = SYMBIONTS[i]; const sym = state.symbiosis[i];
-      if (state.spores < def.pactCost) return;
-      state.spores -= def.pactCost;
-      sym.active = true; sym.hungry = false; sym.feedTimer = 0; sym.broken = false;
-      lastSymKey = null;
-      updateSymbiosis();
-      updateStats();
-    }
-
-    function feedSymbiont(i) {
-      const def = SYMBIONTS[i]; const sym = state.symbiosis[i];
-      if (!sym.hungry || state.spores < def.feedCost) return;
-      state.spores -= def.feedCost;
-      sym.hungry = false; sym.feedTimer = 0;
-      lastSymKey = null;
-      updateSymbiosis();
-      updateStats();
+    function buildAchievements() {
+      const key = state.achievementsUnlocked.join(',') + '|' + state.totalEarned.toFixed(0);
+      if (key === lastAchKey) return;
+      lastAchKey = key;
+      const c = document.getElementById('tab-goals');
+      c.innerHTML = '';
+      const total = state.achievementsUnlocked.length;
+      const hdr = document.createElement('div');
+      hdr.style.cssText = 'padding:6px 8px;font-size:10px;color:#4a7a55';
+      hdr.textContent = total + ' / ' + ACHIEVEMENTS_DEF.length + ' unlocked';
+      c.appendChild(hdr);
+      const grid = document.createElement('div');
+      grid.className = 'ach-grid';
+      ACHIEVEMENTS_DEF.forEach(def => {
+        const unlocked = state.achievementsUnlocked.includes(def.id);
+        const visible = unlocked || def.req(state);
+        const card = document.createElement('div');
+        card.className = 'ach-card ' + (unlocked ? 'unlocked' : 'locked');
+        card.innerHTML = `
+        <div class="ach-top"><span class="ach-emoji">${def.emoji}</span><span class="ach-name">${def.name}</span></div>
+        <div class="ach-desc">${def.desc}</div>
+        <div class="ach-bonus">${def.bonusDesc}</div>
+        ${unlocked ? `<div class="ach-lore">${def.lore}</div>` : ''}
+      `;
+        grid.appendChild(card);
+      });
+      c.appendChild(grid);
     }
 
     // ═══════════════════════════════════════════════════════
-    //  PRODUCERS UI
+    //  CODEX
+    // ═══════════════════════════════════════════════════════
+    let lastCodexKey = null;
+
+    function buildCodex() {
+      const unlockedIds = CODEX_DEF.filter(x => x.unlockAt(state)).map(x => x.id).join(',');
+      if (unlockedIds === lastCodexKey) return;
+      lastCodexKey = unlockedIds;
+      const c = document.getElementById('tab-lore');
+      c.innerHTML = '';
+      CODEX_DEF.forEach(def => {
+        const unlocked = def.unlockAt(state);
+        const entry = document.createElement('div');
+        entry.className = 'codex-entry';
+        if (unlocked) {
+          entry.innerHTML = `<div class="codex-title">— ${def.title} —</div><div class="codex-text">${def.text}</div>`;
+        } else {
+          entry.innerHTML = `<div class="codex-locked">[ ${def.title} — not yet revealed ]</div>`;
+        }
+        c.appendChild(entry);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  RESEARCH TREE
+    // ═══════════════════════════════════════════════════════
+    let lastResearchKey = null;
+
+    function buildResearch() {
+      const key = state.research.map(r => r.bought ? '1' : '0').join('') + '|' + state.spores.toFixed(0);
+      if (key === lastResearchKey) return;
+      lastResearchKey = key;
+      const c = document.getElementById('tab-research');
+      c.innerHTML = '';
+      [1, 2, 3].forEach(tier => {
+        const nodes = RESEARCH_DEF.filter(r => r.tier === tier);
+        const tierLabel = document.createElement('div');
+        tierLabel.className = 'research-tier-label';
+        tierLabel.textContent = 'Tier ' + tier;
+        c.appendChild(tierLabel);
+        if (tier > 1) {
+          const conn = document.createElement('div');
+          conn.className = 'rn-connector';
+          conn.textContent = '↓  ↓';
+          c.appendChild(conn);
+        }
+        const row = document.createElement('div');
+        row.className = 'research-nodes';
+        nodes.forEach(def => {
+          const sr = state.research.find(r => r.id === def.id);
+          const prereqsMet = def.prereqs.every(pid => state.research.find(r => r.id === pid)?.bought);
+          const bought = sr?.bought;
+          const canBuy = prereqsMet && !bought && state.spores >= def.cost;
+          const card = document.createElement('div');
+          card.className = 'rn-card' + (bought ? ' bought' : '') + (!prereqsMet ? ' locked' : '');
+          card.innerHTML = `
+          <div class="rn-name">${def.name}</div>
+          <div class="rn-desc">${def.desc}</div>
+          <div class="rn-cost">${bought ? '' : fmt(def.cost) + ' sp'}</div>
+        `;
+          if (bought) {
+            const badge = document.createElement('div');
+            badge.className = 'rn-bought-badge'; badge.textContent = '✦ Researched';
+            card.appendChild(badge);
+          } else if (prereqsMet) {
+            const btn = document.createElement('button');
+            btn.className = 'rn-btn'; btn.type = 'button'; btn.textContent = 'Research';
+            btn.disabled = !canBuy;
+            btn.addEventListener('click', () => buyResearch(def.id));
+            card.appendChild(btn);
+          } else {
+            const prereqNames = def.prereqs.map(pid => RESEARCH_DEF.find(r => r.id === pid)?.name || pid).join(', ');
+            const lk = document.createElement('div');
+            lk.style.cssText = 'font-size:9px;color:#3a5e42;margin-top:2px';
+            lk.textContent = 'Requires: ' + prereqNames;
+            card.appendChild(lk);
+          }
+          row.appendChild(card);
+        });
+        c.appendChild(row);
+      });
+    }
+
+    function buyResearch(id) {
+      const def = RESEARCH_DEF.find(d => d.id === id);
+      const sr = state.research.find(r => r.id === id);
+      if (!def || sr.bought || state.spores < def.cost) return;
+      state.spores -= def.cost; sr.bought = true;
+      invalidateMults(); lastResearchKey = null;
+      buildResearch(); updateStats();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  BIOME PATH SVG
+    // ═══════════════════════════════════════════════════════
+    function updateBiomePath() {
+      const svg = document.getElementById('biome-path');
+      if (state.prestigeCount === 0) { svg.style.display = 'none'; return; }
+      svg.style.display = 'block';
+      svg.innerHTML = '';
+      const W = 220, cx = (i) => 22 + i * 44, cy = 14;
+      // connector line
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx(0)); line.setAttribute('y1', cy);
+      line.setAttribute('x2', cx(4)); line.setAttribute('y2', cy);
+      line.setAttribute('stroke', '#1D9E7530'); line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+      BIOMES.forEach((b, i) => {
+        const visited = i < state.biomeIdx;
+        const current = i === state.biomeIdx;
+        const future = i > state.biomeIdx;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', cx(i)); circle.setAttribute('cy', cy);
+        circle.setAttribute('r', current ? 10 : 7);
+        circle.setAttribute('fill', current ? '#1D9E75' : visited ? '#0f2e1a' : '#0a1209');
+        circle.setAttribute('stroke', current ? '#9FE1CB' : visited ? '#1D9E7560' : '#1D9E7520');
+        circle.setAttribute('stroke-width', '1');
+        g.appendChild(circle);
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('x', cx(i)); txt.setAttribute('y', cy + 4);
+        txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-size', current ? '12' : '9');
+        txt.setAttribute('fill', future ? '#2a4a35' : '#9FE1CB');
+        txt.textContent = b.emoji;
+        g.appendChild(txt);
+        svg.appendChild(g);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  PRODUCERS
     // ═══════════════════════════════════════════════════════
     function buildProducers() {
-      const c = document.getElementById('tab-producers');
-      c.innerHTML = '';
-      state.producers.forEach(p => {
+      const c = document.getElementById('tab-producers'); c.innerHTML = '';
+      state.producers.forEach(pr => {
         const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'item disabled'; btn.dataset.id = p.id;
-        btn.innerHTML = `
-        <div class="item-top"><span class="item-name">${p.emoji} ${p.name}</span><span class="item-cost" data-cost></span></div>
-        <div class="item-desc">${p.desc}</div>
-        <div class="item-owned" data-owned></div>
-      `;
-        btn.addEventListener('click', () => buyProducer(p.id));
+        btn.type = 'button'; btn.className = 'item disabled'; btn.dataset.id = pr.id;
+        btn.innerHTML = `<div class="item-top"><span class="item-name">${pr.emoji} ${pr.name}</span><span class="item-cost" data-cost></span></div><div class="item-desc">${pr.desc}</div><div class="item-owned" data-owned></div>`;
+        btn.addEventListener('click', () => buyProducer(pr.id));
         c.appendChild(btn);
       });
     }
 
     function updateProducers() {
-      state.producers.forEach(p => {
-        const btn = document.querySelector(`#tab-producers [data-id="${p.id}"]`);
+      state.producers.forEach(pr => {
+        const btn = document.querySelector(`#tab-producers [data-id="${pr.id}"]`);
         if (!btn) return;
-        const cost = getCost(p), can = state.spores >= cost;
+        const cost = getCost(pr), can = state.spores >= cost;
         btn.classList.toggle('disabled', !can);
         btn.classList.toggle('can-afford', can);
         btn.querySelector('[data-cost]').textContent = fmt(cost) + ' sp';
-        const sps = (p.baseSps * getSeasonMult(p.id) * BIOMES[state.biomeIdx].prodMult * getPrestigeMult());
-        btn.querySelector('[data-owned]').textContent = `Owned: ${p.owned}  ·  +${fmt(sps)}/s each`;
+        const sps = pr.baseSps * getSeasonMult(pr.id) * BIOMES[state.biomeIdx].prodMult * getPrestigeMult() * getResearchMults().prod * getAchievementMults().prod;
+        btn.querySelector('[data-owned]').textContent = `Owned: ${pr.owned}  ·  +${fmt(sps)}/s each`;
       });
     }
 
     function buyProducer(id) {
-      const p = state.producers.find(x => x.id === id);
-      const cost = getCost(p);
+      const pr = p(state, id), cost = getCost(pr);
       if (state.spores < cost) return;
-      state.spores -= cost; p.owned++;
+      state.spores -= cost; pr.owned++;
       updateProducers(); updateStats();
     }
 
     // ═══════════════════════════════════════════════════════
-    //  UPGRADES UI
+    //  UPGRADES
     // ═══════════════════════════════════════════════════════
     let lastUpgradeKey = null;
 
@@ -1380,16 +1860,12 @@
       const key = visible.map(u => u.id).join(',') || '__empty__';
       if (key === lastUpgradeKey) return;
       lastUpgradeKey = key;
-      const c = document.getElementById('tab-upgrades');
-      c.innerHTML = '';
+      const c = document.getElementById('tab-upgrades'); c.innerHTML = '';
       if (!visible.length) { c.innerHTML = '<div style="padding:1rem;font-size:11px;color:#4a7a55;font-style:italic">Keep growing to unlock upgrades...</div>'; return; }
       visible.forEach(u => {
         const btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'item disabled'; btn.dataset.id = u.id;
-        btn.innerHTML = `
-        <div class="item-top"><span class="item-name">✦ ${u.name}<span class="badge">${TIER_LABELS[u.tier] || ''}</span></span><span class="item-cost" data-cost></span></div>
-        <div class="item-desc">${u.desc}</div>
-      `;
+        btn.innerHTML = `<div class="item-top"><span class="item-name">✦ ${u.name}<span class="badge">${TIER_LABELS[u.tier] || ''}</span></span><span class="item-cost" data-cost></span></div><div class="item-desc">${u.desc}</div>`;
         btn.addEventListener('click', () => buyUpgrade(u.id));
         c.appendChild(btn);
       });
@@ -1399,15 +1875,13 @@
       document.querySelectorAll('#tab-upgrades [data-id]').forEach(btn => {
         const u = UPGRADES_DEF.find(x => x.id === btn.dataset.id); if (!u) return;
         const can = state.spores >= u.cost;
-        btn.classList.toggle('disabled', !can);
-        btn.classList.toggle('can-afford', can);
+        btn.classList.toggle('disabled', !can); btn.classList.toggle('can-afford', can);
         btn.querySelector('[data-cost]').textContent = fmt(u.cost) + ' sp';
       });
     }
 
     function buyUpgrade(id) {
-      const uDef = UPGRADES_DEF.find(x => x.id === id);
-      const su = state.upgrades.find(x => x.id === id);
+      const uDef = UPGRADES_DEF.find(x => x.id === id), su = state.upgrades.find(x => x.id === id);
       if (!uDef || su.bought || state.spores < uDef.cost) return;
       state.spores -= uDef.cost; su.bought = true; uDef.apply(state);
       lastUpgradeKey = null; lastOwnedKey = null;
@@ -1415,30 +1889,93 @@
     }
 
     // ═══════════════════════════════════════════════════════
-    //  OWNED UPGRADES TAB
+    //  SYMBIOSIS
+    // ═══════════════════════════════════════════════════════
+    let lastSymKey = null;
+    function symKey() { return state.symbiosis.map(s => `${s.id}:${s.active}:${s.hungry}:${s.broken}`).join('|') + '|' + state.totalEarned.toFixed(0); }
+
+    function buildSymbiosis() {
+      const c = document.getElementById('tab-symbiosis'); c.innerHTML = '';
+      SYMBIONTS.forEach((def, i) => {
+        const card = document.createElement('div'); card.className = 'sym-card'; card.dataset.symId = def.id;
+        card.innerHTML = `<div class="sym-top"><span class="sym-name">${def.emoji} ${def.name}</span><span class="sym-status-badge locked" data-sym-status="${def.id}">Locked</span></div><div class="sym-desc">${def.desc}</div><div class="sym-stats">+${def.bonusSps}/s &nbsp;·&nbsp; Feed ${fmt(def.feedCost)} sp every ${def.feedEvery}s &nbsp;·&nbsp; Pact: ${fmt(def.pactCost)} sp</div><div data-sym-actions="${def.id}"></div><div class="sym-feed-track" data-sym-track="${def.id}" style="display:none"><div class="sym-feed-fill" data-sym-fill="${def.id}"></div></div>`;
+        c.appendChild(card);
+      });
+    }
+
+    function updateSymbiosis() {
+      const key = symKey();
+      const rebuild = key !== lastSymKey; lastSymKey = key;
+      SYMBIONTS.forEach((def, i) => {
+        const sym = state.symbiosis[i], unlocked = state.totalEarned >= def.unlockAt;
+        const statusEl = document.querySelector(`[data-sym-status="${def.id}"]`);
+        const actionsEl = document.querySelector(`[data-sym-actions="${def.id}"]`);
+        const trackEl = document.querySelector(`[data-sym-track="${def.id}"]`);
+        const fillEl = document.querySelector(`[data-sym-fill="${def.id}"]`);
+        if (!statusEl) return;
+        let sc = 'locked', st = 'Locked';
+        if (unlocked && !sym.active && !sym.broken) { sc = 'available'; st = 'Available'; }
+        else if (sym.active && !sym.hungry) { sc = 'active'; st = 'Active'; }
+        else if (sym.hungry) { sc = 'hungry'; st = 'Hungry!'; }
+        else if (sym.broken) { sc = 'broken'; st = 'Bond Broken'; }
+        statusEl.className = 'sym-status-badge ' + sc; statusEl.textContent = st;
+        if (rebuild) {
+          actionsEl.innerHTML = '';
+          if (unlocked && !sym.active && !sym.broken) {
+            const btn = document.createElement('button'); btn.className = 'sym-btn pact'; btn.type = 'button'; btn.textContent = `Form Pact (${fmt(def.pactCost)} sp)`; btn.disabled = state.spores < def.pactCost; btn.addEventListener('click', () => formPact(i)); actionsEl.appendChild(btn);
+          } else if (sym.hungry) {
+            const btn = document.createElement('button'); btn.className = 'sym-btn feed'; btn.type = 'button'; btn.textContent = `Feed (${fmt(def.feedCost)} sp)`; btn.disabled = state.spores < def.feedCost; btn.addEventListener('click', () => feedSymbiont(i)); actionsEl.appendChild(btn);
+          } else if (sym.broken && unlocked) {
+            const btn = document.createElement('button'); btn.className = 'sym-btn restore'; btn.type = 'button'; btn.textContent = `Restore Pact (${fmt(def.pactCost)} sp)`; btn.disabled = state.spores < def.pactCost; btn.addEventListener('click', () => formPact(i)); actionsEl.appendChild(btn);
+          }
+        } else {
+          const btn = actionsEl.querySelector('button'); if (btn) { btn.disabled = state.spores < (sym.hungry ? def.feedCost : def.pactCost); }
+        }
+        if (sym.active) {
+          trackEl.style.display = 'block';
+          const pct = Math.min(100, (sym.feedTimer / def.feedEvery) * 100);
+          fillEl.style.width = pct + '%'; fillEl.style.background = sym.hungry ? '#EF9F27' : '#5DCAA5';
+        } else trackEl.style.display = 'none';
+      });
+    }
+
+    function tickSymbiosis(dt) {
+      state.symbiosis.forEach((sym, i) => {
+        if (!sym.active || sym.broken) return;
+        const def = SYMBIONTS[i]; sym.feedTimer += dt;
+        if (!sym.hungry && sym.feedTimer >= def.feedEvery) { sym.hungry = true; tick(`${def.emoji} ${def.name} is hungry! Feed it to keep your bond.`, true); lastSymKey = null; }
+        if (sym.hungry && sym.feedTimer >= def.feedEvery + 30) { sym.broken = true; sym.active = false; tick(`💔 Bond with ${def.name} broken. Restore the pact to reconnect.`, true); lastSymKey = null; }
+      });
+    }
+
+    function formPact(i) {
+      const def = SYMBIONTS[i], sym = state.symbiosis[i];
+      if (state.spores < def.pactCost) return;
+      state.spores -= def.pactCost; sym.active = true; sym.hungry = false; sym.feedTimer = 0; sym.broken = false;
+      lastSymKey = null; updateSymbiosis(); updateStats();
+    }
+    function feedSymbiont(i) {
+      const def = SYMBIONTS[i], sym = state.symbiosis[i];
+      if (!sym.hungry || state.spores < def.feedCost) return;
+      state.spores -= def.feedCost; sym.hungry = false; sym.feedTimer = 0;
+      lastSymKey = null; updateSymbiosis(); updateStats();
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  OWNED UPGRADES
     // ═══════════════════════════════════════════════════════
     let lastOwnedKey = null;
-
     function buildOwned() {
       const bought = UPGRADES_DEF.filter(u => state.upgrades.find(x => x.id === u.id)?.bought);
       const key = bought.map(u => u.id).join(',') || '__none__';
-      if (key === lastOwnedKey) return;
-      lastOwnedKey = key;
-      const c = document.getElementById('tab-owned');
-      c.innerHTML = '';
+      if (key === lastOwnedKey) return; lastOwnedKey = key;
+      const c = document.getElementById('tab-owned'); c.innerHTML = '';
       if (!bought.length) { c.innerHTML = '<div style="padding:1rem;font-size:11px;color:#4a7a55;font-style:italic">No upgrades purchased yet.</div>'; return; }
       const groups = {};
       bought.forEach(u => { if (!groups[u.tier]) groups[u.tier] = []; groups[u.tier].push(u); });
       Object.entries(groups).forEach(([tier, upgrades]) => {
-        const label = document.createElement('div');
-        label.className = 'owned-group'; label.textContent = TIER_LABELS[tier] || tier;
-        c.appendChild(label);
-        upgrades.forEach(u => {
-          const row = document.createElement('div');
-          row.className = 'owned-row';
-          row.innerHTML = `<div class="owned-name">✦ ${u.name}</div><div class="owned-desc">${u.desc}</div>`;
-          c.appendChild(row);
-        });
+        const lbl = document.createElement('div'); lbl.className = 'owned-group'; lbl.textContent = TIER_LABELS[tier] || tier; c.appendChild(lbl);
+        upgrades.forEach(u => { const row = document.createElement('div'); row.className = 'owned-row'; row.innerHTML = `<div class="owned-name">✦ ${u.name}</div><div class="owned-desc">${u.desc}</div>`; c.appendChild(row); });
       });
     }
 
@@ -1446,8 +1983,7 @@
     //  EFFECTS
     // ═══════════════════════════════════════════════════════
     function spawnBurst(x, y, val) {
-      const label = document.createElement('div');
-      label.className = 'particle'; label.textContent = '+' + fmt(val);
+      const label = document.createElement('div'); label.className = 'particle'; label.textContent = '+' + fmt(val);
       label.style.left = (x - 18) + 'px'; label.style.top = (y - 10) + 'px';
       label.style.setProperty('--dx', '0px'); label.style.setProperty('--dy', '-55px');
       document.body.appendChild(label); setTimeout(() => label.remove(), 1000);
@@ -1471,22 +2007,25 @@
 
     function screenShake() {
       const game = document.getElementById('game'), flash = document.getElementById('flash-overlay');
-      game.classList.remove('shake'); void game.offsetWidth;
-      game.classList.add('shake');
+      game.classList.remove('shake'); void game.offsetWidth; game.classList.add('shake');
       flash.style.background = '#1D9E75'; flash.style.opacity = '0.12';
       setTimeout(() => { flash.style.opacity = '0'; }, 130);
       setTimeout(() => game.classList.remove('shake'), 450);
     }
 
     function triggerPulse() {
-      state.hivemind = 0;
-      const bonus = Math.ceil(getSps() * 30 + getClickValue() * 50);
+      state.hivemind = 0; state.allTimePulses++;
+      const bonus = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult());
       state.spores += bonus; state.totalEarned += bonus;
-      const ticker = document.getElementById('ticker');
-      ticker.textContent = `HIVEMIND PULSE! +${fmt(bonus)} spores surged through the network!`;
-      ticker.classList.add('pulse-msg'); setTimeout(() => ticker.classList.remove('pulse-msg'), 2000);
-      screenShake(); spawnPulseRing(); spawnPulseRing();
-      setTimeout(spawnPulseRing, 160);
+      tick('HIVEMIND PULSE! +' + fmt(bonus) + ' spores surged through the network!', true);
+      screenShake(); spawnPulseRing(); spawnPulseRing(); setTimeout(spawnPulseRing, 160);
+    }
+
+    let _tickerTimer = null;
+    function tick(msg, highlight = false) {
+      const el = document.getElementById('ticker');
+      el.textContent = msg;
+      if (highlight) { el.classList.add('pulse-msg'); clearTimeout(_tickerTimer); _tickerTimer = setTimeout(() => el.classList.remove('pulse-msg'), 3000); }
     }
 
     // ═══════════════════════════════════════════════════════
@@ -1496,37 +2035,26 @@
       const gain = getClickValue();
       state.spores += gain; state.totalEarned += gain;
       state.hivemind = Math.min(100, state.hivemind + 0.5);
-      spawnBurst(e.clientX, e.clientY, gain);
-      spawnPulseRing();
+      spawnBurst(e.clientX, e.clientY, gain); spawnPulseRing();
       if (state.hivemind >= 100) triggerPulse();
       updateStats();
     });
 
     // ═══════════════════════════════════════════════════════
-    //  STATS + BIOME TAG
+    //  STATS
     // ═══════════════════════════════════════════════════════
     function updateStats() {
       document.getElementById('total-spores').textContent = fmt(state.spores);
       document.getElementById('sps').textContent = fmt(getSps()) + '/s';
       document.getElementById('progress-fill').style.width = state.hivemind + '%';
-      const predictedBonus = Math.ceil(getSps() * 30 + getClickValue() * 50);
-      document.getElementById('pulse-info').textContent = `Hivemind pulse: ${Math.floor(state.hivemind)}% · Next pulse: +${fmt(predictedBonus)} sp`;
-    }
-
-    function updateBiomeTag() {
-      const tag = document.getElementById('biome-tag');
-      if (state.prestigeCount === 0) { tag.style.display = 'none'; return; }
-      tag.style.display = 'block';
-      const b = BIOMES[state.biomeIdx];
-      document.getElementById('biome-label').textContent = b.name + ' ' + b.emoji;
-      const mult = getPrestigeMult();
-      tag.title = b.desc + ' · Legacy ' + mult.toFixed(1) + 'x';
+      const predicted = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult());
+      document.getElementById('pulse-info').textContent = `Hivemind pulse: ${Math.floor(state.hivemind)}% · Next pulse: +${fmt(predicted)} sp`;
     }
 
     // ═══════════════════════════════════════════════════════
     //  TAB SWITCHING
     // ═══════════════════════════════════════════════════════
-    const ALL_TABS = ['producers', 'upgrades', 'symbiosis', 'owned'];
+    const ALL_TABS = ['producers', 'upgrades', 'research', 'symbiosis', 'goals', 'lore', 'owned'];
     function switchTab(tab) {
       ALL_TABS.forEach(t => {
         document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab);
@@ -1538,131 +2066,77 @@
     // ═══════════════════════════════════════════════════════
     //  ANIMATED MYCELIUM CANVAS
     // ═══════════════════════════════════════════════════════
-    const canvas = document.getElementById('mycelium-canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById('mycelium-canvas'), ctx = canvas.getContext('2d');
     let branches = [], animTime = 0, lastTotal = -1;
 
     function makeBranch(x1, y1, angle, len, depth, delay) { return { x1, y1, angle, len, depth, delay, progress: 0, children: [] }; }
-
     function seedBranches(total) {
-      const W = canvas.offsetWidth || 260, H = canvas.offsetHeight || 80;
-      const cx = W / 2, cy = H / 2; branches = [];
+      const W = canvas.offsetWidth || 260, H = canvas.offsetHeight || 80, cx = W / 2, cy = H / 2; branches = [];
       const armCount = Math.min(4 + Math.floor(total / 3), 26);
       for (let i = 0; i < armCount; i++) {
-        const baseAngle = (i / armCount) * Math.PI * 2;
-        const len = 18 + (i % 5) * 7;
-        const b = makeBranch(cx, cy, baseAngle, len, 0, i * 0.04);
-        if (total > 5) {
-          for (let j = 0; j < 2; j++) {
-            const sa = baseAngle + (j ? 0.5 : -0.5) + (Math.random() - 0.5) * 0.3;
-            b.children.push(makeBranch(cx + Math.cos(baseAngle) * len, cy + Math.sin(baseAngle) * len * 0.6, sa, len * 0.55, 1, b.delay + 0.3));
-          }
-        }
-        if (total > 15) {
-          b.children.forEach(child => {
-            const ga = child.angle + (Math.random() - 0.5) * 0.6;
-            child.children.push(makeBranch(child.x1 + Math.cos(child.angle) * child.len, child.y1 + Math.sin(child.angle) * child.len * 0.6, ga, child.len * 0.5, 2, child.delay + 0.25));
-          });
-        }
+        const ba = (i / armCount) * Math.PI * 2, len = 18 + (i % 5) * 7;
+        const b = makeBranch(cx, cy, ba, len, 0, i * 0.04);
+        if (total > 5) for (let j = 0; j < 2; j++) { const sa = ba + (j ? 0.5 : -0.5) + (Math.random() - 0.5) * 0.3; b.children.push(makeBranch(cx + Math.cos(ba) * len, cy + Math.sin(ba) * len * 0.6, sa, len * 0.55, 1, b.delay + 0.3)); }
+        if (total > 15) b.children.forEach(child => { const ga = child.angle + (Math.random() - 0.5) * 0.6; child.children.push(makeBranch(child.x1 + Math.cos(child.angle) * child.len, child.y1 + Math.sin(child.angle) * child.len * 0.6, ga, child.len * 0.5, 2, child.delay + 0.25)); });
         branches.push(b);
       }
-
-      requestAnimationFrame(animateMycelium);
     }
-
-    // ═══════════════════════════════════════════
-    //  GAME LOOPS
-    // ═══════════════════════════════════════════
-    let msgTimer = 0;
-    function showMessage() {
-      const ticker = document.getElementById('ticker');
-      ticker.textContent = MESSAGES[state.msgIdx % MESSAGES.length];
-      state.msgIdx++;
-    }
-
     function drawBranch(b, t, alpha) {
       if (t < b.delay) return;
       b.progress = Math.min(1, (t - b.delay) / 0.6);
       const x2 = b.x1 + Math.cos(b.angle) * b.len * b.progress, y2 = b.y1 + Math.sin(b.angle) * b.len * b.progress * 0.6;
       const grad = ctx.createLinearGradient(b.x1, b.y1, x2, y2);
-      grad.addColorStop(0, `rgba(29,158,117,${0.7 * alpha})`);
-      grad.addColorStop(1, `rgba(159,225,203,${0.25 * alpha})`);
-      ctx.beginPath(); ctx.moveTo(b.x1, b.y1); ctx.lineTo(x2, y2);
-      ctx.strokeStyle = grad; ctx.lineWidth = Math.max(0.4, 1.2 - b.depth * 0.4); ctx.stroke();
-      if (b.progress >= 1) {
-        const pulse = 0.5 + 0.5 * Math.sin(t * 3 + b.angle * 7), r = 1.5 + pulse * 1.2;
-        ctx.beginPath(); ctx.arc(x2, y2, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(93,202,165,${(0.4 + pulse * 0.5) * alpha})`; ctx.fill();
-      }
-      if (b.progress > 0.85) {
-        b.children.forEach(child => {
-          child.x1 = b.x1 + Math.cos(b.angle) * b.len; child.y1 = b.y1 + Math.sin(b.angle) * b.len * 0.6;
-          drawBranch(child, t, alpha * 0.75);
-        });
-      }
+      grad.addColorStop(0, `rgba(29,158,117,${0.7 * alpha})`); grad.addColorStop(1, `rgba(159,225,203,${0.25 * alpha})`);
+      ctx.beginPath(); ctx.moveTo(b.x1, b.y1); ctx.lineTo(x2, y2); ctx.strokeStyle = grad; ctx.lineWidth = Math.max(0.4, 1.2 - b.depth * 0.4); ctx.stroke();
+      if (b.progress >= 1) { const pulse = 0.5 + 0.5 * Math.sin(t * 3 + b.angle * 7), r = 1.5 + pulse * 1.2; ctx.beginPath(); ctx.arc(x2, y2, r, 0, Math.PI * 2); ctx.fillStyle = `rgba(93,202,165,${(0.4 + pulse * 0.5) * alpha})`; ctx.fill(); }
+      if (b.progress > 0.85) b.children.forEach(child => { child.x1 = b.x1 + Math.cos(b.angle) * b.len; child.y1 = b.y1 + Math.sin(b.angle) * b.len * 0.6; drawBranch(child, t, alpha * 0.75); });
     }
-
     function animateMycelium() {
       const W = canvas.offsetWidth || 260, H = canvas.offsetHeight || 80;
-      const total = state.producers.reduce((s, p) => s + p.owned, 0);
+      const total = state.producers.reduce((s, x) => s + x.owned, 0);
       if (total !== lastTotal) { canvas.width = W; canvas.height = H; seedBranches(total); animTime = 0; lastTotal = total; }
       animTime += 0.016; canvas.width = W; canvas.height = H; ctx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2, cp = 0.5 + 0.5 * Math.sin(animTime * 2.5);
-      ctx.beginPath(); ctx.arc(cx, cy, 4 + cp, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(29,158,117,${0.8 + cp * 0.2})`; ctx.fill();
-      if (total === 0) {
-        ctx.beginPath(); ctx.arc(cx, cy, 8 + cp * 4, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(29,158,117,${0.15 + cp * 0.1})`; ctx.lineWidth = 0.8; ctx.stroke();
-      } else { branches.forEach(b => drawBranch(b, animTime, 1)); }
+      ctx.beginPath(); ctx.arc(cx, cy, 4 + cp, 0, Math.PI * 2); ctx.fillStyle = `rgba(29,158,117,${0.8 + cp * 0.2})`; ctx.fill();
+      if (total === 0) { ctx.beginPath(); ctx.arc(cx, cy, 8 + cp * 4, 0, Math.PI * 2); ctx.strokeStyle = `rgba(29,158,117,${0.15 + cp * 0.1})`; ctx.lineWidth = 0.8; ctx.stroke(); }
+      else branches.forEach(b => drawBranch(b, animTime, 1));
       requestAnimationFrame(animateMycelium);
     }
 
     // ═══════════════════════════════════════════════════════
-    //  GAME LOOPS
+    //  GAME LOOP
     // ═══════════════════════════════════════════════════════
     let msgTimer = 0;
-    function showMessage() {
-      const ticker = document.getElementById('ticker');
-      ticker.textContent = MESSAGES[state.msgIdx % MESSAGES.length]; state.msgIdx++;
-    }
+    function showMessage() { tick(MESSAGES[state.msgIdx % MESSAGES.length]); }
 
-    const DT = 0.05; // 50ms in seconds
+    const DT = 0.05;
     setInterval(() => {
-      // Income
       const sps = getSps();
       if (sps > 0) { const g = sps * DT; state.spores += g; state.totalEarned += g; }
-      // Seasons
-      tickSeason(DT);
-      // Symbiosis
-      tickSymbiosis(DT);
-      // UI
-      updateStats();
-      updateProducers();
+      tickSeason(DT); tickSymbiosis(DT); tickEvents(DT);
+      updateStats(); updateProducers();
       buildUpgrades(); updateUpgrades();
-      buildSymbiosis ? updateSymbiosis() : null;
-      updateSporulateUI();
+      updateSymbiosis(); updateSporulateUI();
+      checkAchievements(); buildAchievements();
+      buildCodex(); buildResearch();
+      updateBiomePath();
     }, 50);
 
-    // Flavor messages
-    setInterval(() => { if (++msgTimer % 8 === 0) showMessage(); }, 1000);
-
-    // Autosave
+    setInterval(() => { if (++msgTimer % 8 === 0 && !state.activeEvent) showMessage(); }, 1000);
     setInterval(saveGame, 30000);
 
     // ═══════════════════════════════════════════════════════
     //  BOOT
     // ═══════════════════════════════════════════════════════
     function bootUI() {
-      buildProducers();
-      buildSymbiosis();
-      buildOwned();
-      updateStats();
-      updateProducers();
+      buildProducers(); buildSymbiosis(); buildOwned();
+      buildAchievements(); buildCodex(); buildResearch();
+      updateStats(); updateProducers();
       buildUpgrades(); updateUpgrades();
-      updateSymbiosis();
-      updateSeasonBar();
-      updateBiomeTag();
-      updateSporulateUI();
+      updateSymbiosis(); updateSeasonBar();
+      updateBiomePath(); updateSporulateUI();
+      document.getElementById('mode-check').checked = state.disasterMode;
+      document.getElementById('event-toast').style.display = 'none';
       showMessage();
     }
 
