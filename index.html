@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Mycelium Empire</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      touch-action: manipulation;
+    }
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
@@ -67,8 +79,17 @@
       border: 1px solid #1D9E7533;
     }
 
-    .stat-label { font-size: 11px; color: #7aad85; margin-bottom: 2px; }
-    .stat-val { font-size: 20px; font-weight: 500; color: #9FE1CB; }
+    .stat-label {
+      font-size: 11px;
+      color: #7aad85;
+      margin-bottom: 2px;
+    }
+
+    .stat-val {
+      font-size: 20px;
+      font-weight: 500;
+      color: #9FE1CB;
+    }
 
     #mycelium-canvas {
       width: 100%;
@@ -90,13 +111,28 @@
       gap: 4px;
       transition: transform 0.08s, background 0.08s;
       user-select: none;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    #spore-btn:hover { background: #143d20; }
-    #spore-btn:active { transform: scale(0.92); background: #1D9E7533; }
+    #spore-btn:hover {
+      background: #143d20;
+    }
 
-    #spore-icon { font-size: 48px; }
-    #click-label { font-size: 11px; color: #5DCAA5; font-weight: 500; }
+    #spore-btn:active {
+      transform: scale(0.92);
+      background: #1D9E7533;
+    }
+
+    #spore-icon {
+      font-size: 48px;
+    }
+
+    #click-label {
+      font-size: 11px;
+      color: #5DCAA5;
+      font-weight: 500;
+    }
 
     #ticker {
       font-size: 12px;
@@ -125,9 +161,17 @@
       width: 0%;
     }
 
-    #pulse-info { font-size: 11px; color: #5DCAA5; width: 100%; text-align: center; }
+    #pulse-info {
+      font-size: 11px;
+      color: #5DCAA5;
+      width: 100%;
+      text-align: center;
+    }
 
-    #tabs { display: flex; border-bottom: 1px solid #1D9E7533; }
+    #tabs {
+      display: flex;
+      border-bottom: 1px solid #1D9E7533;
+    }
 
     .tab {
       flex: 1;
@@ -140,6 +184,8 @@
       border: none;
       background: none;
       transition: color 0.15s, background 0.15s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .tab.active {
@@ -148,18 +194,31 @@
       border-bottom: 2px solid #1D9E75;
     }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
 
     .item {
       padding: 10px 12px;
       border-bottom: 1px solid #1D9E7522;
       cursor: pointer;
       transition: background 0.1s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .item:hover { background: #111f13; }
-    .item.disabled { opacity: 0.4; cursor: not-allowed; }
+    .item:hover {
+      background: #111f13;
+    }
+
+    .item.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
 
     .item-top {
       display: flex;
@@ -168,10 +227,29 @@
       margin-bottom: 2px;
     }
 
-    .item-name { font-size: 13px; font-weight: 500; color: #d4edd8; }
-    .item-cost { font-size: 12px; color: #5DCAA5; font-weight: 500; }
-    .item-desc { font-size: 11px; color: #7aad85; line-height: 1.4; }
-    .item-owned { font-size: 11px; color: #4a7a55; margin-top: 2px; }
+    .item-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #d4edd8;
+    }
+
+    .item-cost {
+      font-size: 12px;
+      color: #5DCAA5;
+      font-weight: 500;
+    }
+
+    .item-desc {
+      font-size: 11px;
+      color: #7aad85;
+      line-height: 1.4;
+    }
+
+    .item-owned {
+      font-size: 11px;
+      color: #4a7a55;
+      margin-top: 2px;
+    }
 
     .particle {
       position: fixed;
@@ -184,13 +262,27 @@
     }
 
     @keyframes float-up {
-      0%   { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-55px); }
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-55px);
+      }
     }
 
     @keyframes pulse-ring {
-      0%   { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(1.5); opacity: 0; }
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
     }
 
     .pulse-ring {
@@ -203,11 +295,22 @@
       pointer-events: none;
     }
 
-    #btn-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+    #btn-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-    #save-info { font-size: 10px; color: #4a7a55; text-align: center; margin-top: 4px; }
+    #save-info {
+      font-size: 10px;
+      color: #4a7a55;
+      text-align: center;
+      margin-top: 4px;
+    }
   </style>
 </head>
+
 <body>
   <h1>🍄 Mycelium Empire</h1>
 
@@ -235,7 +338,9 @@
 
       <div id="ticker">Click the spore to pulse your mycelial network and harvest spores!</div>
 
-      <div id="progress-bar"><div id="progress-fill"></div></div>
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
       <div id="pulse-info">Hivemind pulse: 0%</div>
       <div id="save-info">Progress auto-saves every 30s</div>
     </div>
@@ -252,21 +357,21 @@
 
   <script>
     const PRODUCERS_DEF = [
-      { id:'threads',    name:'Mycelium Threads',    emoji:'🕸', desc:'Passive rot spreads through organic matter.',       baseCost:15,    baseSps:0.1  },
-      { id:'fruiting',   name:'Fruiting Bodies',     emoji:'🍄', desc:'Mushrooms shed spores automatically.',             baseCost:100,   baseSps:0.5  },
-      { id:'woodweb',    name:'Wood Wide Web',        emoji:'🌳', desc:'Tap into tree root networks for massive flow.',    baseCost:600,   baseSps:3    },
-      { id:'sporestorm', name:'Spore Storm',          emoji:'💨', desc:'Clouds colonise distant regions.',                baseCost:3000,  baseSps:12   },
-      { id:'hivemind',   name:'Underground City',     emoji:'🏙', desc:'Your network becomes sentient infrastructure.',   baseCost:15000, baseSps:50   },
-      { id:'cordyceps',  name:'Cordyceps Protocol',   emoji:'🐜', desc:'Influence insects to spread spores.',             baseCost:75000, baseSps:200  },
+      { id: 'threads', name: 'Mycelium Threads', emoji: '🕸', desc: 'Passive rot spreads through organic matter.', baseCost: 15, baseSps: 0.1 },
+      { id: 'fruiting', name: 'Fruiting Bodies', emoji: '🍄', desc: 'Mushrooms shed spores automatically.', baseCost: 100, baseSps: 0.5 },
+      { id: 'woodweb', name: 'Wood Wide Web', emoji: '🌳', desc: 'Tap into tree root networks for massive flow.', baseCost: 600, baseSps: 3 },
+      { id: 'sporestorm', name: 'Spore Storm', emoji: '💨', desc: 'Clouds colonise distant regions.', baseCost: 3000, baseSps: 12 },
+      { id: 'hivemind', name: 'Underground City', emoji: '🏙', desc: 'Your network becomes sentient infrastructure.', baseCost: 15000, baseSps: 50 },
+      { id: 'cordyceps', name: 'Cordyceps Protocol', emoji: '🐜', desc: 'Influence insects to spread spores.', baseCost: 75000, baseSps: 200 },
     ];
 
     const UPGRADES_DEF = [
-      { id:'u1', name:'Chitin Filaments',   desc:'Threads are 2x more efficient.',          cost:200,    req:s => s.producers.find(p=>p.id==='threads').owned >= 5,    apply:s => { s.producers.find(p=>p.id==='threads').baseSps *= 2; } },
-      { id:'u2', name:'Bioluminescence',    desc:'Clicking gives 2x spores.',               cost:500,    req:s => s.totalEarned >= 300,                                apply:s => { s.sporesPerClick *= 2; } },
-      { id:'u3', name:'Mycorrhizal Boost',  desc:'Wood Wide Web gives 3x yield.',           cost:5000,   req:s => s.producers.find(p=>p.id==='woodweb').owned >= 3,    apply:s => { s.producers.find(p=>p.id==='woodweb').baseSps *= 3; } },
-      { id:'u4', name:'Spore Coating',      desc:'Fruiting Bodies work 2x faster.',         cost:2000,   req:s => s.producers.find(p=>p.id==='fruiting').owned >= 8,   apply:s => { s.producers.find(p=>p.id==='fruiting').baseSps *= 2; } },
-      { id:'u5', name:'Quantum Entanglement',desc:'Clicking gives 5x spores.',              cost:50000,  req:s => s.totalEarned >= 25000,                              apply:s => { s.sporesPerClick *= 5; } },
-      { id:'u6', name:'Neural Mesh',        desc:'All producers +50% output.',              cost:200000, req:s => s.totalEarned >= 100000,                             apply:s => { s.producers.forEach(p => p.baseSps *= 1.5); } },
+      { id: 'u1', name: 'Chitin Filaments', desc: 'Threads are 2x more efficient.', cost: 200, req: s => s.producers.find(p => p.id === 'threads').owned >= 5, apply: s => { s.producers.find(p => p.id === 'threads').baseSps *= 2; } },
+      { id: 'u2', name: 'Bioluminescence', desc: 'Clicking gives 2x spores.', cost: 500, req: s => s.totalEarned >= 300, apply: s => { s.sporesPerClick *= 2; } },
+      { id: 'u3', name: 'Mycorrhizal Boost', desc: 'Wood Wide Web gives 3x yield.', cost: 5000, req: s => s.producers.find(p => p.id === 'woodweb').owned >= 3, apply: s => { s.producers.find(p => p.id === 'woodweb').baseSps *= 3; } },
+      { id: 'u4', name: 'Spore Coating', desc: 'Fruiting Bodies work 2x faster.', cost: 2000, req: s => s.producers.find(p => p.id === 'fruiting').owned >= 8, apply: s => { s.producers.find(p => p.id === 'fruiting').baseSps *= 2; } },
+      { id: 'u5', name: 'Quantum Entanglement', desc: 'Clicking gives 5x spores.', cost: 50000, req: s => s.totalEarned >= 25000, apply: s => { s.sporesPerClick *= 5; } },
+      { id: 'u6', name: 'Neural Mesh', desc: 'All producers +50% output.', cost: 200000, req: s => s.totalEarned >= 100000, apply: s => { s.producers.forEach(p => p.baseSps *= 1.5); } },
     ];
 
     function defaultState() {
@@ -315,7 +420,7 @@
           const u = state.upgrades.find(x => x.id === su.id);
           if (u) u.bought = su.bought;
         });
-      } catch(e) { console.warn('Save load failed', e); }
+      } catch (e) { console.warn('Save load failed', e); }
     }
 
     const MESSAGES = [
@@ -333,9 +438,9 @@
 
     function fmt(n) {
       if (n < 1000) return Math.floor(n).toString();
-      if (n < 1e6)  return (n/1000).toFixed(1) + 'k';
-      if (n < 1e9)  return (n/1e6).toFixed(2) + 'M';
-      return (n/1e9).toFixed(2) + 'B';
+      if (n < 1e6) return (n / 1000).toFixed(1) + 'k';
+      if (n < 1e9) return (n / 1e6).toFixed(2) + 'M';
+      return (n / 1e9).toFixed(2) + 'B';
     }
 
     function getCost(p) {
@@ -369,15 +474,15 @@
       document.getElementById('tab-upgrades').innerHTML = visible.length === 0
         ? '<div style="padding:1rem;font-size:13px;color:#4a7a55">Keep growing to unlock upgrades...</div>'
         : visible.map(uDef => {
-            const can = state.spores >= uDef.cost;
-            return `<div class="item ${can ? '' : 'disabled'}" onclick="buyUpgrade('${uDef.id}')">
+          const can = state.spores >= uDef.cost;
+          return `<div class="item ${can ? '' : 'disabled'}" onclick="buyUpgrade('${uDef.id}')">
               <div class="item-top">
                 <span class="item-name">✦ ${uDef.name}</span>
                 <span class="item-cost">${fmt(uDef.cost)} sp</span>
               </div>
               <div class="item-desc">${uDef.desc}</div>
             </div>`;
-          }).join('');
+        }).join('');
     }
 
     function buyProducer(id) {
@@ -401,7 +506,7 @@
 
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach((t, i) =>
-        t.classList.toggle('active', ['producers','upgrades'][i] === tab));
+        t.classList.toggle('active', ['producers', 'upgrades'][i] === tab));
       document.getElementById('tab-producers').classList.toggle('active', tab === 'producers');
       document.getElementById('tab-upgrades').classList.toggle('active', tab === 'upgrades');
     }
@@ -411,7 +516,7 @@
       el.className = 'particle';
       el.textContent = '+' + fmt(val);
       el.style.left = (x - 20) + 'px';
-      el.style.top  = (y - 10) + 'px';
+      el.style.top = (y - 10) + 'px';
       document.body.appendChild(el);
       setTimeout(() => el.remove(), 900);
     }
@@ -523,4 +628,5 @@
     showMessage();
   </script>
 </body>
+
 </html>
