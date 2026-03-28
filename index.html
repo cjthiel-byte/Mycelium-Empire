@@ -234,6 +234,25 @@
       text-align: center;
     }
 
+    #reset-btn {
+      font-size: 10px;
+      color: #7a4a4a;
+      background: none;
+      border: 1px solid #7a4a4a55;
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    #reset-btn:hover {
+      background: #3d1a1a;
+      color: #e07070;
+    }
+
     #tabs {
       display: flex;
       border-bottom: 1px solid #1D9E7533;
@@ -410,6 +429,7 @@
       </div>
       <div id="pulse-info">Hivemind pulse: 0%</div>
       <div id="save-info">Auto-saves every 30s</div>
+      <button id="reset-btn" onclick="resetGame()">Reset game</button>
     </div>
 
     <div id="right">
@@ -638,7 +658,15 @@
       spawnPulseRing();
     }
 
-    let msgTimer = 0;
+    function resetGame() {
+      if (!confirm('Reset everything and start over?')) return;
+      localStorage.removeItem('myceliumEmpire');
+      state = defaultState();
+      lastUpgradeKey = '';
+      buildProducers();
+      render();
+      showMessage();
+    }
     function showMessage() {
       document.getElementById('ticker').textContent = MESSAGES[state.msgIdx % MESSAGES.length];
       state.msgIdx++;
