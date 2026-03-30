@@ -27,8 +27,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: max(env(safe-area-inset-top), 0.75rem) 0.75rem 0.75rem;
-      min-height: 100dvh;
+      padding: max(env(safe-area-inset-top), 0.75rem) 0.75rem max(env(safe-area-inset-bottom), 0.75rem);
     }
 
     h1 {
@@ -93,7 +92,7 @@
 
     @media (max-width: 640px) {
       body {
-        padding: max(env(safe-area-inset-top), 0.4rem) 0.4rem max(env(safe-area-inset-bottom), 0.4rem);
+        padding: max(env(safe-area-inset-top), 0.5rem) 0.4rem max(env(safe-area-inset-bottom), 1rem);
       }
 
       h1 {
@@ -1803,7 +1802,7 @@
     }
     function loadGame() {
       try {
-        const raw = localStorage.getItem('myceliumEmpireV6'); if (!raw) return;
+        const raw = localStorage.getItem('myceliumEmpireV7') || localStorage.getItem('myceliumEmpireV6'); if (!raw) return;
         const sv = JSON.parse(raw);
         ['spores', 'totalEarned', 'sporesPerClick', 'hivemind', 'hivemindUnlocked', 'msgIdx', 'seasonIdx', 'seasonTimer',
           'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown'
@@ -1819,6 +1818,7 @@
     }
     function resetGame() {
       if (!confirm('Reset everything and start over?')) return;
+      localStorage.removeItem('myceliumEmpireV7');
       localStorage.removeItem('myceliumEmpireV6');
       state = defaultState(); invalidateMults();
       lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
@@ -2161,26 +2161,48 @@
       return 'Buy ×' + buyQty;
     }
 
-    function buildProducers() {
-      const c = document.getElementById('tab-producers'); c.innerHTML = '';
-      // Qty selector row
+    function buildQtyBar() {
+      const c = document.getElementById('tab-producers');
+      // Remove any existing qty bar
+      const old = c.querySelector('#qty-bar');
+      if (old) old.remove();
       const qrow = document.createElement('div');
-      qrow.style.cssText = 'display:flex;gap:5px;padding:8px 12px 6px;border-bottom:1px solid #1D9E7518;';
+      qrow.id = 'qty-bar';
+      qrow.style.cssText = 'display:flex;gap:5px;padding:8px 12px 6px;border-bottom:1px solid #1D9E7518;flex-shrink:0;';
       [1, 5, 10, 'max'].forEach(q => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.textContent = q === 'max' ? 'Max' : '×' + q;
-        btn.style.cssText = 'flex:1;padding:4px 2px;border-radius:6px;border:1px solid #1D9E7530;background:transparent;color:#6a9d75;font-size:10px;font-weight:500;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;font-family:inherit;transition:background 0.1s,color 0.1s,border-color 0.1s;';
-        btn.dataset.qty = q;
-        if (buyQty === q) { btn.style.background = '#1D9E7520'; btn.style.color = '#9FE1CB'; btn.style.borderColor = '#1D9E7560'; }
+        btn.dataset.qty = String(q);
+        btn.style.cssText = 'flex:1;padding:5px 2px;border-radius:6px;border:1px solid #1D9E7530;background:transparent;color:#6a9d75;font-size:11px;font-weight:500;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;font-family:inherit;transition:background 0.1s,color 0.1s,border-color 0.1s;';
+        const isActive = (q === 'max' && buyQty === 'max') || (q !== 'max' && buyQty === q);
+        if (isActive) applyQtyActive(btn);
         btn.addEventListener('click', () => {
           buyQty = q === 'max' ? 'max' : Number(q);
-          buildProducers(); // rebuild to refresh qty buttons + buy labels
+          // Update button styles without rebuilding DOM
+          document.querySelectorAll('#qty-bar button').forEach(b => clearQtyActive(b));
+          applyQtyActive(btn);
+          updateProducers();
         });
         qrow.appendChild(btn);
       });
-      c.appendChild(qrow);
-      // Producer items
+      c.insertBefore(qrow, c.firstChild);
+    }
+
+    function applyQtyActive(btn) {
+      btn.style.background = '#1D9E7520';
+      btn.style.color = '#9FE1CB';
+      btn.style.borderColor = '#1D9E7560';
+    }
+    function clearQtyActive(btn) {
+      btn.style.background = 'transparent';
+      btn.style.color = '#6a9d75';
+      btn.style.borderColor = '#1D9E7530';
+    }
+
+    function buildProducers() {
+      const c = document.getElementById('tab-producers'); c.innerHTML = '';
+      // Producer items (stable — never rebuilt after first build)
       state.producers.forEach(pr => {
         const btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'item disabled'; btn.dataset.id = pr.id;
@@ -2188,6 +2210,7 @@
         btn.addEventListener('click', () => buyProducer(pr.id));
         c.appendChild(btn);
       });
+      buildQtyBar();
     }
     function updateProducers() {
       state.producers.forEach(pr => {
