@@ -1370,7 +1370,7 @@
           <span id="click-label">tap to pulse</span>
         </button>
       </div>
-      <div id="ticker">Tap the spore to pulse your mycelial network!</div>
+      <div id="ticker">🍄 Tap the mushroom to spread your first spore!</div>
       <div id="progress-bar" style="display:none">
         <div id="progress-fill"></div>
       </div>
@@ -1516,14 +1516,30 @@
     };
 
     const RESEARCH_DEF = [
+      // Tier 1
       { id: 'r1', tier: 1, prereqs: [], name: 'Spore Synthesis', desc: '+25% all producer output.', cost: 500, applyMult: m => { m.prod *= 1.25; } },
       { id: 'r2', tier: 1, prereqs: [], name: 'Efficient Growth', desc: 'Producer costs −15%.', cost: 800, applyMult: m => { m.cost *= 0.85; } },
+      { id: 'r1c', tier: 1, prereqs: [], name: 'Root Sensitivity', desc: '+10% symbiont bonus SPS.', cost: 1200, applyMult: m => { m.symbiosis *= 1.1; } },
+      // Tier 2
       { id: 'r3', tier: 2, prereqs: ['r1'], name: 'Mycelial Highways', desc: '+75% all producer output.', cost: 8000, applyMult: m => { m.prod *= 1.75; } },
       { id: 'r4', tier: 2, prereqs: ['r2'], name: 'Click Resonance', desc: '+100% click power.', cost: 5000, applyMult: m => { m.click *= 2; } },
-      { id: 'r5', tier: 2, prereqs: ['r1'], name: 'Bond Amplifier', desc: 'Symbiont SPS doubled.', cost: 10000, applyMult: m => { m.symbiosis *= 2; } },
+      { id: 'r5', tier: 2, prereqs: ['r1c'], name: 'Bond Amplifier', desc: 'Symbiont SPS doubled.', cost: 10000, applyMult: m => { m.symbiosis *= 2; } },
+      // Tier 3
       { id: 'r6', tier: 3, prereqs: ['r3', 'r5'], name: 'Fungal Singularity', desc: '+150% all producers.', cost: 80000, applyMult: m => { m.prod *= 2.5; } },
       { id: 'r7', tier: 3, prereqs: ['r4'], name: 'Pulse Amplifier', desc: 'Hivemind pulse gives 3×.', cost: 60000, applyMult: m => { m.pulse *= 3; } },
       { id: 'r8', tier: 3, prereqs: ['r3', 'r4'], name: 'Quantum Mycelium', desc: '+200% output, 2× clicks.', cost: 200000, applyMult: m => { m.prod *= 3; m.click *= 2; } },
+      // Tier 4
+      { id: 'r9', tier: 4, prereqs: ['r6'], name: 'Hyphal Consciousness', desc: '+300% all producer output.', cost: 2e6, applyMult: m => { m.prod *= 4; } },
+      { id: 'r10', tier: 4, prereqs: ['r7'], name: 'Resonant Burst', desc: 'Hivemind pulse gives 5× total.', cost: 1.5e6, applyMult: m => { m.pulse *= 5; } },
+      { id: 'r11', tier: 4, prereqs: ['r8'], name: 'Void Lattice', desc: 'Producer costs −25%.', cost: 1e6, applyMult: m => { m.cost *= 0.75; } },
+      // Tier 5
+      { id: 'r12', tier: 5, prereqs: ['r9', 'r10'], name: 'Mycelial Overmind', desc: 'All output ×5, clicks ×3.', cost: 2e7, applyMult: m => { m.prod *= 5; m.click *= 3; } },
+      { id: 'r13', tier: 5, prereqs: ['r10'], name: 'Dream Resonance', desc: 'Symbiont SPS ×5, pulse ×2.', cost: 1.5e7, applyMult: m => { m.symbiosis *= 5; m.pulse *= 2; } },
+      { id: 'r14', tier: 5, prereqs: ['r11'], name: 'Temporal Compression', desc: '+500% all output.', cost: 1e7, applyMult: m => { m.prod *= 6; } },
+      // Tier 6
+      { id: 'r15', tier: 6, prereqs: ['r12', 'r13'], name: 'The Eternal Protocol', desc: 'All output ×10.', cost: 5e8, applyMult: m => { m.prod *= 10; } },
+      { id: 'r16', tier: 6, prereqs: ['r13', 'r14'], name: 'Void Singularity', desc: 'Clicks ×10, pulse ×5.', cost: 3e8, applyMult: m => { m.click *= 10; m.pulse *= 5; } },
+      { id: 'r17', tier: 6, prereqs: ['r12', 'r14'], name: 'The Final Rot', desc: 'All output ×8, costs −40%.', cost: 4e8, applyMult: m => { m.prod *= 8; m.cost *= 0.6; } },
     ];
 
     const SEASONS = [
@@ -1675,12 +1691,25 @@
     function mp(s, id, x) { p(s, id).baseSps *= x; }
     function fmt(n) {
       if (n < 1000) return Math.floor(n).toString();
-      if (n < 1e6) return (n / 1000).toFixed(1) + 'k';
+      if (n < 1e6) return (n / 1e3).toFixed(1) + 'k';
       if (n < 1e9) return (n / 1e6).toFixed(2) + 'M';
       if (n < 1e12) return (n / 1e9).toFixed(2) + 'B';
       if (n < 1e15) return (n / 1e12).toFixed(2) + 'T';
-      if (n < 1e18) return (n / 1e15).toFixed(2) + 'Qa';
-      return (n / 1e18).toFixed(2) + 'Qi';
+      if (n < 1e18) return (n / 1e15).toFixed(2) + 'Qa';   // Quadrillion
+      if (n < 1e21) return (n / 1e18).toFixed(2) + 'Qi';   // Quintillion
+      if (n < 1e24) return (n / 1e21).toFixed(2) + 'Sx';   // Sextillion
+      if (n < 1e27) return (n / 1e24).toFixed(2) + 'Sp';   // Septillion
+      if (n < 1e30) return (n / 1e27).toFixed(2) + 'Oc';   // Octillion
+      if (n < 1e33) return (n / 1e30).toFixed(2) + 'No';   // Nonillion
+      if (n < 1e36) return (n / 1e33).toFixed(2) + 'Dc';   // Decillion
+      if (n < 1e39) return (n / 1e36).toFixed(2) + 'Spr';  // Sporillion
+      if (n < 1e42) return (n / 1e39).toFixed(2) + 'Myc';  // Mycelillion
+      if (n < 1e45) return (n / 1e42).toFixed(2) + 'Hyp';  // Hyphalion
+      if (n < 1e48) return (n / 1e45).toFixed(2) + 'Rhz';  // Rhizillion
+      if (n < 1e51) return (n / 1e48).toFixed(2) + 'Net';  // Netherillion
+      if (n < 1e54) return (n / 1e51).toFixed(2) + 'Vrd';  // Vordillion (void-rot)
+      if (n < 1e57) return (n / 1e54).toFixed(2) + 'Etl';  // Eternalion
+      return (n / 1e57).toFixed(2) + 'Abs';     // Absolutium
     }
 
     // ═══════════════════════════════════════
@@ -1757,7 +1786,7 @@
     // ═══════════════════════════════════════
     function saveGame() {
       try {
-        localStorage.setItem('myceliumEmpireV6', JSON.stringify({
+        localStorage.setItem('myceliumEmpireV7', JSON.stringify({
           spores: state.spores, totalEarned: state.totalEarned, sporesPerClick: state.sporesPerClick,
           hivemind: state.hivemind, hivemindUnlocked: state.hivemindUnlocked,
           msgIdx: state.msgIdx, seasonIdx: state.seasonIdx, seasonTimer: state.seasonTimer,
@@ -2017,10 +2046,11 @@
     // ═══════════════════════════════════════
     let lastResearchKey = null;
     function buildResearch() {
-      const key = state.research.map(r => r.bought ? '1' : '0').join('') + '|' + state.spores.toFixed(0);
+      // Only rebuild when bought state changes — never when spores change
+      const key = state.research.map(r => r.bought ? '1' : '0').join('');
       if (key === lastResearchKey) return; lastResearchKey = key;
       const c = document.getElementById('tab-research'); c.innerHTML = '';
-      [1, 2, 3].forEach(tier => {
+      [1, 2, 3, 4, 5, 6].forEach(tier => {
         const nodes = RESEARCH_DEF.filter(r => r.tier === tier);
         const lbl = document.createElement('div'); lbl.className = 'research-tier-label'; lbl.textContent = 'Tier ' + tier; c.appendChild(lbl);
         if (tier > 1) { const conn = document.createElement('div'); conn.className = 'rn-connector'; conn.textContent = '↓  ↓'; c.appendChild(conn); }
@@ -2029,21 +2059,43 @@
           const sr = state.research.find(r => r.id === def.id);
           const pre = def.prereqs.every(pid => state.research.find(r => r.id === pid)?.bought);
           const bought = sr?.bought;
-          const card = document.createElement('div'); card.className = 'rn-card' + (bought ? ' bought' : '') + ((!pre && !bought) ? ' locked' : '');
+          const card = document.createElement('div');
+          card.className = 'rn-card' + (bought ? ' bought' : '') + ((!pre && !bought) ? ' locked' : '');
+          card.dataset.rid = def.id;
           card.innerHTML = `<div class="rn-name">${def.name}</div><div class="rn-desc">${def.desc}</div><div class="rn-cost">${bought ? '' : fmt(def.cost) + ' sp'}</div>`;
-          if (bought) { const b = document.createElement('div'); b.className = 'rn-bought-badge'; b.textContent = '✦ Researched'; card.appendChild(b); }
-          else if (pre) { const btn = document.createElement('button'); btn.className = 'rn-btn'; btn.type = 'button'; btn.textContent = 'Research'; btn.disabled = state.spores < def.cost; btn.addEventListener('click', () => buyResearch(def.id)); card.appendChild(btn); }
-          else { const lk = document.createElement('div'); lk.style.cssText = 'font-size:10px;color:#3a5e42;margin-top:3px'; lk.textContent = 'Requires: ' + def.prereqs.map(pid => RESEARCH_DEF.find(r => r.id === pid)?.name || pid).join(', '); card.appendChild(lk); }
+          if (bought) {
+            const b = document.createElement('div'); b.className = 'rn-bought-badge'; b.textContent = '✦ Researched'; card.appendChild(b);
+          } else if (pre) {
+            const btn = document.createElement('button');
+            btn.className = 'rn-btn'; btn.type = 'button'; btn.textContent = 'Research';
+            btn.dataset.rcost = def.cost;
+            btn.disabled = state.spores < def.cost;
+            btn.addEventListener('click', () => buyResearch(def.id));
+            card.appendChild(btn);
+          } else {
+            const lk = document.createElement('div');
+            lk.style.cssText = 'font-size:10px;color:#3a5e42;margin-top:3px';
+            lk.textContent = 'Requires: ' + def.prereqs.map(pid => RESEARCH_DEF.find(r => r.id === pid)?.name || pid).join(', ');
+            card.appendChild(lk);
+          }
           row.appendChild(card);
         });
         c.appendChild(row);
       });
     }
+
+    function updateResearch() {
+      // Only update button disabled states — never touch structure
+      document.querySelectorAll('#tab-research .rn-btn').forEach(btn => {
+        btn.disabled = state.spores < Number(btn.dataset.rcost);
+      });
+    }
+
     function buyResearch(id) {
       const def = RESEARCH_DEF.find(d => d.id === id), sr = state.research.find(r => r.id === id);
       if (!def || sr.bought || state.spores < def.cost) return;
       state.spores -= def.cost; sr.bought = true; invalidateMults(); lastResearchKey = null;
-      buildResearch(); updateStats();
+      buildResearch(); updateResearch(); updateStats();
     }
 
     // ═══════════════════════════════════════
@@ -2075,28 +2127,105 @@
     // ═══════════════════════════════════════
     //  PRODUCERS
     // ═══════════════════════════════════════
+    // Format SPS — always show meaningful decimals for small values
+    function fmtSps(n) {
+      if (n === 0) return '0';
+      if (n < 0.01) return n.toExponential(1);
+      if (n < 1) return n.toFixed(2);
+      if (n < 10) return n.toFixed(1);
+      return fmt(n);
+    }
+
+    let buyQty = 1; // 1, 5, 10, or 'max'
+
+    function maxAffordable(pr) {
+      const cost = getCost(pr);
+      if (state.spores < cost) return 0;
+      let n = 0, spores = state.spores, owned = pr.owned;
+      // Binary search for max
+      let lo = 1, hi = 10000;
+      while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        let total = 0, o = owned;
+        for (let i = 0; i < mid; i++) total += Math.ceil(pr.baseCost * Math.pow(1.15, o++) * getResearchMults().cost);
+        if (total <= spores) { n = mid; lo = mid + 1; } else hi = mid - 1;
+      }
+      return n;
+    }
+
+    function getQtyLabel(pr) {
+      if (buyQty === 'max') {
+        const n = maxAffordable(pr);
+        return n > 0 ? 'Buy ×' + n : '';
+      }
+      return 'Buy ×' + buyQty;
+    }
+
     function buildProducers() {
       const c = document.getElementById('tab-producers'); c.innerHTML = '';
+      // Qty selector row
+      const qrow = document.createElement('div');
+      qrow.style.cssText = 'display:flex;gap:5px;padding:8px 12px 6px;border-bottom:1px solid #1D9E7518;';
+      [1, 5, 10, 'max'].forEach(q => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = q === 'max' ? 'Max' : '×' + q;
+        btn.style.cssText = 'flex:1;padding:4px 2px;border-radius:6px;border:1px solid #1D9E7530;background:transparent;color:#6a9d75;font-size:10px;font-weight:500;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;font-family:inherit;transition:background 0.1s,color 0.1s,border-color 0.1s;';
+        btn.dataset.qty = q;
+        if (buyQty === q) { btn.style.background = '#1D9E7520'; btn.style.color = '#9FE1CB'; btn.style.borderColor = '#1D9E7560'; }
+        btn.addEventListener('click', () => {
+          buyQty = q === 'max' ? 'max' : Number(q);
+          buildProducers(); // rebuild to refresh qty buttons + buy labels
+        });
+        qrow.appendChild(btn);
+      });
+      c.appendChild(qrow);
+      // Producer items
       state.producers.forEach(pr => {
-        const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'item disabled'; btn.dataset.id = pr.id;
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'item disabled'; btn.dataset.id = pr.id;
         btn.innerHTML = `<div class="item-top"><span class="item-name">${pr.emoji} ${pr.name}</span><span class="item-cost" data-cost></span></div><div class="item-desc">${pr.desc}</div><div class="item-owned" data-owned></div>`;
-        btn.addEventListener('click', () => buyProducer(pr.id)); c.appendChild(btn);
+        btn.addEventListener('click', () => buyProducer(pr.id));
+        c.appendChild(btn);
       });
     }
     function updateProducers() {
       state.producers.forEach(pr => {
         const btn = document.querySelector(`#tab-producers [data-id="${pr.id}"]`); if (!btn) return;
-        const cost = getCost(pr), can = state.spores >= cost;
-        btn.classList.toggle('disabled', !can); btn.classList.toggle('can-afford', can);
-        btn.querySelector('[data-cost]').textContent = fmt(cost) + ' sp';
+        const singleCost = getCost(pr);
+        let totalCost = singleCost, qty = 1, can = false;
+        if (buyQty === 'max') {
+          qty = maxAffordable(pr);
+          if (qty === 0) { totalCost = singleCost; can = false; }
+          else {
+            let o = pr.owned, total = 0;
+            for (let i = 0; i < qty; i++) total += Math.ceil(pr.baseCost * Math.pow(1.15, o++) * getResearchMults().cost);
+            totalCost = total; can = true;
+          }
+        } else {
+          qty = buyQty;
+          let o = pr.owned, total = 0;
+          for (let i = 0; i < qty; i++) total += Math.ceil(pr.baseCost * Math.pow(1.15, o++) * getResearchMults().cost);
+          totalCost = total; can = state.spores >= total;
+        }
+        btn.classList.toggle('disabled', !can);
+        btn.classList.toggle('can-afford', can);
+        const costLabel = buyQty === 1 ? fmt(singleCost) + ' sp' : fmt(totalCost) + ' sp (×' + (buyQty === 'max' ? qty : buyQty) + ')';
+        btn.querySelector('[data-cost]').textContent = costLabel;
         const sps = pr.baseSps * getSeasonMult(pr.id) * BIOMES[state.biomeIdx].prodMult * getPrestigeMult() * getResearchMults().prod * getAchievementMults().prod;
-        btn.querySelector('[data-owned]').textContent = `Owned: ${pr.owned}  ·  +${fmt(sps)}/s each`;
+        btn.querySelector('[data-owned]').textContent = `Owned: ${pr.owned}  ·  +${fmtSps(sps)}/s each`;
       });
     }
     function buyProducer(id) {
-      const pr = p(state, id), cost = getCost(pr);
-      if (state.spores < cost) return;
-      state.spores -= cost; pr.owned++; updateProducers(); updateStats();
+      const pr = p(state, id);
+      const qty = buyQty === 'max' ? maxAffordable(pr) : buyQty;
+      if (qty === 0) return;
+      for (let i = 0; i < qty; i++) {
+        const cost = getCost(pr);
+        if (state.spores < cost) break;
+        state.spores -= cost; pr.owned++;
+      }
+      updateProducers(); updateStats();
     }
 
     // ═══════════════════════════════════════
@@ -2354,7 +2483,7 @@
       buildUpgrades(); updateUpgrades();
       updateSymbiosis(); updateSporulateUI();
       checkAchievements(); buildGoals();
-      buildCodex(); buildResearch();
+      buildCodex(); buildResearch(); updateResearch();
       updateBiomePath();
     }, 50);
 
@@ -2365,12 +2494,13 @@
     //  BOOT
     // ═══════════════════════════════════════
     function bootUI() {
-      buildProducers(); buildSymbiosis(); buildOwned(); buildGoals(); buildCodex(); buildResearch();
+      buildProducers(); buildSymbiosis(); buildOwned(); buildGoals(); buildCodex();
       updateStats(); updateProducers(); buildUpgrades(); updateUpgrades();
       updateSymbiosis(); updateSeasonBar(); updateBiomePath(); updateSporulateUI();
       document.getElementById('mode-check').checked = state.disasterMode;
       document.getElementById('event-toast').style.display = 'none';
-      showMessage();
+      buildResearch(); updateResearch();
+      if (state.totalEarned > 0) showMessage();
     }
 
     loadGame();
