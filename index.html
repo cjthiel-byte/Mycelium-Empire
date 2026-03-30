@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Mycelium Empire</title>
   <style>
     *,
@@ -21,6 +22,10 @@
       font-family: system-ui, -apple-system, sans-serif;
       background: #0a1209;
       color: #d4edd8;
+      /* Prevent any text/element selection globally */
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
     }
 
     body {
@@ -398,6 +403,7 @@
       gap: 5px;
       transition: transform 0.08s, background 0.08s;
       user-select: none;
+      -webkit-user-select: none;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       animation: bio-glow 2.8s ease-in-out infinite;
@@ -415,6 +421,8 @@
     #spore-icon {
       font-size: 48px;
       pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     #click-label {
@@ -422,6 +430,8 @@
       color: #5DCAA5;
       font-weight: 500;
       pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     #ticker {
@@ -1729,7 +1739,7 @@
       return {
         prestigeCount: 0, biomeIdx: 0, biomesVisited: ['forest'],
         achievementsUnlocked: [], allTimePulses: 0, winterSurvived: false,
-        disasterMode: false, showSporulatePanel: false,
+        disasterMode: false, showSporulatePanel: false, lastSeen: 0,
       };
     }
     function defaultState() { return { ...defaultRunState(), ...defaultMetaState() }; }
@@ -1792,6 +1802,7 @@
           prestigeCount: state.prestigeCount, biomeIdx: state.biomeIdx, biomesVisited: state.biomesVisited,
           achievementsUnlocked: state.achievementsUnlocked, allTimePulses: state.allTimePulses,
           winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, eventCooldown: state.eventCooldown,
+          lastSeen: Date.now(),
           producers: state.producers.map(x => ({ id: x.id, owned: x.owned, baseSps: x.baseSps })),
           upgrades: state.upgrades.map(x => ({ id: x.id, bought: x.bought })),
           symbiosis: state.symbiosis.map(x => ({ ...x })),
@@ -1805,7 +1816,7 @@
         const raw = localStorage.getItem('myceliumEmpireV7') || localStorage.getItem('myceliumEmpireV6'); if (!raw) return;
         const sv = JSON.parse(raw);
         ['spores', 'totalEarned', 'sporesPerClick', 'hivemind', 'hivemindUnlocked', 'msgIdx', 'seasonIdx', 'seasonTimer',
-          'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown'
+          'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown', 'lastSeen'
         ].forEach(k => { if (sv[k] !== undefined) state[k] = sv[k]; });
         if (sv.achievementsUnlocked) state.achievementsUnlocked = sv.achievementsUnlocked;
         if (sv.biomesVisited) state.biomesVisited = sv.biomesVisited;
@@ -2526,8 +2537,55 @@
       if (state.totalEarned > 0) showMessage();
     }
 
+    // ═══════════════════════════════════════
+    //  GESTURE / ZOOM BLOCKERS
+    // ═══════════════════════════════════════
+    // Block pinch-zoom (gesturestart fires on Safari Mac/iOS for multi-touch)
+    document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
+    document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
+    document.addEventListener('gestureend', e => e.preventDefault(), { passive: false });
+    // Block multi-touch on touchstart (catches Android pinch too)
+    document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+
+    // ═══════════════════════════════════════
+    //  SAVE ON BACKGROUND / CLOSE
+    // ═══════════════════════════════════════
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        state.lastSeen = Date.now();
+        saveGame();
+      } else {
+        applyOfflineProgress();
+      }
+    });
+    document.addEventListener('pagehide', () => { state.lastSeen = Date.now(); saveGame(); });
+    document.addEventListener('beforeunload', () => { state.lastSeen = Date.now(); saveGame(); });
+
+    // ═══════════════════════════════════════
+    //  OFFLINE PROGRESS
+    // ═══════════════════════════════════════
+    const MAX_OFFLINE_SECONDS = 8 * 3600; // cap at 8 hours so it doesn't feel broken
+
+    function applyOfflineProgress() {
+      if (!state.lastSeen) return;
+      const elapsed = Math.min((Date.now() - state.lastSeen) / 1000, MAX_OFFLINE_SECONDS);
+      state.lastSeen = 0;
+      if (elapsed < 10) return; // ignore tiny gaps
+      const sps = getSps();
+      if (sps <= 0) return;
+      const earned = sps * elapsed;
+      state.spores += earned;
+      state.totalEarned += earned;
+      const mins = Math.floor(elapsed / 60);
+      const hrs = Math.floor(mins / 60);
+      const timeStr = hrs > 0 ? `${hrs}h ${mins % 60}m` : `${mins}m`;
+      tick(`🌙 Welcome back! ${timeStr} passed — your network earned +${fmt(earned)} spores.`, true);
+      updateStats();
+    }
+
     loadGame();
     bootUI();
+    applyOfflineProgress();
     requestAnimationFrame(animateMycelium);
   </script>
 </body>
