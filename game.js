@@ -479,15 +479,25 @@ function loadFromCloud(force = false) {
 }
 
 function resetGame() {
-    if (!confirm('Reset everything and start over?')) return;
+    if (!confirm('Reset everything and start over? This cannot be undone.')) return;
+    // Clear local storage
     localStorage.removeItem('myceliumEmpireV7');
     localStorage.removeItem('myceliumEmpireV6');
+    // Reset to blank state first so buildSaveData() returns zeros
+    state = defaultState();
+    invalidateMults();
+    // Overwrite cloud save with blank state so the database is also zeroed
     if (currentUser && db && FIREBASE_CONFIGURED) {
-        db.collection('saves').doc(currentUser.uid).delete().catch(() => { });
+        db.collection('saves').doc(currentUser.uid).set({
+            gameState: buildSaveData(),
+            lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
+        }).catch(e => console.warn('Cloud reset failed', e));
     }
-    state = defaultState(); invalidateMults();
     lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
-    branches = []; bootUI();
+    branches = [];
+    closeProfileModal();
+    bootUI();
+    tick('🌱 Game reset. A new spore lands.', true);
 }
 
 // ═══════════════════════════════════════
@@ -632,21 +642,23 @@ function updateProfileUI(loggedIn) {
     const btn = document.getElementById('profile-btn');
     const icon = document.getElementById('profile-btn-icon');
     const label = document.getElementById('profile-btn-label');
+    const logoutInline = document.getElementById('logout-inline-btn');
 
     if (loggedIn) {
-        // Derive avatar: use first letter of username, or '?' as fallback
         const initial = currentUsername ? currentUsername[0].toUpperCase() : (currentUser?.email?.[0]?.toUpperCase() || '?');
         btn.classList.add('logged-in');
         icon.textContent = initial;
-        label.style.display = 'none';  // always hidden when logged in
+        label.style.display = 'none';
+        logoutInline.style.display = '';
         // Update modal logged-in view
         document.getElementById('p-avatar').textContent = initial;
         document.getElementById('p-username-display').textContent = currentUsername || currentUser?.email || '';
     } else {
         btn.classList.remove('logged-in');
         icon.textContent = '👤';
-        label.style.display = '';  // restore to CSS default
+        label.style.display = '';
         label.textContent = 'Sign In';
+        logoutInline.style.display = 'none';
     }
 }
 
@@ -1094,15 +1106,16 @@ ALL_TABS.forEach(t => document.getElementById('tab-btn-' + t).addEventListener('
 
 // Profile modal wiring
 document.getElementById('profile-btn').addEventListener('click', openProfileModal);
+document.getElementById('logout-inline-btn').addEventListener('click', doSignOut);
 document.getElementById('profile-modal-close').addEventListener('click', closeProfileModal);
 document.getElementById('profile-overlay').addEventListener('click', e => { if (e.target === document.getElementById('profile-overlay')) closeProfileModal(); });
 document.getElementById('ptab-login').addEventListener('click', () => switchProfileTab('login'));
 document.getElementById('ptab-signup').addEventListener('click', () => switchProfileTab('signup'));
 document.getElementById('p-login-btn').addEventListener('click', doSignIn);
 document.getElementById('p-signup-btn').addEventListener('click', doSignUp);
-document.getElementById('p-logout-btn').addEventListener('click', doSignOut);
 document.getElementById('p-save-now-btn').addEventListener('click', () => { saveGame(); });
-document.getElementById('p-load-cloud-btn').addEventListener('click', () => { if (confirm('Load cloud save? This will overwrite your current session.')) loadFromCloud(true); });
+document.getElementById('p-load-cloud-btn').addEventListener('click', () => { if (confirm('Load last save? This will overwrite your current session.')) loadFromCloud(true); });
+document.getElementById('p-reset-btn').addEventListener('click', resetGame);
 
 // Allow Enter key in auth forms
 document.getElementById('p-password-login').addEventListener('keydown', e => { if (e.key === 'Enter') doSignIn(); });

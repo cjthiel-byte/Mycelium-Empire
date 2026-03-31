@@ -30,6 +30,7 @@
         <span id="profile-btn-icon">👤</span>
         <span id="profile-btn-label">Sign In</span>
       </button>
+      <button id="logout-inline-btn" aria-label="Sign out" style="display:none">Sign Out</button>
     </div>
   </div>
 
@@ -79,8 +80,8 @@
         <div id="p-username-display"></div>
         <div id="p-sync-status"></div>
         <button class="p-action-btn" id="p-save-now-btn" type="button">☁️ Save Now</button>
-        <button class="p-action-btn" id="p-load-cloud-btn" type="button">⬇️ Load Cloud Save</button>
-        <button class="p-logout-btn" id="p-logout-btn" type="button">Sign Out</button>
+        <button class="p-action-btn" id="p-load-cloud-btn" type="button">⬇️ Load Last Save</button>
+        <button class="p-reset-btn" id="p-reset-btn" type="button">🗑 Reset Game</button>
       </div>
 
       <!-- Firebase not configured notice -->
@@ -157,7 +158,6 @@
         <span class="mode-label" id="mode-disaster">Disaster</span>
       </div>
       <div id="save-info">Auto-saves every 30s</div>
-      <button id="reset-btn" onclick="resetGame()">Reset game</button>
     </div>
 
     <!-- Right panel -->
