@@ -177,11 +177,16 @@ const SEASONS = [
 ];
 
 const BIOMES = [
-    { id: 'forest', name: 'Ancient Forest', emoji: '🌲', clickMult: 1, prodMult: 1, noSeasons: false, desc: 'The origin. Balanced and fertile.' },
-    { id: 'desert', name: 'Arid Desert', emoji: '🏜', clickMult: 3, prodMult: 0.65, noSeasons: false, desc: 'Clicks powerful. Producers struggle.' },
-    { id: 'ocean', name: 'Deep Ocean', emoji: '🌊', clickMult: 1, prodMult: 2.0, noSeasons: true, desc: 'No seasons. Producers flourish in the dark.' },
-    { id: 'arctic', name: 'Frozen Tundra', emoji: '🧊', clickMult: 1, prodMult: 1.0, noSeasons: false, arcticMode: true, desc: 'Winter bonuses doubled. Summer brutal.' },
-    { id: 'void', name: 'The Void', emoji: '🌌', clickMult: 2, prodMult: 3.0, noSeasons: false, desc: 'Tripled production. Strange laws here.' },
+    { id: 'forest', name: 'Ancient Forest', emoji: '🌲', clickMult: 1, prodMult: 1.0, noSeasons: false, desc: 'The origin. Balanced and fertile.' },
+    { id: 'desert', name: 'Arid Desert', emoji: '🏜', clickMult: 3, prodMult: 0.65, noSeasons: false, desc: 'Clicks are powerful. Producers struggle in the heat.' },
+    { id: 'ocean', name: 'Deep Ocean', emoji: '🌊', clickMult: 1, prodMult: 2.0, noSeasons: true, desc: 'No seasons. Producers flourish in the crushing dark.' },
+    { id: 'arctic', name: 'Frozen Tundra', emoji: '🧊', clickMult: 1, prodMult: 1.0, noSeasons: false, arcticMode: true, desc: 'Winter bonuses are doubled. Summer is brutal.' },
+    { id: 'void', name: 'The Void', emoji: '🌌', clickMult: 2, prodMult: 3.0, noSeasons: false, desc: 'Tripled production. Strange laws apply here.' },
+    { id: 'swamp', name: 'Fungal Swamp', emoji: '🌿', clickMult: 1, prodMult: 1.75, noSeasons: false, swampMode: true, desc: 'Rot is everywhere. Producers thrive, but seasons swing harder.' },
+    { id: 'cave', name: 'Crystal Caves', emoji: '💎', clickMult: 4, prodMult: 0.8, noSeasons: true, desc: 'No seasons. Clicks resonate through crystal, massively amplified.' },
+    { id: 'canopy', name: 'Ancient Canopy', emoji: '🌴', clickMult: 1.5, prodMult: 1.5, noSeasons: false, desc: 'High above the forest floor. Both clicks and producers gain a steady lift.' },
+    { id: 'volcanic', name: 'Volcanic Rift', emoji: '🌋', clickMult: 2, prodMult: 0.5, noSeasons: false, volcanicMode: true, desc: 'Extreme heat halves producers but doubles clicks. Spring and Fall surge.' },
+    { id: 'celestial', name: 'Celestial Drift', emoji: '🌠', clickMult: 3, prodMult: 4.0, noSeasons: true, desc: 'Beyond the planet. No seasons. Clicks and production both reach their peak.' },
 ];
 
 const SYMBIONTS = [
@@ -247,7 +252,29 @@ PRODUCERS_DEF.forEach(pr => {
     });
 });
 const BIOME_ACHS = BIOMES.map((b, i) => ({ id: `biome_${b.id}`, emoji: b.emoji, name: `${b.name} Explorer`, desc: i === 0 ? 'Begin your journey in the Ancient Forest.' : `Sporulate into the ${b.name}.`, bonusDesc: '', req: s => i === 0 ? s.totalEarned >= 1 : s.biomesVisited.includes(b.id), lore: '', bonus: null, category: 'biome' }));
-const ALL_ACHS = [...MAJOR_ACHS, ...PRODUCER_ACHS, ...BIOME_ACHS];
+
+// ═══════════════════════════════════════
+//  HIDDEN ACHIEVEMENTS
+// ═══════════════════════════════════════
+// Transient trackers — reset each run, never saved
+let _clickTs = [], _hivemindZeroAt = Date.now(), _lastClickAt = Date.now(), _recentPulseTs = [], _runStartAt = Date.now();
+
+const HIDDEN_ACHS = [
+    // Event-triggered (req always false — unlocked manually at the right moment)
+    { id: 'h1', hidden: true, emoji: '⚡', name: 'Frenzy', desc: 'Click 50 times within 10 seconds.', bonusDesc: '+10% click power', lore: 'The network convulses. Something wakes.', bonus: m => { m.click *= 1.10; }, req: () => false },
+    { id: 'h2', hidden: true, emoji: '🔋', name: 'Overclock', desc: 'Fill the Hivemind bar from 0 to 100 in under 30 seconds.', bonusDesc: '+20% pulse bonus', lore: 'You did not wait. You forced it.', bonus: m => { m.pulse *= 1.20; }, req: () => false },
+    { id: 'h8', hidden: true, emoji: '🧩', name: 'Mind Meld', desc: 'Trigger the Hivemind Pulse 3 times within 2 minutes.', bonusDesc: '+30% pulse bonus', lore: 'Three pulses. One thought. No gap between.', bonus: m => { m.pulse *= 1.30; }, req: () => false },
+    // Passive — checked every tick via checkAchievements
+    { id: 'h3', hidden: true, emoji: '🪨', name: 'Stillness', desc: "Don't click for 90 seconds while earning 100+ spores/sec.", bonusDesc: '+10% all output', lore: 'The network breathes without you. It always could.', bonus: m => { m.prod *= 1.10; }, req: s => getSps() >= 100 && (Date.now() - _lastClickAt) >= 90000 },
+    { id: 'h4', hidden: true, emoji: '👑', name: 'Obsessive', desc: 'Own 50 of every producer simultaneously.', bonusDesc: '+15% all output', lore: 'Every node. Every thread. Every layer. Saturated.', bonus: m => { m.prod *= 1.15; }, req: s => s.producers.every(pr => pr.owned >= 50) },
+    { id: 'h5', hidden: true, emoji: '🗂', name: 'The Collector', desc: 'Own at least one of every producer type.', bonusDesc: '+8% all output', lore: 'Nothing left to discover. Only growth remains.', bonus: m => { m.prod *= 1.08; }, req: s => s.producers.every(pr => pr.owned >= 1) },
+    { id: 'h6', hidden: true, emoji: '🔁', name: 'Remembrance', desc: 'Sporulate back into a biome you have already visited.', bonusDesc: '+10% all output', lore: 'You have been here before. The soil remembers you.', bonus: m => { m.prod *= 1.10; }, req: s => s.revisitedBiome },
+    { id: 'h7', hidden: true, emoji: '📖', name: 'Archivist', desc: 'Unlock every Lore entry in a single run.', bonusDesc: '+12% all output', lore: 'You read every word. The mycelium noticed.', bonus: m => { m.prod *= 1.12; }, req: s => CODEX_DEF.every(entry => entry.unlockAt(s)) },
+    { id: 'h9', hidden: true, emoji: '💨', name: 'Speed Runner', desc: 'Reach the sporulation threshold within 10 minutes of a run.', bonusDesc: '+15% all output', lore: 'You already knew the way.', bonus: m => { m.prod *= 1.15; }, req: s => s.totalEarned >= sporulationThreshold() && (Date.now() - _runStartAt) <= 600000 },
+    { id: 'h10', hidden: true, emoji: '🫙', name: 'All In', desc: 'Drop below 10 spores while owning at least 20 producers.', bonusDesc: '+8% all output', lore: 'The network starves. It does not stop growing.', bonus: m => { m.prod *= 1.08; }, req: s => s.spores < 10 && s.producers.reduce((t, pr) => t + pr.owned, 0) >= 20 },
+];
+
+const ALL_ACHS = [...MAJOR_ACHS, ...PRODUCER_ACHS, ...BIOME_ACHS, ...HIDDEN_ACHS];
 
 const CODEX_DEF = [
     { id: 'c1', title: 'Origin', unlockAt: s => s.totalEarned >= 50, text: 'You are a spore. A single point of possibility, landed on a fallen log at the edge of a dying forest. You do not know this yet. You are already growing.' },
@@ -326,6 +353,7 @@ function defaultRunState() {
     return {
         spores: 0, totalEarned: 0, sporesPerClick: 1, hivemind: 0, hivemindUnlocked: false, msgIdx: 0,
         seasonIdx: 0, seasonTimer: 0,
+        clicksThisPrestige: 0,
         producers: PRODUCERS_DEF.map(x => ({ ...x, owned: 0 })),
         upgrades: UPGRADES_DEF.map(x => ({ id: x.id, bought: false })),
         symbiosis: SYMBIONTS.map(x => ({ id: x.id, active: false, hungry: false, feedTimer: 0, broken: false })),
@@ -338,6 +366,7 @@ function defaultMetaState() {
         prestigeCount: 0, biomeIdx: 0, biomesVisited: ['forest'],
         achievementsUnlocked: [], allTimePulses: 0, winterSurvived: false,
         disasterMode: false, showSporulatePanel: false, lastSeen: 0,
+        allTimeSporesBase: 0, allTimeClicks: 0, revisitedBiome: false,
     };
 }
 function defaultState() { return { ...defaultRunState(), ...defaultMetaState() }; }
@@ -364,6 +393,8 @@ function getSeasonMult(id) {
     const biome = BIOMES[state.biomeIdx]; if (biome.noSeasons) return 1;
     const season = SEASONS[state.seasonIdx]; let m = season.mults[id] || 1;
     if (biome.arcticMode) { if (state.seasonIdx === 3) m = 1 + (m - 1) * 2 + 1; if (state.seasonIdx === 1) m *= 0.5; }
+    if (biome.swampMode) { m = m > 1 ? 1 + (m - 1) * 1.5 : 1 - (1 - m) * 1.5; m = Math.max(0.05, m); }
+    if (biome.volcanicMode) { if (state.seasonIdx === 0 || state.seasonIdx === 2) m = m > 1 ? m * 1.6 : m; else if (state.seasonIdx === 1 || state.seasonIdx === 3) m = m < 1 ? m * 0.5 : m * 0.7; }
     return m;
 }
 function getPrestigeMult() { return 1 + state.prestigeCount * 0.5; }
@@ -400,6 +431,7 @@ function buildSaveData() {
         achievementsUnlocked: state.achievementsUnlocked, allTimePulses: state.allTimePulses,
         winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, eventCooldown: state.eventCooldown,
         lastSeen: Date.now(),
+        allTimeSporesBase: state.allTimeSporesBase, allTimeClicks: state.allTimeClicks, clicksThisPrestige: state.clicksThisPrestige, revisitedBiome: state.revisitedBiome,
         producers: state.producers.map(x => ({ id: x.id, owned: x.owned, baseSps: x.baseSps })),
         upgrades: state.upgrades.map(x => ({ id: x.id, bought: x.bought })),
         symbiosis: state.symbiosis.map(x => ({ ...x })),
@@ -410,7 +442,8 @@ function buildSaveData() {
 function applyGameData(sv) {
     if (!sv) return;
     ['spores', 'totalEarned', 'sporesPerClick', 'hivemind', 'hivemindUnlocked', 'msgIdx', 'seasonIdx', 'seasonTimer',
-        'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown', 'lastSeen'
+        'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown', 'lastSeen',
+        'allTimeSporesBase', 'allTimeClicks', 'clicksThisPrestige', 'revisitedBiome'
     ].forEach(k => { if (sv[k] !== undefined) state[k] = sv[k]; });
     if (sv.achievementsUnlocked) state.achievementsUnlocked = sv.achievementsUnlocked;
     if (sv.biomesVisited) state.biomesVisited = sv.biomesVisited;
@@ -468,7 +501,7 @@ function loadFromCloud(force = false) {
             state = defaultState();
             applyGameData(cloudData);
             invalidateMults();
-            lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
+            lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1;
             branches = [];
             bootUI();
             applyOfflineProgress();
@@ -493,7 +526,7 @@ function resetGame() {
             lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
         }).catch(e => console.warn('Cloud reset failed', e));
     }
-    lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
+    lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1;
     branches = [];
     closeProfileModal();
     bootUI();
@@ -669,10 +702,13 @@ function toggleSporulatePanel() { state.showSporulatePanel = !state.showSporulat
 function doSporulate() {
     const nextIdx = (state.biomeIdx + 1) % BIOMES.length;
     const visited = [...state.biomesVisited];
+    const isRevisit = visited.includes(BIOMES[nextIdx].id);
     if (!visited.includes(BIOMES[nextIdx].id)) visited.push(BIOMES[nextIdx].id);
-    const meta = { prestigeCount: state.prestigeCount + 1, biomeIdx: nextIdx, biomesVisited: visited, achievementsUnlocked: [...state.achievementsUnlocked], allTimePulses: state.allTimePulses, winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, showSporulatePanel: false };
-    state = { ...defaultRunState(), ...meta }; invalidateMults();
-    lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null;
+    const meta = { prestigeCount: state.prestigeCount + 1, biomeIdx: nextIdx, biomesVisited: visited, achievementsUnlocked: [...state.achievementsUnlocked], allTimePulses: state.allTimePulses, winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, showSporulatePanel: false, allTimeSporesBase: state.allTimeSporesBase + state.totalEarned, allTimeClicks: state.allTimeClicks, revisitedBiome: state.revisitedBiome || isRevisit };
+    state = { ...defaultRunState(), ...meta }; invalidateMults(); _lastBiomeIdx = -1;
+    // Reset hidden achievement trackers for the new run
+    _clickTs = []; _hivemindZeroAt = Date.now(); _lastClickAt = Date.now(); _recentPulseTs = []; _runStartAt = Date.now();
+    lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null;
     branches = []; bootUI(); screenShake();
     tick('🧬 Sporulated! You enter ' + BIOMES[state.biomeIdx].emoji + ' ' + BIOMES[state.biomeIdx].name + '. Legacy: ' + getPrestigeMult().toFixed(1) + '×', true);
 }
@@ -682,9 +718,6 @@ function updateSporulateUI() {
     wrap.style.display = 'block';
     document.getElementById('sporulate-panel').style.display = state.showSporulatePanel ? 'block' : 'none';
     if (state.showSporulatePanel) {
-        const next = BIOMES[(state.biomeIdx + 1) % BIOMES.length];
-        document.getElementById('spor-biome').textContent = next.emoji + ' ' + next.name;
-        document.getElementById('spor-biome-desc').textContent = next.desc;
         document.getElementById('spor-mult').textContent = (1 + (state.prestigeCount + 1) * 0.5).toFixed(1) + '× (currently ' + getPrestigeMult().toFixed(1) + '×)';
     }
 }
@@ -716,6 +749,17 @@ function updateSeasonBar() {
     document.getElementById('season-fill').style.background = ns ? '#1D9E7560' : season.color;
     const rem = Math.max(0, Math.ceil(season.duration - state.seasonTimer)), m = Math.floor(rem / 60), sec = rem % 60;
     document.getElementById('season-time').textContent = ns ? '—' : m + ':' + String(sec).padStart(2, '0');
+
+    // Season tooltip
+    const tipWrap = document.getElementById('season-tip-wrap');
+    if (ns) { tipWrap.style.display = 'none'; return; }
+    tipWrap.style.display = 'inline-flex';
+    const PROD_NAMES = { threads: 'Threads', fruiting: 'Fruiting Bodies', woodweb: 'Wood Wide Web', sporestorm: 'Spore Storm', undercity: 'Underground City', cordyceps: 'Cordyceps', planetary: 'Planetary', voidspore: 'Void Spore', lichenveil: 'Lichen Veil', dreamweb: 'Dream Mycelium', satellite: 'Satellite', crystal: 'Hivemind Crystal', rootsing: 'Root Singularity', temporal: 'Temporal Thread', stellar: 'Stellar Mycelium', consciousness: 'Consciousness Web', dimensional: 'Dimensional Rot', eternalspore: 'Eternal Spore', galactic: 'Galactic Lattice', absolute: 'The Absolute' };
+    const slines = [];
+    Object.entries(season.mults).forEach(([id, v]) => {
+        slines.push((v >= 1 ? '▲ ' : '▼ ') + (PROD_NAMES[id] || id) + ' ' + (v >= 1 ? '+' : '') + Math.round((v - 1) * 100) + '%');
+    });
+    document.getElementById('season-tooltip-text').textContent = slines.join('\n');
 }
 
 // ═══════════════════════════════════════
@@ -732,6 +776,18 @@ function tickEvents(dt) {
         document.getElementById('event-bar-fill').style.width = (100 - pct) + '%';
         document.getElementById('event-bar-fill').style.background = ev.color;
         toast.style.borderColor = ev.color + '66';
+        // Populate event tooltip
+        const tipEl = document.getElementById('event-tooltip-text');
+        const lines = [];
+        if (ev.globalMult) lines.push('★ All output ×' + ev.globalMult);
+        if (ev.bonusSpores) lines.push('★ Bonus spores on start');
+        if (ev.stealPct) lines.push('⚠ Steals ' + (ev.stealPct * 100) + '% stored spores');
+        const PROD_NAMES = { threads: 'Threads', fruiting: 'Fruiting Bodies', woodweb: 'Wood Wide Web', sporestorm: 'Spore Storm', undercity: 'Underground City', cordyceps: 'Cordyceps', lichenveil: 'Lichen Veil', satellite: 'Satellite', stellar: 'Stellar Mycelium', galactic: 'Galactic Lattice' };
+        Object.entries(ev.mults || {}).forEach(([id, v]) => {
+            const name = PROD_NAMES[id] || id;
+            lines.push((v >= 1 ? '▲ ' : '▼ ') + name + ' ' + (v >= 1 ? '+' : '') + Math.round((v - 1) * 100) + '%');
+        });
+        tipEl.textContent = lines.join('\n');
         if (ev.elapsed >= ev.duration) { state.activeEvent = null; state.eventCooldown = state.disasterMode ? 60 + Math.random() * 50 : 90 + Math.random() * 60; toast.style.display = 'none'; }
         return;
     }
@@ -747,6 +803,16 @@ function fireEvent() {
     tick(ev.emoji + ' ' + ev.name + '! ' + ev.desc, true);
 }
 
+function tryUnlockHidden(id) {
+    if (state.achievementsUnlocked.includes(id)) return;
+    const def = HIDDEN_ACHS.find(a => a.id === id);
+    if (!def) return;
+    state.achievementsUnlocked.push(id);
+    invalidateMults();
+    showAchToast(def);
+    lastAchKey = null;
+}
+
 // ═══════════════════════════════════════
 //  ACHIEVEMENT TOASTS
 // ═══════════════════════════════════════
@@ -759,8 +825,8 @@ function processAchToastQueue() {
     const def = achToastQueue.shift();
     const container = document.getElementById('ach-toast-container');
     const toast = document.createElement('div');
-    toast.className = 'ach-toast';
-    toast.innerHTML = `<span class="ach-toast-emoji">${def.emoji}</span><div class="ach-toast-body"><div class="ach-toast-label">Achievement Unlocked</div><div class="ach-toast-name">${def.name}</div>${def.bonusDesc ? `<div class="ach-toast-bonus">${def.bonusDesc}</div>` : ''}</div>`;
+    toast.className = 'ach-toast' + (def.hidden ? ' golden' : '');
+    toast.innerHTML = `<span class="ach-toast-emoji">${def.emoji}</span><div class="ach-toast-body"><div class="ach-toast-label">${def.hidden ? '✦ Secret Achievement' : 'Achievement Unlocked'}</div><div class="ach-toast-name">${def.name}</div>${def.bonusDesc ? `<div class="ach-toast-bonus">${def.bonusDesc}</div>` : ''}</div>`;
     container.appendChild(toast);
     setTimeout(() => { toast.classList.add('leaving'); setTimeout(() => { toast.remove(); setTimeout(processAchToastQueue, 200); }, 300); }, 3000);
 }
@@ -793,6 +859,24 @@ function buildGoals() {
     const pmUnlocked = PRODUCER_ACHS.filter(a => state.achievementsUnlocked.includes(a.id)).length;
     const phdr = document.createElement('div'); phdr.className = 'goals-section-hdr'; phdr.innerHTML = `<span>Producer Mastery</span><span class="goals-section-count">${pmUnlocked} / ${PRODUCER_ACHS.length}</span>`; c.appendChild(phdr);
     PRODUCERS_DEF.forEach(pr => { const row = document.createElement('div'); row.className = 'pm-row'; const nameSpan = document.createElement('span'); nameSpan.className = 'pm-name'; nameSpan.textContent = pr.emoji + ' ' + pr.name; row.appendChild(nameSpan); const badges = document.createElement('div'); badges.className = 'pm-badges'; PROD_MILESTONES.forEach(n => { const id = `pm_${pr.id}_${n}`; const unlocked = state.achievementsUnlocked.includes(id); const hasBonus = !!PROD_MILESTONE_BONUSES[n]; const badge = document.createElement('span'); badge.className = 'pm-badge' + (unlocked ? ' done' : '') + (hasBonus ? ' bonus' : ''); badge.title = n + ' owned' + (hasBonus ? ' · ' + PROD_MILESTONE_BONUSES[n].desc : ''); badge.textContent = n >= 1000 ? fmt(n) : n; badges.appendChild(badge); }); row.appendChild(badges); c.appendChild(row); });
+    // ── Hidden Achievements ──
+    const hiddenUnlocked = HIDDEN_ACHS.filter(a => state.achievementsUnlocked.includes(a.id)).length;
+    const hhdr = document.createElement('div'); hhdr.className = 'goals-section-hdr';
+    hhdr.innerHTML = `<span>✦ Secret Achievements</span><span class="goals-section-count">${hiddenUnlocked} / ${HIDDEN_ACHS.length}</span>`;
+    c.appendChild(hhdr);
+    const hgrid = document.createElement('div'); hgrid.className = 'ach-grid'; c.appendChild(hgrid);
+    HIDDEN_ACHS.forEach(def => {
+        const unlocked = state.achievementsUnlocked.includes(def.id);
+        const card = document.createElement('div');
+        if (unlocked) {
+            card.className = 'ach-card unlocked golden-card';
+            card.innerHTML = `<div class="ach-top"><span class="ach-emoji">${def.emoji}</span><span class="ach-name">${def.name}</span></div><div class="ach-desc">${def.desc}</div><div class="ach-bonus">${def.bonusDesc}</div>${def.lore ? `<div class="ach-lore">${def.lore}</div>` : ''}`;
+        } else {
+            card.className = 'ach-card locked hidden-mystery';
+            card.innerHTML = `<div class="ach-top"><span class="ach-emoji">?</span><span class="ach-name">???</span></div><div class="ach-desc">Secret achievement — keep playing to discover it.</div>`;
+        }
+        hgrid.appendChild(card);
+    });
 }
 
 // ═══════════════════════════════════════
@@ -844,16 +928,7 @@ function buyResearch(id) {
 // ═══════════════════════════════════════
 //  BIOME PATH
 // ═══════════════════════════════════════
-function updateBiomePath() {
-    const svg = document.getElementById('biome-path');
-    if (state.prestigeCount === 0) { svg.style.display = 'none'; return; }
-    svg.style.display = 'block'; svg.innerHTML = '';
-    const W = 260, cx = i => 26 + i * 52, cy = 16;
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', cx(0)); line.setAttribute('y1', cy); line.setAttribute('x2', cx(4)); line.setAttribute('y2', cy);
-    line.setAttribute('stroke', '#1D9E7530'); line.setAttribute('stroke-width', '1'); svg.appendChild(line);
-    BIOMES.forEach((b, i) => { const cur = i === state.biomeIdx, vis = state.biomesVisited.includes(b.id) && !cur; const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); circle.setAttribute('cx', cx(i)); circle.setAttribute('cy', cy); circle.setAttribute('r', cur ? 11 : 7); circle.setAttribute('fill', cur ? '#1D9E75' : vis ? '#0f2e1a' : '#0a1209'); circle.setAttribute('stroke', cur ? '#9FE1CB' : vis ? '#1D9E7560' : '#1D9E7520'); circle.setAttribute('stroke-width', '1'); g.appendChild(circle); const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text'); txt.setAttribute('x', cx(i)); txt.setAttribute('y', cy + 4); txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-size', cur ? '13' : '10'); txt.setAttribute('fill', !vis && !cur ? '#2a4a35' : '#9FE1CB'); txt.textContent = b.emoji; g.appendChild(txt); svg.appendChild(g); });
-}
+function updateBiomePath() { /* biome stepper removed — current biome shown in stats tab and sporulate panel */ }
 
 // ═══════════════════════════════════════
 //  PRODUCERS
@@ -989,7 +1064,20 @@ function spawnBurst(x, y, val) {
 }
 function spawnPulseRing() { const ring = document.createElement('div'); ring.className = 'pulse-ring'; document.getElementById('btn-wrap').appendChild(ring); setTimeout(() => ring.remove(), 750); }
 function screenShake() { const game = document.getElementById('game'), flash = document.getElementById('flash-overlay'); game.classList.remove('shake'); void game.offsetWidth; game.classList.add('shake'); flash.style.background = '#1D9E75'; flash.style.opacity = '0.12'; setTimeout(() => { flash.style.opacity = '0'; }, 130); setTimeout(() => game.classList.remove('shake'), 450); }
-function triggerPulse() { state.hivemind = 0; state.allTimePulses++; const bonus = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult()); state.spores += bonus; state.totalEarned += bonus; tick('HIVEMIND PULSE! +' + fmt(bonus) + ' spores surged through the network!', true); screenShake(); spawnPulseRing(); spawnPulseRing(); setTimeout(spawnPulseRing, 160); }
+function triggerPulse() {
+    // Check Overclock before resetting hivemind
+    if (Date.now() - _hivemindZeroAt <= 30000) tryUnlockHidden('h2');
+    // Mind Meld: 3 pulses within 2 minutes
+    const now = Date.now();
+    _recentPulseTs = _recentPulseTs.filter(t => now - t < 120000); _recentPulseTs.push(now);
+    if (_recentPulseTs.length >= 3) tryUnlockHidden('h8');
+    state.hivemind = 0; _hivemindZeroAt = Date.now();
+    state.allTimePulses++;
+    const bonus = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult());
+    state.spores += bonus; state.totalEarned += bonus;
+    tick('HIVEMIND PULSE! +' + fmt(bonus) + ' spores surged through the network!', true);
+    screenShake(); spawnPulseRing(); spawnPulseRing(); setTimeout(spawnPulseRing, 160);
+}
 
 let _tickerTimer = null;
 function tick(msg, highlight = false) { const el = document.getElementById('ticker'); el.textContent = msg; if (highlight) { el.classList.add('pulse-msg'); clearTimeout(_tickerTimer); _tickerTimer = setTimeout(() => el.classList.remove('pulse-msg'), 3000); } }
@@ -1005,12 +1093,105 @@ function updateStats() {
     document.getElementById('pulse-info').style.display = pulseOn ? 'block' : 'none';
     document.getElementById('pulse-locked').style.display = pulseOn ? 'none' : 'block';
     if (pulseOn) { document.getElementById('progress-fill').style.width = state.hivemind + '%'; const predicted = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult()); document.getElementById('pulse-info').textContent = `Hivemind pulse: ${Math.floor(state.hivemind)}% · Next pulse: +${fmt(predicted)} sp`; }
+    updateBiomeBar();
+}
+
+let _lastBiomeIdx = -1;
+function updateBiomeBar() {
+    if (state.biomeIdx === _lastBiomeIdx) return;
+    _lastBiomeIdx = state.biomeIdx;
+    const b = BIOMES[state.biomeIdx];
+    document.getElementById('biome-bar-emoji').textContent = b.emoji;
+    document.getElementById('biome-bar-name').textContent = b.name;
+    // Tooltip lines
+    const lines = [];
+    lines.push('Click \xD7' + b.clickMult);
+    lines.push('Producers \xD7' + b.prodMult);
+    if (b.noSeasons) lines.push('No seasonal effects');
+    if (b.arcticMode) lines.push('Winter bonuses \xD72 \xB7 Summer halved');
+    if (b.swampMode) lines.push('Season swings amplified \xD71.5');
+    if (b.volcanicMode) lines.push('Spring & Fall surge \xB7 Summer & Winter penalised');
+    document.getElementById('biome-tooltip-text').textContent = lines.join('\n');
 }
 
 // ═══════════════════════════════════════
-//  TAB SWITCHING
+//  STATS TAB
 // ═══════════════════════════════════════
-const ALL_TABS = ['producers', 'upgrades', 'research', 'bonds', 'goals', 'lore'];
+let lastStatsKey = null;
+function buildStats() {
+    const allTimeTotal = (state.allTimeSporesBase || 0) + state.totalEarned;
+    const threshold = sporulationThreshold();
+    const pct = Math.min(100, (state.totalEarned / threshold) * 100);
+    const key = [
+        Math.floor(allTimeTotal), state.prestigeCount,
+        state.allTimeClicks, state.clicksThisPrestige,
+        Math.floor(pct)
+    ].join('|');
+    if (key === lastStatsKey) return;
+    lastStatsKey = key;
+
+    const c = document.getElementById('tab-stats');
+    c.innerHTML = '';
+
+    function makeSection(title) {
+        const hdr = document.createElement('div');
+        hdr.className = 'stats-section-hdr';
+        hdr.textContent = title;
+        c.appendChild(hdr);
+        const grid = document.createElement('div');
+        grid.className = 'stats-grid';
+        c.appendChild(grid);
+        return grid;
+    }
+
+    function addStat(grid, label, value, sub) {
+        const card = document.createElement('div');
+        card.className = 'stats-card';
+        card.innerHTML = '<div class="stats-card-label">' + label + '</div>'
+            + '<div class="stats-card-val">' + value + '</div>'
+            + (sub ? '<div class="stats-card-sub">' + sub + '</div>' : '');
+        grid.appendChild(card);
+    }
+
+    // ── This Prestige ──
+    const g2 = makeSection('🌱 This Prestige');
+    addStat(g2, 'Spores Earned', fmt(state.totalEarned), 'this run');
+    addStat(g2, 'Clicks', fmt(state.clicksThisPrestige || 0), 'this run');
+    addStat(g2, 'Prestige #', state.prestigeCount === 0 ? 'First Run' : '#' + state.prestigeCount, state.prestigeCount === 0 ? 'sporulate to ascend' : 'current run');
+    addStat(g2, 'Spores / sec', fmt(getSps()) + '/s', 'current rate');
+
+    // ── All-Time ──
+    const g1 = makeSection('✦ All-Time');
+    addStat(g1, 'Spores Earned', fmt(allTimeTotal), 'across all prestiges');
+    addStat(g1, 'Total Clicks', fmt(state.allTimeClicks || 0), 'all prestiges');
+    addStat(g1, 'Times Sporulated', state.prestigeCount > 0 ? state.prestigeCount : '—', state.prestigeCount > 0 ? 'sporulations' : 'not yet');
+    addStat(g1, 'Legacy Multiplier', getPrestigeMult().toFixed(1) + '×', state.prestigeCount === 0 ? 'no bonus yet' : '+' + (state.prestigeCount * 50) + '% production');
+
+    // ── Next Sporulation — only shown after the first prestige ──
+    if (state.prestigeCount >= 1) {
+        const g3 = makeSection('🧬 Next Sporulation');
+        const nextMult = (1 + (state.prestigeCount + 1) * 0.5).toFixed(1);
+        const remaining = Math.max(0, threshold - state.totalEarned);
+        const ready = canSporulate();
+
+        const progCard = document.createElement('div');
+        progCard.className = 'stats-card stats-card-wide';
+        const pctLabel = ready ? '✦ Ready!' : Math.floor(pct) + '%';
+        const subLabel = ready ? 'Open Sporulate panel to ascend' : fmt(remaining) + ' spores remaining';
+        progCard.innerHTML = '<div class="stats-card-label">Spores needed to sporulate</div>'
+            + '<div class="stats-sporulate-row">'
+            + '<span class="stats-card-val">' + fmt(threshold) + '</span>'
+            + '<span class="stats-sporulate-pct' + (ready ? ' ready' : '') + '">' + pctLabel + '</span>'
+            + '</div>'
+            + '<div class="stats-progress-track"><div class="stats-progress-fill' + (ready ? ' ready' : '') + '" style="width:' + pct + '%"></div></div>'
+            + '<div class="stats-card-sub">' + subLabel + '</div>';
+        g3.appendChild(progCard);
+
+        addStat(g3, 'Next Legacy Mult', nextMult + '×', '+' + ((state.prestigeCount + 1) * 50) + '% production');
+    }
+}
+// ═══════════════════════════════════════
+const ALL_TABS = ['producers', 'upgrades', 'research', 'bonds', 'goals', 'lore', 'stats'];
 function switchTab(tab) { ALL_TABS.forEach(t => { document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab); document.getElementById('tab-' + t).classList.toggle('active', t === tab); }); }
 
 // ═══════════════════════════════════════
@@ -1038,7 +1219,7 @@ setInterval(() => {
     updateSymbiosis(); updateSporulateUI();
     checkAchievements(); buildGoals();
     buildCodex(); buildResearch(); updateResearch();
-    updateBiomePath();
+    updateBiomePath(); buildStats();
 }, 50);
 setInterval(() => { if (++msgTimer % 8 === 0 && !state.activeEvent) showMessage(); }, 1000);
 setInterval(saveGame, 30000);
@@ -1099,7 +1280,16 @@ function applyOfflineProgress() {
 //  EVENT WIRING
 // ═══════════════════════════════════════
 document.getElementById('mode-check').addEventListener('change', () => { state.disasterMode = document.getElementById('mode-check').checked; tick(state.disasterMode ? '⚠️ Disaster Mode: events can now harm your colony.' : '🌿 Colony Mode: only beneficial events.', true); });
-document.getElementById('spore-btn').addEventListener('click', e => { const gain = getClickValue(); state.spores += gain; state.totalEarned += gain; if (state.hivemindUnlocked) { state.hivemind = Math.min(100, state.hivemind + 0.5); if (state.hivemind >= 100) triggerPulse(); } spawnBurst(e.clientX, e.clientY, gain); spawnPulseRing(); updateStats(); });
+document.getElementById('spore-btn').addEventListener('click', e => {
+    const gain = getClickValue(); state.spores += gain; state.totalEarned += gain; state.allTimeClicks++; state.clicksThisPrestige++;
+    // Hidden achievement tracking
+    const now = Date.now();
+    _lastClickAt = now;
+    _clickTs = _clickTs.filter(t => now - t < 10000); _clickTs.push(now);
+    if (_clickTs.length >= 50) tryUnlockHidden('h1');
+    if (state.hivemindUnlocked) { state.hivemind = Math.min(100, state.hivemind + 0.5); if (state.hivemind >= 100) triggerPulse(); }
+    spawnBurst(e.clientX, e.clientY, gain); spawnPulseRing(); updateStats();
+});
 document.getElementById('subtab-available').addEventListener('click', () => switchUpgradeSub('available'));
 document.getElementById('subtab-owned').addEventListener('click', () => switchUpgradeSub('owned'));
 ALL_TABS.forEach(t => document.getElementById('tab-btn-' + t).addEventListener('click', () => switchTab(t)));
@@ -1130,7 +1320,7 @@ function bootUI() {
     updateSymbiosis(); updateSeasonBar(); updateBiomePath(); updateSporulateUI();
     document.getElementById('mode-check').checked = state.disasterMode;
     document.getElementById('event-toast').style.display = 'none';
-    buildResearch(); updateResearch();
+    buildResearch(); updateResearch(); buildStats();
     if (state.totalEarned > 0) showMessage();
 }
 

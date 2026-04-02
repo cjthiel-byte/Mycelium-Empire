@@ -111,20 +111,35 @@
         </div>
       </div>
       <div id="season-bar">
-        <div id="season-header"><span id="season-name-row">🌱 Spring</span><span id="season-time">1:30</span></div>
+        <div id="season-header">
+          <span id="season-name-row">🌱 Spring</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span id="season-time">1:30</span>
+            <span class="info-tip" id="season-tip-wrap"><span class="info-icon">ⓘ</span><span class="info-tooltip"
+                id="season-tooltip-text"></span></span>
+          </div>
+        </div>
         <div id="season-desc">Threads thrive · Fruiting blooms</div>
         <div id="season-track">
           <div id="season-fill"></div>
         </div>
       </div>
       <div id="event-toast">
-        <div id="event-header"><span id="event-title">Event</span><span id="event-timer">0s</span></div>
+        <div id="event-header">
+          <span id="event-title">Event</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span id="event-timer">0s</span>
+            <span class="info-tip" id="event-tip-wrap"><span class="info-icon">ⓘ</span><span class="info-tooltip"
+                id="event-tooltip-text"></span></span>
+          </div>
+        </div>
         <div id="event-desc-txt"></div>
         <div id="event-bar-wrap">
           <div id="event-bar-fill"></div>
         </div>
       </div>
-      <svg id="biome-path" height="32" viewBox="0 0 260 32" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg id="biome-path" height="32" viewBox="0 0 260 32" xmlns="http://www.w3.org/2000/svg"
+        style="display:none"></svg>
       <canvas id="mycelium-canvas"></canvas>
       <div id="btn-wrap">
         <button id="spore-btn" aria-label="Harvest spores">
@@ -141,8 +156,6 @@
       <div id="sporulate-wrap">
         <button id="sporulate-btn" onclick="toggleSporulatePanel()">🧬 Sporulate — Ascend &amp; Evolve</button>
         <div id="sporulate-panel">
-          <div class="spor-row">Next biome: <strong id="spor-biome">—</strong></div>
-          <div class="spor-row" id="spor-biome-desc"></div>
           <div class="spor-row">Legacy multiplier: <strong id="spor-mult">—</strong></div>
           <div class="spor-row warn">Spores, producers, upgrades &amp; research reset. Achievements &amp; prestige
             multiplier are permanent.</div>
@@ -157,6 +170,17 @@
         <label class="mode-switch"><input type="checkbox" id="mode-check" /><span class="mode-slider"></span></label>
         <span class="mode-label" id="mode-disaster">Disaster</span>
       </div>
+      <div id="biome-bar">
+        <span id="biome-bar-label">Current Biome</span>
+        <div id="biome-bar-chip">
+          <span id="biome-bar-emoji"></span>
+          <span id="biome-bar-name"></span>
+          <span class="info-tip" id="biome-tip-wrap">
+            <span class="info-icon">ⓘ</span>
+            <span class="info-tooltip" id="biome-tooltip-text"></span>
+          </span>
+        </div>
+      </div>
       <div id="save-info">Auto-saves every 30s</div>
     </div>
 
@@ -169,6 +193,7 @@
         <button class="tab" id="tab-btn-bonds">Bonds</button>
         <button class="tab" id="tab-btn-goals">Goals</button>
         <button class="tab" id="tab-btn-lore">Lore</button>
+        <button class="tab" id="tab-btn-stats">Stats</button>
       </div>
       <div id="tab-producers" class="tab-content active"></div>
       <div id="tab-upgrades" class="tab-content">
@@ -183,6 +208,7 @@
       <div id="tab-bonds" class="tab-content"></div>
       <div id="tab-goals" class="tab-content"></div>
       <div id="tab-lore" class="tab-content"></div>
+      <div id="tab-stats" class="tab-content"></div>
     </div>
   </div>
 
