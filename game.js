@@ -129,12 +129,29 @@ const UPGRADES_DEF = [
     { id: 'u13', tier: 'crystal', name: 'Quantum Lattice', desc: 'Hivemind Crystals 6× more output.', cost: 1.5e11, req: s => p(s, 'crystal').owned >= 3, apply: s => mp(s, 'crystal', 6) },
     { id: 'u14', tier: 'rootsing', name: 'Planetary Nervous System', desc: 'Root Singularity 7× more.', cost: 1.5e12, req: s => p(s, 'rootsing').owned >= 3, apply: s => mp(s, 'rootsing', 7) },
     { id: 'u15', tier: 'temporal', name: 'Causal Loop Harvest', desc: 'Temporal Threads 8× more.', cost: 1.5e13, req: s => p(s, 'temporal').owned >= 3, apply: s => mp(s, 'temporal', 8) },
+    { id: 'u15b', tier: 'temporal', name: 'Timestream Convergence', desc: 'Temporal Threads 12× more.', cost: 2e14, req: s => p(s, 'temporal').owned >= 15, apply: s => mp(s, 'temporal', 12) },
+    { id: 'u_stellar1', tier: 'stellar', name: 'Solar Wind Seeding', desc: 'Stellar Mycelium 5× more output.', cost: 5e13, req: s => p(s, 'stellar').owned >= 3, apply: s => mp(s, 'stellar', 5) },
+    { id: 'u_stellar2', tier: 'stellar', name: 'Cosmic Bloom', desc: 'Stellar Mycelium 8× more output.', cost: 8e14, req: s => p(s, 'stellar').owned >= 15, apply: s => mp(s, 'stellar', 8) },
+    { id: 'u_consciousness1', tier: 'consciousness', name: 'Synaptic Mycelium', desc: 'Consciousness Web 5× more output.', cost: 5e14, req: s => p(s, 'consciousness').owned >= 3, apply: s => mp(s, 'consciousness', 5) },
+    { id: 'u_consciousness2', tier: 'consciousness', name: 'Collective Dreaming', desc: 'Consciousness Web 8× more output.', cost: 8e15, req: s => p(s, 'consciousness').owned >= 15, apply: s => mp(s, 'consciousness', 8) },
+    { id: 'u_dimensional1', tier: 'dimensional', name: 'Reality Fracture', desc: 'Dimensional Rot 6× more output.', cost: 5e15, req: s => p(s, 'dimensional').owned >= 3, apply: s => mp(s, 'dimensional', 6) },
+    { id: 'u_dimensional2', tier: 'dimensional', name: 'Multiversal Decay', desc: 'Dimensional Rot 9× more output.', cost: 8e16, req: s => p(s, 'dimensional').owned >= 15, apply: s => mp(s, 'dimensional', 9) },
+    { id: 'u_eternal1', tier: 'eternalspore', name: 'Undying Spore', desc: 'The Eternal Spore 6× more output.', cost: 5e16, req: s => p(s, 'eternalspore').owned >= 3, apply: s => mp(s, 'eternalspore', 6) },
+    { id: 'u_eternal2', tier: 'eternalspore', name: 'Infinite Loop', desc: 'The Eternal Spore 10× more output.', cost: 8e17, req: s => p(s, 'eternalspore').owned >= 15, apply: s => mp(s, 'eternalspore', 10) },
     { id: 'u16', tier: 'galactic', name: 'Gravitational Spore Web', desc: 'Galactic Lattice 5× more output.', cost: 5e17, req: s => p(s, 'galactic').owned >= 3, apply: s => mp(s, 'galactic', 5) },
+    { id: 'u16b', tier: 'galactic', name: 'Dark Matter Weave', desc: 'Galactic Lattice 8× more output.', cost: 5e18, req: s => p(s, 'galactic').owned >= 15, apply: s => mp(s, 'galactic', 8) },
     { id: 'u17', tier: 'absolute', name: 'Omniversal Rot', desc: 'The Absolute 6× more output.', cost: 5e18, req: s => p(s, 'absolute').owned >= 3, apply: s => mp(s, 'absolute', 6) },
+    { id: 'u17b', tier: 'absolute', name: 'Beyond Infinity', desc: 'The Absolute 10× more output.', cost: 5e19, req: s => p(s, 'absolute').owned >= 15, apply: s => mp(s, 'absolute', 10) },
     { id: 'ug1', tier: 'global', name: 'Neural Mesh', desc: 'All producers +50% output.', cost: 100000, req: s => s.totalEarned >= 50000, apply: s => { s.producers.forEach(x => x.baseSps *= 1.5); } },
     { id: 'ug2', tier: 'global', name: 'Hive Ascension', desc: 'All producers double output.', cost: 2e6, req: s => s.totalEarned >= 1e6, apply: s => { s.producers.forEach(x => x.baseSps *= 2); } },
     { id: 'ug3', tier: 'global', name: 'Universal Rot', desc: 'All producers triple output.', cost: 2e9, req: s => s.totalEarned >= 5e8, apply: s => { s.producers.forEach(x => x.baseSps *= 3); } },
     { id: 'ug4', tier: 'global', name: 'Omnipresent Spore', desc: 'All producers ×5 output.', cost: 5e12, req: s => s.totalEarned >= 1e12, apply: s => { s.producers.forEach(x => x.baseSps *= 5); } },
+    { id: 'ug5', tier: 'global', name: 'Mycelial Transcendence', desc: 'All producers ×8 output.', cost: 5e15, req: s => s.totalEarned >= 1e15, apply: s => { s.producers.forEach(x => x.baseSps *= 8); } },
+    { id: 'ug6', tier: 'global', name: 'The Infinite Rot', desc: 'All producers ×15 output.', cost: 5e18, req: s => s.totalEarned >= 1e18, apply: s => { s.producers.forEach(x => x.baseSps *= 15); } },
+    // Auto-feed bonds
+    { id: 'uf1', tier: 'autofeed', name: 'Spore Cultivation I', desc: 'Automatically feed Bonds 1–3 (Earthworm, Dung Beetle, Ant Colony) when hungry.', cost: 500000, req: s => s.symbiosis.filter(x => ['earthworm', 'beetle', 'antcolony'].includes(x.id)).some(x => x.active || x.broken), apply: s => { } },
+    { id: 'uf2', tier: 'autofeed', name: 'Spore Cultivation II', desc: 'Automatically feed Bonds 4–6 (Morpho Moth, Hivemind Bees, Cave Spider) when hungry.', cost: 50000000, req: s => s.symbiosis.filter(x => ['moth', 'bees', 'spider'].includes(x.id)).some(x => x.active || x.broken), apply: s => { } },
+    { id: 'uf3', tier: 'autofeed', name: 'Spore Cultivation III', desc: 'Automatically feed Bonds 7–10 (Root Lizard, Spore Elk, Void Leech, Eternal Serpent) when hungry.', cost: 5000000000, req: s => s.symbiosis.filter(x => ['lizard', 'elk', 'leech', 'serpent'].includes(x.id)).some(x => x.active || x.broken), apply: s => { } },
 ];
 
 const TIER_LABELS = {
@@ -142,7 +159,8 @@ const TIER_LABELS = {
     click: 'Click', storm: 'Storm', cordyceps: 'Cordyceps', planetary: 'Planetary',
     voidspore: 'Void', lichen: 'Lichen', dream: 'Dream', satellite: 'Satellite',
     crystal: 'Crystal', rootsing: 'Root Sing.', temporal: 'Temporal',
-    galactic: 'Galactic', absolute: 'Absolute', global: 'Global',
+    galactic: 'Galactic', absolute: 'Absolute', global: 'Global', autofeed: 'Auto-Feed',
+    stellar: 'Stellar', consciousness: 'Consciousness', dimensional: 'Dimensional', eternalspore: 'Eternal Spore',
 };
 
 // ═══════════════════════════════════════
@@ -193,6 +211,13 @@ const SYMBIONTS = [
     { id: 'earthworm', name: 'Earthworm', emoji: '🪱', desc: 'Tills the soil, enriching your threads.', unlockAt: 300, pactCost: 150, bonusSps: 2, feedCost: 80, feedEvery: 40 },
     { id: 'beetle', name: 'Dung Beetle', emoji: '🪲', desc: 'Spreads your spores through the forest floor.', unlockAt: 3000, pactCost: 1500, bonusSps: 15, feedCost: 400, feedEvery: 55 },
     { id: 'antcolony', name: 'Ant Colony', emoji: '🐜', desc: 'An entire colony works to expand your reach.', unlockAt: 30000, pactCost: 15000, bonusSps: 100, feedCost: 3000, feedEvery: 75 },
+    { id: 'moth', name: 'Morpho Moth', emoji: '🦋', desc: 'Carries spores on iridescent wings across vast distances.', unlockAt: 250000, pactCost: 100000, bonusSps: 600, feedCost: 20000, feedEvery: 60 },
+    { id: 'bees', name: 'Hivemind Bees', emoji: '🐝', desc: 'A psychically linked swarm that pulses your spores across entire regions.', unlockAt: 2000000, pactCost: 800000, bonusSps: 4000, feedCost: 150000, feedEvery: 70 },
+    { id: 'spider', name: 'Cave Spider', emoji: '🕷', desc: 'Weaves spore-laden webs deep in caverns — unseen, but everywhere.', unlockAt: 20000000, pactCost: 8000000, bonusSps: 25000, feedCost: 1000000, feedEvery: 80 },
+    { id: 'lizard', name: 'Root Lizard', emoji: '🦎', desc: 'An ancient reptile whose scales host thriving spore colonies along every root system it touches.', unlockAt: 500000000, pactCost: 200000000, bonusSps: 150000, feedCost: 8000000, feedEvery: 90 },
+    { id: 'elk', name: 'Spore Elk', emoji: '🦌', desc: 'A great elk whose antlers drip with bioluminescent spores, seeding every forest it passes through.', unlockAt: 10000000000, pactCost: 4000000000, bonusSps: 1000000, feedCost: 60000000, feedEvery: 100 },
+    { id: 'leech', name: 'Void Leech', emoji: '🐙', desc: 'A creature from between dimensions that feeds on dark matter and spreads your spores across realities.', unlockAt: 500000000000, pactCost: 200000000000, bonusSps: 8000000, feedCost: 500000000, feedEvery: 110 },
+    { id: 'serpent', name: 'Eternal Serpent', emoji: '🐍', desc: 'An ageless serpent that has carried your spores since before time had meaning.', unlockAt: 5e13, pactCost: 2e13, bonusSps: 75000000, feedCost: 5000000000, feedEvery: 120 },
 ];
 
 const EVENTS_POSITIVE = [
@@ -309,9 +334,44 @@ const MESSAGES = [
     'The dream layer stirs.', 'Time is irrelevant to rot.',
 ];
 
-// ═══════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════
+const PROD_NAMES = {
+    threads: 'Threads', fruiting: 'Fruiting Bodies', woodweb: 'Wood Wide Web', sporestorm: 'Spore Storm',
+    undercity: 'Underground City', cordyceps: 'Cordyceps', planetary: 'Planetary', voidspore: 'Void Spore',
+    lichenveil: 'Lichen Veil', dreamweb: 'Dream Mycelium', satellite: 'Satellite', crystal: 'Hivemind Crystal',
+    rootsing: 'Root Singularity', temporal: 'Temporal Thread', stellar: 'Stellar Mycelium',
+    consciousness: 'Consciousness Web', dimensional: 'Dimensional Rot', eternalspore: 'Eternal Spore',
+    galactic: 'Galactic Lattice', absolute: 'The Absolute',
+};
+
+const CODEX_TREE = [
+    {
+        branch: 'Root', emoji: '🌿', color: '#5DCAA5', nodes: [
+            { id: 'R1', name: 'Ancient Memory', cost: 20, desc: 'Start each run with 3 free Mycelium Threads.', effect: '+3 Threads at run start' },
+            { id: 'R2', name: 'Deep Soil', cost: 45, desc: 'Producer costs reduced by 8%, permanently.', effect: '−8% producer costs' },
+            { id: 'R3', name: 'Fertile Ground', cost: 85, desc: 'Offline progress cap raised from 8 hours to 12 hours.', effect: '12h offline cap' },
+            { id: 'R4', name: 'Elder Network', cost: 150, desc: 'All producers gain +15% base output.', effect: '+15% all output' },
+            { id: 'R5', name: 'The Living Substrate', cost: 240, desc: 'Producer costs reduced by a further 15%.', effect: '−15% producer costs' },
+        ]
+    },
+    {
+        branch: 'Pulse', emoji: '⚡', color: '#9FE1CB', nodes: [
+            { id: 'P1', name: 'Awakened Spore', cost: 20, desc: 'Start each run with the Hivemind already unlocked.', effect: 'Hivemind unlocked at start' },
+            { id: 'P2', name: 'Resonant Charge', cost: 45, desc: 'Hivemind bar charges 30% faster per click.', effect: '+30% charge rate' },
+            { id: 'P3', name: 'Overcharge', cost: 95, desc: 'Pulse bonus increased by 50%.', effect: '+50% pulse bonus' },
+            { id: 'P4', name: 'Echo Chamber', cost: 165, desc: 'Each pulse adds a flat bonus equal to 10 seconds of SPS.', effect: '+10s SPS on pulse' },
+            { id: 'P5', name: 'Infinite Recursion', cost: 270, desc: 'After firing, the pulse bar recharges to 20%.', effect: '20% recharge after pulse' },
+        ]
+    },
+    {
+        branch: 'Ascension', emoji: '🧬', color: '#EF9F27', nodes: [
+            { id: 'A1', name: 'Spore Legacy', cost: 30, desc: 'Legacy multiplier gains +0.1× more per prestige.', effect: '+0.1× per prestige' },
+            { id: 'A2', name: 'Essence Bloom', cost: 70, desc: 'Earn 25% more Essence on each sporulation.', effect: '+25% Essence earned' },
+            { id: 'A3', name: 'Bond Memory', cost: 125, desc: 'Active bond pacts carry over when you sporulate.', effect: 'Bonds persist across runs' },
+            { id: 'A4', name: 'Mycelial Will', cost: 210, desc: 'Start each run with one free Tier 1 research purchased.', effect: 'Free T1 research at start' },
+            { id: 'A5', name: 'The Undying', cost: 380, desc: 'Legacy multiplier uses +0.75× per prestige instead of +0.5×.', effect: '+0.75× per prestige formula' },
+        ]
+    },
+];
 function p(s, id) { return s.producers.find(x => x.id === id); }
 function mp(s, id, x) { p(s, id).baseSps *= x; }
 
@@ -367,6 +427,7 @@ function defaultMetaState() {
         achievementsUnlocked: [], allTimePulses: 0, winterSurvived: false,
         disasterMode: false, showSporulatePanel: false, lastSeen: 0,
         allTimeSporesBase: 0, allTimeClicks: 0, revisitedBiome: false,
+        essence: 0, codexPurchased: [],
     };
 }
 function defaultState() { return { ...defaultRunState(), ...defaultMetaState() }; }
@@ -374,6 +435,22 @@ function defaultState() { return { ...defaultRunState(), ...defaultMetaState() }
 let state = defaultState();
 let _rMults = null, _aMults = null;
 function invalidateMults() { _rMults = null; _aMults = null; }
+
+// ── Codex helpers ──
+function hasCodex(id) { return state.codexPurchased.includes(id); }
+function calcEssenceEarned() {
+    const base = Math.floor(Math.log10(Math.max(state.totalEarned, 10)) * 3);
+    const total = base + state.achievementsUnlocked.length + state.prestigeCount;
+    return Math.max(5, Math.floor(total * (hasCodex('A2') ? 1.25 : 1)));
+}
+function getCodexCostMult() {
+    let m = 1;
+    if (hasCodex('R2')) m *= 0.92;
+    if (hasCodex('R5')) m *= 0.85;
+    return m;
+}
+function getCodexProdMult() { return hasCodex('R4') ? 1.15 : 1; }
+function getCodexPulseMult() { return hasCodex('P3') ? 1.5 : 1; }
 
 function getResearchMults() {
     if (_rMults) return _rMults;
@@ -397,8 +474,12 @@ function getSeasonMult(id) {
     if (biome.volcanicMode) { if (state.seasonIdx === 0 || state.seasonIdx === 2) m = m > 1 ? m * 1.6 : m; else if (state.seasonIdx === 1 || state.seasonIdx === 3) m = m < 1 ? m * 0.5 : m * 0.7; }
     return m;
 }
-function getPrestigeMult() { return 1 + state.prestigeCount * 0.5; }
-function getCost(pr) { return Math.ceil(pr.baseCost * Math.pow(1.15, pr.owned) * getResearchMults().cost); }
+function getPrestigeMult() {
+    const base = hasCodex('A5') ? 0.75 : 0.5;
+    const extra = hasCodex('A1') ? 0.1 : 0;
+    return 1 + state.prestigeCount * (base + extra);
+}
+function getCost(pr) { return Math.ceil(pr.baseCost * Math.pow(1.15, pr.owned) * getResearchMults().cost * getCodexCostMult()); }
 function getSymbiosisSps() {
     const sm = getResearchMults().symbiosis;
     return state.symbiosis.reduce((t, sym) => {
@@ -409,13 +490,13 @@ function getSymbiosisSps() {
 function getSps() {
     const biome = BIOMES[state.biomeIdx], rm = getResearchMults(), am = getAchievementMults();
     const base = state.producers.reduce((s, pr) => s + pr.baseSps * pr.owned * getSeasonMult(pr.id) * getEventMult(pr.id), 0);
-    return base * biome.prodMult * getPrestigeMult() * rm.prod * am.prod * getEventGlobal() + getSymbiosisSps();
+    return base * biome.prodMult * getPrestigeMult() * rm.prod * am.prod * getEventGlobal() * getCodexProdMult() + getSymbiosisSps();
 }
 function getClickValue() {
     const biome = BIOMES[state.biomeIdx], rm = getResearchMults(), am = getAchievementMults();
     return state.sporesPerClick * biome.clickMult * getPrestigeMult() * rm.click * am.click;
 }
-function getPulseMult() { const rm = getResearchMults(), am = getAchievementMults(); return rm.pulse * am.pulse; }
+function getPulseMult() { const rm = getResearchMults(), am = getAchievementMults(); return rm.pulse * am.pulse * getCodexPulseMult(); }
 function sporulationThreshold() { return 1000000 * Math.pow(5, state.prestigeCount); }
 function canSporulate() { return state.totalEarned >= sporulationThreshold(); }
 
@@ -432,6 +513,7 @@ function buildSaveData() {
         winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, eventCooldown: state.eventCooldown,
         lastSeen: Date.now(),
         allTimeSporesBase: state.allTimeSporesBase, allTimeClicks: state.allTimeClicks, clicksThisPrestige: state.clicksThisPrestige, revisitedBiome: state.revisitedBiome,
+        essence: state.essence, codexPurchased: [...state.codexPurchased],
         producers: state.producers.map(x => ({ id: x.id, owned: x.owned, baseSps: x.baseSps })),
         upgrades: state.upgrades.map(x => ({ id: x.id, bought: x.bought })),
         symbiosis: state.symbiosis.map(x => ({ ...x })),
@@ -443,10 +525,11 @@ function applyGameData(sv) {
     if (!sv) return;
     ['spores', 'totalEarned', 'sporesPerClick', 'hivemind', 'hivemindUnlocked', 'msgIdx', 'seasonIdx', 'seasonTimer',
         'prestigeCount', 'biomeIdx', 'allTimePulses', 'winterSurvived', 'disasterMode', 'eventCooldown', 'lastSeen',
-        'allTimeSporesBase', 'allTimeClicks', 'clicksThisPrestige', 'revisitedBiome'
+        'allTimeSporesBase', 'allTimeClicks', 'clicksThisPrestige', 'revisitedBiome', 'essence'
     ].forEach(k => { if (sv[k] !== undefined) state[k] = sv[k]; });
     if (sv.achievementsUnlocked) state.achievementsUnlocked = sv.achievementsUnlocked;
     if (sv.biomesVisited) state.biomesVisited = sv.biomesVisited;
+    if (sv.codexPurchased) state.codexPurchased = sv.codexPurchased;
     (sv.producers || []).forEach(sp => { const x = p(state, sp.id); if (x) { x.owned = sp.owned; x.baseSps = sp.baseSps; } });
     (sv.upgrades || []).forEach(su => { const x = state.upgrades.find(u => u.id === su.id); if (x) x.bought = su.bought; });
     (sv.symbiosis || []).forEach(ss => { const x = state.symbiosis.find(s => s.id === ss.id); if (x) Object.assign(x, ss); });
@@ -460,7 +543,7 @@ function applyGameData(sv) {
 function saveGame() {
     const data = buildSaveData();
     // Always save to localStorage as backup
-    try { localStorage.setItem('myceliumEmpireV7', JSON.stringify(data)); } catch (e) { }
+    try { localStorage.setItem('myceliumEmpireV8', JSON.stringify(data)); } catch (e) { }
     // If logged in, also save to Firestore
     if (currentUser && db && FIREBASE_CONFIGURED) {
         db.collection('saves').doc(currentUser.uid).set({ gameState: data, lastSaved: firebase.firestore.FieldValue.serverTimestamp() })
@@ -476,7 +559,7 @@ function saveGame() {
 
 function loadGame() {
     try {
-        const raw = localStorage.getItem('myceliumEmpireV7') || localStorage.getItem('myceliumEmpireV6');
+        const raw = localStorage.getItem('myceliumEmpireV8') || localStorage.getItem('myceliumEmpireV7') || localStorage.getItem('myceliumEmpireV6');
         if (raw) applyGameData(JSON.parse(raw));
     } catch (e) { console.warn('Local load failed', e); }
 }
@@ -493,7 +576,7 @@ function loadFromCloud(force = false) {
 
         // On explicit login (force=true) always load the cloud save.
         // On silent page-load only load cloud if it has equal or more progress than local.
-        const localRaw = localStorage.getItem('myceliumEmpireV7');
+        const localRaw = localStorage.getItem('myceliumEmpireV8') || localStorage.getItem('myceliumEmpireV7');
         const localEarned = localRaw ? (JSON.parse(localRaw).totalEarned || 0) : 0;
         const shouldLoad = force || (cloudData.totalEarned || 0) >= localEarned;
 
@@ -501,7 +584,7 @@ function loadFromCloud(force = false) {
             state = defaultState();
             applyGameData(cloudData);
             invalidateMults();
-            lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1;
+            lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1; _openPanel = null; _lastBondAlertKey = ""; _lastEssenceKey = "";
             branches = [];
             bootUI();
             applyOfflineProgress();
@@ -514,6 +597,7 @@ function loadFromCloud(force = false) {
 function resetGame() {
     if (!confirm('Reset everything and start over? This cannot be undone.')) return;
     // Clear local storage
+    localStorage.removeItem('myceliumEmpireV8');
     localStorage.removeItem('myceliumEmpireV7');
     localStorage.removeItem('myceliumEmpireV6');
     // Reset to blank state first so buildSaveData() returns zeros
@@ -526,7 +610,7 @@ function resetGame() {
             lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
         }).catch(e => console.warn('Cloud reset failed', e));
     }
-    lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1;
+    lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1; _openPanel = null; _lastBondAlertKey = ""; _lastEssenceKey = "";
     branches = [];
     closeProfileModal();
     bootUI();
@@ -704,13 +788,28 @@ function doSporulate() {
     const visited = [...state.biomesVisited];
     const isRevisit = visited.includes(BIOMES[nextIdx].id);
     if (!visited.includes(BIOMES[nextIdx].id)) visited.push(BIOMES[nextIdx].id);
-    const meta = { prestigeCount: state.prestigeCount + 1, biomeIdx: nextIdx, biomesVisited: visited, achievementsUnlocked: [...state.achievementsUnlocked], allTimePulses: state.allTimePulses, winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, showSporulatePanel: false, allTimeSporesBase: state.allTimeSporesBase + state.totalEarned, allTimeClicks: state.allTimeClicks, revisitedBiome: state.revisitedBiome || isRevisit };
-    state = { ...defaultRunState(), ...meta }; invalidateMults(); _lastBiomeIdx = -1;
+    // Save bond state before reset for A3 (Bond Memory)
+    const prevSymbiosis = hasCodex('A3') ? state.symbiosis.map(s => ({ ...s })) : null;
+    const essenceEarned = calcEssenceEarned();
+    const meta = {
+        prestigeCount: state.prestigeCount + 1, biomeIdx: nextIdx, biomesVisited: visited,
+        achievementsUnlocked: [...state.achievementsUnlocked], allTimePulses: state.allTimePulses,
+        winterSurvived: state.winterSurvived, disasterMode: state.disasterMode, showSporulatePanel: false,
+        allTimeSporesBase: state.allTimeSporesBase + state.totalEarned, allTimeClicks: state.allTimeClicks,
+        revisitedBiome: state.revisitedBiome || isRevisit,
+        essence: state.essence + essenceEarned, codexPurchased: [...state.codexPurchased],
+    };
+    state = { ...defaultRunState(), ...meta }; invalidateMults(); _lastBiomeIdx = -1; _openPanel = null; _lastBondAlertKey = ""; _lastEssenceKey = '';
+    // Apply run-start codex bonuses
+    if (hasCodex('R1')) { const t = p(state, 'threads'); if (t) t.owned += 3; }
+    if (hasCodex('P1')) state.hivemindUnlocked = true;
+    if (hasCodex('A4')) { const cheapest = RESEARCH_DEF.filter(r => r.tier === 1).reduce((a, b) => a.cost < b.cost ? a : b); const sr = state.research.find(r => r.id === cheapest.id); if (sr && !sr.bought) { sr.bought = true; invalidateMults(); } }
+    if (prevSymbiosis) { prevSymbiosis.forEach((ps, i) => { if (ps.active && !ps.broken) { state.symbiosis[i].active = true; state.symbiosis[i].feedTimer = 0; state.symbiosis[i].hungry = false; state.symbiosis[i].broken = false; } }); }
     // Reset hidden achievement trackers for the new run
     _clickTs = []; _hivemindZeroAt = Date.now(); _lastClickAt = Date.now(); _recentPulseTs = []; _runStartAt = Date.now();
     lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null;
     branches = []; bootUI(); screenShake();
-    tick('🧬 Sporulated! You enter ' + BIOMES[state.biomeIdx].emoji + ' ' + BIOMES[state.biomeIdx].name + '. Legacy: ' + getPrestigeMult().toFixed(1) + '×', true);
+    tick('🧬 Sporulated! +' + essenceEarned + ' Essence. ' + BIOMES[state.biomeIdx].emoji + ' ' + BIOMES[state.biomeIdx].name + '. Legacy: ' + getPrestigeMult().toFixed(1) + '×', true);
 }
 function updateSporulateUI() {
     const wrap = document.getElementById('sporulate-wrap');
@@ -718,7 +817,31 @@ function updateSporulateUI() {
     wrap.style.display = 'block';
     document.getElementById('sporulate-panel').style.display = state.showSporulatePanel ? 'block' : 'none';
     if (state.showSporulatePanel) {
-        document.getElementById('spor-mult').textContent = (1 + (state.prestigeCount + 1) * 0.5).toFixed(1) + '× (currently ' + getPrestigeMult().toFixed(1) + '×)';
+        const nextBase = hasCodex('A5') ? 0.75 : 0.5;
+        const nextExtra = hasCodex('A1') ? 0.1 : 0;
+        const nextMult = (1 + (state.prestigeCount + 1) * (nextBase + nextExtra)).toFixed(1);
+        document.getElementById('spor-mult').textContent = nextMult + '× (currently ' + getPrestigeMult().toFixed(1) + '×)';
+        document.getElementById('spor-essence').textContent = '+' + calcEssenceEarned() + ' Essence (total: ' + (state.essence + calcEssenceEarned()) + ')';
+    }
+}
+
+// ═══════════════════════════════════════
+//  STATUS STRIP (season · event · bonds)
+// ═══════════════════════════════════════
+let _openPanel = null;
+function toggleStatusPanel(id) {
+    const panels = ['season', 'event', 'bond'];
+    const isOpen = _openPanel === id;
+    panels.forEach(p => {
+        document.getElementById('spanel-' + p).classList.remove('open');
+        document.getElementById('spill-' + p).classList.remove('s-active');
+    });
+    if (!isOpen) {
+        document.getElementById('spanel-' + id).classList.add('open');
+        document.getElementById('spill-' + id).classList.add('s-active');
+        _openPanel = id;
+    } else {
+        _openPanel = null;
     }
 }
 
@@ -741,54 +864,64 @@ function onSeasonChange() {
 }
 function updateSeasonBar() {
     const biome = BIOMES[state.biomeIdx], season = SEASONS[state.seasonIdx], ns = biome.noSeasons;
-    document.getElementById('season-bar').style.borderColor = ns ? '#1D9E7320' : season.color + '55';
-    document.getElementById('season-name-row').textContent = ns ? '— No Seasons' : season.emoji + ' ' + season.name;
-    document.getElementById('season-desc').textContent = ns ? 'The deep ocean ignores the surface.' : season.desc;
-    const pct = ns ? 100 : (state.seasonTimer / season.duration) * 100;
-    document.getElementById('season-fill').style.width = pct + '%';
-    document.getElementById('season-fill').style.background = ns ? '#1D9E7560' : season.color;
-    const rem = Math.max(0, Math.ceil(season.duration - state.seasonTimer)), m = Math.floor(rem / 60), sec = rem % 60;
-    document.getElementById('season-time').textContent = ns ? '—' : m + ':' + String(sec).padStart(2, '0');
-
-    // Season tooltip
-    const tipWrap = document.getElementById('season-tip-wrap');
-    if (ns) { tipWrap.style.display = 'none'; return; }
-    tipWrap.style.display = 'inline-flex';
-    const PROD_NAMES = { threads: 'Threads', fruiting: 'Fruiting Bodies', woodweb: 'Wood Wide Web', sporestorm: 'Spore Storm', undercity: 'Underground City', cordyceps: 'Cordyceps', planetary: 'Planetary', voidspore: 'Void Spore', lichenveil: 'Lichen Veil', dreamweb: 'Dream Mycelium', satellite: 'Satellite', crystal: 'Hivemind Crystal', rootsing: 'Root Singularity', temporal: 'Temporal Thread', stellar: 'Stellar Mycelium', consciousness: 'Consciousness Web', dimensional: 'Dimensional Rot', eternalspore: 'Eternal Spore', galactic: 'Galactic Lattice', absolute: 'The Absolute' };
-    const slines = [];
-    Object.entries(season.mults).forEach(([id, v]) => {
-        slines.push((v >= 1 ? '▲ ' : '▼ ') + (PROD_NAMES[id] || id) + ' ' + (v >= 1 ? '+' : '') + Math.round((v - 1) * 100) + '%');
-    });
-    document.getElementById('season-tooltip-text').textContent = slines.join('\n');
+    const rem = ns ? 0 : Math.max(0, Math.ceil(season.duration - state.seasonTimer));
+    const m = Math.floor(rem / 60), sec = rem % 60;
+    // Update season pill
+    document.getElementById('strip-season-icon').textContent = ns ? '○' : season.emoji;
+    document.getElementById('strip-season-text').textContent = ns ? 'No seasons' : season.name + ' · ' + m + ':' + String(sec).padStart(2, '0');
+    // Build season panel
+    const panel = document.getElementById('spanel-season');
+    let inner = panel.querySelector('.spanel-inner');
+    if (!inner) { inner = document.createElement('div'); inner.className = 'spanel-inner'; panel.appendChild(inner); }
+    if (ns) {
+        inner.innerHTML = '<div class="spanel-title">No Seasons</div><div class="spanel-desc" style="margin:0">This biome ignores the seasonal cycle.</div>';
+    } else {
+        const pct = (state.seasonTimer / season.duration) * 100;
+        let html = `<div class="spanel-title">${season.emoji} ${season.name}</div><div class="spanel-desc">${season.desc}</div>`;
+        html += `<div class="spanel-prog-track"><div class="spanel-prog-fill" style="width:${pct.toFixed(1)}%;background:${season.color}"></div></div>`;
+        Object.entries(season.mults).forEach(([id, v]) => {
+            const cls = v >= 1 ? 'spanel-mult-up' : 'spanel-mult-down';
+            html += `<div class="spanel-mult-row"><span>${PROD_NAMES[id] || id}</span><span class="${cls}">${v >= 1 ? '▲ +' : '▼ '}${Math.round((v - 1) * 100)}%</span></div>`;
+        });
+        inner.innerHTML = html;
+    }
 }
 
 // ═══════════════════════════════════════
 //  EVENTS
 // ═══════════════════════════════════════
 function tickEvents(dt) {
+    const pill = document.getElementById('spill-event');
     if (state.activeEvent) {
         state.activeEvent.elapsed += dt;
         const ev = state.activeEvent, rem = Math.max(0, ev.duration - ev.elapsed), pct = (ev.elapsed / ev.duration) * 100;
-        const toast = document.getElementById('event-toast'); toast.style.display = 'block';
-        document.getElementById('event-title').textContent = ev.emoji + ' ' + ev.name;
-        document.getElementById('event-timer').textContent = Math.ceil(rem) + 's';
-        document.getElementById('event-desc-txt').textContent = ev.desc;
-        document.getElementById('event-bar-fill').style.width = (100 - pct) + '%';
-        document.getElementById('event-bar-fill').style.background = ev.color;
-        toast.style.borderColor = ev.color + '66';
-        // Populate event tooltip
-        const tipEl = document.getElementById('event-tooltip-text');
-        const lines = [];
-        if (ev.globalMult) lines.push('★ All output ×' + ev.globalMult);
-        if (ev.bonusSpores) lines.push('★ Bonus spores on start');
-        if (ev.stealPct) lines.push('⚠ Steals ' + (ev.stealPct * 100) + '% stored spores');
-        const PROD_NAMES = { threads: 'Threads', fruiting: 'Fruiting Bodies', woodweb: 'Wood Wide Web', sporestorm: 'Spore Storm', undercity: 'Underground City', cordyceps: 'Cordyceps', lichenveil: 'Lichen Veil', satellite: 'Satellite', stellar: 'Stellar Mycelium', galactic: 'Galactic Lattice' };
+        // Update pill
+        pill.classList.remove('inactive');
+        document.getElementById('strip-event-icon').textContent = ev.emoji;
+        document.getElementById('strip-event-text').textContent = ev.name + ' · ' + Math.ceil(rem) + 's';
+        document.getElementById('spill-event').style.borderColor = ev.color + '70';
+        // Build event panel
+        const panel = document.getElementById('spanel-event');
+        let inner = panel.querySelector('.spanel-inner');
+        if (!inner) { inner = document.createElement('div'); inner.className = 'spanel-inner event-inner'; panel.appendChild(inner); }
+        let html = `<div class="spanel-title amber">${ev.emoji} ${ev.name}</div><div class="spanel-desc">${ev.desc}</div>`;
+        html += `<div class="spanel-prog-track"><div class="spanel-prog-fill" style="width:${(100 - pct).toFixed(1)}%;background:${ev.color}"></div></div>`;
+        if (ev.globalMult) html += `<div class="spanel-mult-row"><span>All output</span><span class="spanel-mult-up">× ${ev.globalMult}</span></div>`;
+        if (ev.stealPct) html += `<div class="spanel-mult-row"><span>Spore drain</span><span class="spanel-mult-down">−${ev.stealPct * 100}%</span></div>`;
         Object.entries(ev.mults || {}).forEach(([id, v]) => {
-            const name = PROD_NAMES[id] || id;
-            lines.push((v >= 1 ? '▲ ' : '▼ ') + name + ' ' + (v >= 1 ? '+' : '') + Math.round((v - 1) * 100) + '%');
+            const cls = v >= 1 ? 'spanel-mult-up' : 'spanel-mult-down';
+            html += `<div class="spanel-mult-row"><span>${PROD_NAMES[id] || id}</span><span class="${cls}">${v >= 1 ? '▲ +' : '▼ '}${Math.round((v - 1) * 100)}%</span></div>`;
         });
-        tipEl.textContent = lines.join('\n');
-        if (ev.elapsed >= ev.duration) { state.activeEvent = null; state.eventCooldown = state.disasterMode ? 60 + Math.random() * 50 : 90 + Math.random() * 60; toast.style.display = 'none'; }
+        inner.innerHTML = html;
+        if (ev.elapsed >= ev.duration) {
+            state.activeEvent = null;
+            state.eventCooldown = state.disasterMode ? 60 + Math.random() * 50 : 90 + Math.random() * 60;
+            pill.classList.add('inactive');
+            pill.style.borderColor = '';
+            document.getElementById('strip-event-icon').textContent = '·';
+            document.getElementById('strip-event-text').textContent = 'No event';
+            if (_openPanel === 'event') { document.getElementById('spanel-event').classList.remove('open'); pill.classList.remove('s-active'); _openPanel = null; }
+        }
         return;
     }
     state.eventCooldown -= dt;
@@ -984,7 +1117,14 @@ function updateProducers() {
 }
 function buyProducer(id) {
     const pr = p(state, id);
-    const qty = buyQty === 'max' ? maxAffordable(pr) : buyQty; if (qty === 0) return;
+    const qty = buyQty === 'max' ? maxAffordable(pr) : buyQty;
+    if (qty === 0) return;
+    // For fixed quantities, verify the full cost is affordable before buying anything
+    if (buyQty !== 'max') {
+        let o = pr.owned, total = 0;
+        for (let i = 0; i < qty; i++) total += Math.ceil(pr.baseCost * Math.pow(1.15, o++) * getResearchMults().cost);
+        if (state.spores < total) return;
+    }
     for (let i = 0; i < qty; i++) { const cost = getCost(pr); if (state.spores < cost) break; state.spores -= cost; pr.owned++; }
     updateProducers(); updateStats();
 }
@@ -1040,17 +1180,86 @@ function symKey() {
 }
 function buildSymbiosis() {
     const c = document.getElementById('tab-bonds'); c.innerHTML = '';
-    SYMBIONTS.forEach((def, i) => { const card = document.createElement('div'); card.className = 'sym-card'; card.innerHTML = `<div class="sym-top"><span class="sym-name">${def.emoji} ${def.name}</span><span class="sym-status-badge locked" data-sym-status="${def.id}">Locked</span></div><div class="sym-desc">${def.desc}</div><div class="sym-stats">+${def.bonusSps}/s &nbsp;·&nbsp; Feed ${fmt(def.feedCost)} sp every ${def.feedEvery}s &nbsp;·&nbsp; Pact: ${fmt(def.pactCost)} sp</div><div data-sym-actions="${def.id}"></div><div class="sym-feed-track" data-sym-track="${def.id}" style="display:none"><div class="sym-feed-fill" data-sym-fill="${def.id}"></div></div>`; c.appendChild(card); });
+    SYMBIONTS.forEach((def, i) => { const card = document.createElement('div'); card.className = 'sym-card'; card.innerHTML = `<div class="sym-top"><span class="sym-name">${def.emoji} ${def.name}</span><span class="sym-status-badge locked" data-sym-status="${def.id}">Locked</span></div><div class="sym-desc">${def.desc}</div><div class="sym-stats">+${fmt(def.bonusSps)}/s &nbsp;·&nbsp; Feed ${fmt(def.feedCost)} sp every ${def.feedEvery}s &nbsp;·&nbsp; Pact: ${fmt(def.pactCost)} sp</div><div data-sym-actions="${def.id}"></div><div class="sym-feed-track" data-sym-track="${def.id}" style="display:none"><div class="sym-feed-fill" data-sym-fill="${def.id}"></div></div>`; c.appendChild(card); });
 }
 function updateSymbiosis() {
     const key = symKey(), rebuild = key !== lastSymKey; lastSymKey = key;
     SYMBIONTS.forEach((def, i) => { const sym = state.symbiosis[i], unlocked = state.totalEarned >= def.unlockAt; const statusEl = document.querySelector(`[data-sym-status="${def.id}"]`); const actionsEl = document.querySelector(`[data-sym-actions="${def.id}"]`); const trackEl = document.querySelector(`[data-sym-track="${def.id}"]`); const fillEl = document.querySelector(`[data-sym-fill="${def.id}"]`); if (!statusEl) return; let sc = 'locked', st = 'Locked'; if (unlocked && !sym.active && !sym.broken) { sc = 'available'; st = 'Available'; } else if (sym.active && !sym.hungry) { sc = 'active'; st = 'Active'; } else if (sym.hungry) { sc = 'hungry'; st = 'Hungry!'; } else if (sym.broken) { sc = 'broken'; st = 'Bond Broken'; } statusEl.className = 'sym-status-badge ' + sc; statusEl.textContent = st; if (rebuild) { actionsEl.innerHTML = ''; if (unlocked && !sym.active && !sym.broken) { const btn = document.createElement('button'); btn.className = 'sym-btn pact'; btn.type = 'button'; btn.textContent = `Form Pact (${fmt(def.pactCost)} sp)`; btn.disabled = state.spores < def.pactCost; btn.addEventListener('click', () => formPact(i)); actionsEl.appendChild(btn); } else if (sym.hungry) { const btn = document.createElement('button'); btn.className = 'sym-btn feed'; btn.type = 'button'; btn.textContent = `Feed (${fmt(def.feedCost)} sp)`; btn.disabled = state.spores < def.feedCost; btn.addEventListener('click', () => feedSymbiont(i)); actionsEl.appendChild(btn); } else if (sym.broken && unlocked) { const btn = document.createElement('button'); btn.className = 'sym-btn restore'; btn.type = 'button'; btn.textContent = `Restore Pact (${fmt(def.pactCost)} sp)`; btn.disabled = state.spores < def.pactCost; btn.addEventListener('click', () => formPact(i)); actionsEl.appendChild(btn); } } else { const btn = actionsEl.querySelector('button'); if (btn) btn.disabled = state.spores < (sym.hungry ? def.feedCost : def.pactCost); } if (sym.active) { trackEl.style.display = 'block'; const pct = Math.min(100, (sym.feedTimer / def.feedEvery) * 100); fillEl.style.width = pct + '%'; fillEl.style.background = sym.hungry ? '#EF9F27' : '#5DCAA5'; } else trackEl.style.display = 'none'; });
+    updateBondTabBadge();
 }
 function tickSymbiosis(dt) {
-    state.symbiosis.forEach((sym, i) => { if (!sym.active || sym.broken) return; const def = SYMBIONTS[i]; sym.feedTimer += dt; if (!sym.hungry && sym.feedTimer >= def.feedEvery) { sym.hungry = true; tick(`${def.emoji} ${def.name} is hungry! Feed it to keep your bond.`, true); lastSymKey = null; } if (sym.hungry && sym.feedTimer >= def.feedEvery + 30) { sym.broken = true; sym.active = false; tick(`💔 Bond with ${def.name} broken. Restore the pact to reconnect.`, true); lastSymKey = null; } });
+    const autoFeed1 = state.upgrades.find(u => u.id === 'uf1')?.bought || false;
+    const autoFeed2 = state.upgrades.find(u => u.id === 'uf2')?.bought || false;
+    const autoFeed3 = state.upgrades.find(u => u.id === 'uf3')?.bought || false;
+    const AF1_IDS = ['earthworm', 'beetle', 'antcolony'];
+    const AF2_IDS = ['moth', 'bees', 'spider'];
+    const AF3_IDS = ['lizard', 'elk', 'leech', 'serpent'];
+    state.symbiosis.forEach((sym, i) => {
+        if (!sym.active || sym.broken) return;
+        const def = SYMBIONTS[i];
+        const hasAuto = (autoFeed1 && AF1_IDS.includes(def.id)) ||
+            (autoFeed2 && AF2_IDS.includes(def.id)) ||
+            (autoFeed3 && AF3_IDS.includes(def.id));
+        sym.feedTimer += dt;
+        if (!sym.hungry && sym.feedTimer >= def.feedEvery) {
+            if (hasAuto && state.spores >= def.feedCost) {
+                state.spores -= def.feedCost; sym.feedTimer = 0; lastSymKey = null;
+            } else { sym.hungry = true; lastSymKey = null; if (!hasAuto) tick(`${def.emoji} ${def.name} is hungry! Feed it to keep your bond.`, true); }
+        }
+        if (sym.hungry && sym.feedTimer >= def.feedEvery + 30) {
+            if (hasAuto && state.spores >= def.feedCost) {
+                state.spores -= def.feedCost; sym.hungry = false; sym.feedTimer = 0; lastSymKey = null;
+            } else { sym.broken = true; sym.active = false; tick(`💔 Bond with ${def.name} broken. Restore the pact to reconnect.`, true); lastSymKey = null; }
+        }
+    });
 }
 function formPact(i) { const def = SYMBIONTS[i], sym = state.symbiosis[i]; if (state.spores < def.pactCost) return; state.spores -= def.pactCost; sym.active = true; sym.hungry = false; sym.feedTimer = 0; sym.broken = false; lastSymKey = null; updateSymbiosis(); updateStats(); }
 function feedSymbiont(i) { const def = SYMBIONTS[i], sym = state.symbiosis[i]; if (!sym.hungry || state.spores < def.feedCost) return; state.spores -= def.feedCost; sym.hungry = false; sym.feedTimer = 0; lastSymKey = null; updateSymbiosis(); updateStats(); }
+
+function updateBondTabBadge() {
+    const hasAlert = state.symbiosis.some(sym => sym.hungry || sym.broken);
+    document.getElementById('tab-btn-bonds').classList.toggle('has-alert', hasAlert);
+}
+
+let _lastBondAlertKey = '';
+function updateBondAlert() {
+    const hungry = state.symbiosis.map((sym, i) => ({ sym, i, def: SYMBIONTS[i] }))
+        .filter(({ sym }) => sym.active && sym.hungry && !sym.broken);
+    const anyAlert = state.symbiosis.some(sym => sym.hungry || sym.broken);
+    const active = state.symbiosis.filter(sym => sym.active && !sym.broken && !sym.hungry).length;
+
+    // Update pill (always)
+    const pill = document.getElementById('spill-bond');
+    const dot = document.getElementById('strip-bond-dot');
+    if (anyAlert) {
+        pill.classList.add('alert');
+        dot.style.display = 'block';
+        document.getElementById('strip-bond-text').textContent = '×' + (hungry.length || state.symbiosis.filter(s => s.broken).length) + (hungry.length ? ' hungry' : ' broken');
+    } else {
+        pill.classList.remove('alert');
+        dot.style.display = 'none';
+        document.getElementById('strip-bond-text').textContent = active > 0 ? active + ' active' : '—';
+    }
+
+    // Only rebuild panel HTML when hungry set changes — prevents destroying buttons mid-click
+    const bondKey = hungry.map(({ i, def }) => i + ':' + (state.spores >= def.feedCost ? '1' : '0')).join(',') + '|' + (anyAlert ? 'a' : 'n');
+    const panel = document.getElementById('spanel-bond');
+    let inner = panel.querySelector('.spanel-inner');
+    if (!inner) { inner = document.createElement('div'); inner.className = 'spanel-inner bond-inner'; panel.appendChild(inner); }
+    if (bondKey === _lastBondAlertKey) return;
+    _lastBondAlertKey = bondKey;
+
+    if (!hungry.length) {
+        inner.innerHTML = `<div class="spanel-title">Bonds</div><div class="spanel-desc" style="margin:0">${active > 0 ? 'All active bonds are fed.' : 'No active bonds yet.'}</div>`;
+    } else {
+        let html = '<div class="spanel-title red">Hungry bonds</div>';
+        hungry.forEach(({ i, def }) => {
+            const canFeed = state.spores >= def.feedCost;
+            html += `<div class="spanel-feed-row"><span class="spanel-feed-name">${def.emoji} ${def.name}</span><button class="spanel-feed-btn" type="button" onclick="feedSymbiont(${i});_lastBondAlertKey='';updateBondAlert();" ${canFeed ? '' : 'disabled'}>Feed ${fmt(def.feedCost)} sp</button></div>`;
+        });
+        inner.innerHTML = html;
+    }
+}
 
 // ═══════════════════════════════════════
 //  EFFECTS
@@ -1071,9 +1280,14 @@ function triggerPulse() {
     const now = Date.now();
     _recentPulseTs = _recentPulseTs.filter(t => now - t < 120000); _recentPulseTs.push(now);
     if (_recentPulseTs.length >= 3) tryUnlockHidden('h8');
-    state.hivemind = 0; _hivemindZeroAt = Date.now();
+    // P5: recharge bar to 20% after firing instead of 0
+    state.hivemind = hasCodex('P5') ? 20 : 0;
+    _hivemindZeroAt = Date.now();
     state.allTimePulses++;
-    const bonus = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult());
+    const base = Math.ceil((getSps() * 30 + getClickValue() * 50) * getPulseMult());
+    // P4: flat bonus equal to 10 seconds of SPS on top of the pulse
+    const flat = hasCodex('P4') ? Math.ceil(getSps() * 10) : 0;
+    const bonus = base + flat;
     state.spores += bonus; state.totalEarned += bonus;
     tick('HIVEMIND PULSE! +' + fmt(bonus) + ' spores surged through the network!', true);
     screenShake(); spawnPulseRing(); spawnPulseRing(); setTimeout(spawnPulseRing, 160);
@@ -1096,7 +1310,7 @@ function updateStats() {
     updateBiomeBar();
 }
 
-let _lastBiomeIdx = -1;
+let _lastBiomeIdx = -1; _openPanel = null; _lastBondAlertKey = "";
 function updateBiomeBar() {
     if (state.biomeIdx === _lastBiomeIdx) return;
     _lastBiomeIdx = state.biomeIdx;
@@ -1190,9 +1404,85 @@ function buildStats() {
         addStat(g3, 'Next Legacy Mult', nextMult + '×', '+' + ((state.prestigeCount + 1) * 50) + '% production');
     }
 }
+
 // ═══════════════════════════════════════
-const ALL_TABS = ['producers', 'upgrades', 'research', 'bonds', 'goals', 'lore', 'stats'];
-function switchTab(tab) { ALL_TABS.forEach(t => { document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab); document.getElementById('tab-' + t).classList.toggle('active', t === tab); }); }
+//  ESSENCE / MYCELIAL CODEX TAB
+// ═══════════════════════════════════════
+let _lastEssenceKey = '';
+function buildEssence() {
+    const key = state.codexPurchased.join(',') + '|' + state.essence;
+    if (key === _lastEssenceKey) return;
+    _lastEssenceKey = key;
+    const c = document.getElementById('tab-essence');
+    c.innerHTML = '';
+
+    // Header
+    const hdr = document.createElement('div');
+    hdr.className = 'essence-header';
+    hdr.innerHTML = `<div class="essence-balance"><span class="essence-bal-val">✦ ${state.essence}</span><span class="essence-bal-label"> Essence</span></div>`
+        + `<div class="essence-hint">${state.prestigeCount === 0 ? 'Sporulate to earn Essence.' : 'Next sporulation: +' + calcEssenceEarned() + ' Essence'}</div>`;
+    c.appendChild(hdr);
+
+    // Branch columns
+    const grid = document.createElement('div');
+    grid.className = 'essence-grid';
+
+    CODEX_TREE.forEach(branch => {
+        const col = document.createElement('div');
+        col.className = 'essence-branch';
+        col.innerHTML = `<div class="essence-branch-hdr" style="color:${branch.color}">${branch.emoji} ${branch.branch}</div>`;
+
+        branch.nodes.forEach((node, idx) => {
+            const bought = state.codexPurchased.includes(node.id);
+            const prevBought = idx === 0 || state.codexPurchased.includes(branch.nodes[idx - 1].id);
+            const canAfford = state.essence >= node.cost;
+            const available = !bought && prevBought;
+
+            const card = document.createElement('div');
+            card.className = 'essence-node' + (bought ? ' bought' : available ? ' available' : ' locked');
+
+            let btnHtml = '';
+            if (bought) {
+                btnHtml = '<div class="essence-node-owned">✦ Owned</div>';
+            } else if (available) {
+                btnHtml = `<button class="essence-buy-btn" type="button" ${canAfford ? '' : 'disabled'} onclick="buyCodex('${node.id}',${node.cost})">${node.cost} Essence</button>`;
+            } else {
+                btnHtml = '<div class="essence-node-locked">🔒 Locked</div>';
+            }
+
+            card.innerHTML = `<div class="essence-node-name">${node.name}</div>`
+                + `<div class="essence-node-effect">${node.effect}</div>`
+                + `<div class="essence-node-desc">${node.desc}</div>`
+                + btnHtml;
+            col.appendChild(card);
+
+            // Connector arrow between nodes
+            if (idx < branch.nodes.length - 1) {
+                const arr = document.createElement('div');
+                arr.className = 'essence-connector';
+                arr.textContent = '↓';
+                col.appendChild(arr);
+            }
+        });
+        grid.appendChild(col);
+    });
+    c.appendChild(grid);
+}
+
+function buyCodex(id, cost) {
+    if (state.essence < cost || state.codexPurchased.includes(id)) return;
+    state.essence -= cost;
+    state.codexPurchased.push(id);
+    invalidateMults();
+    _lastEssenceKey = '';
+    buildEssence();
+    saveGame();
+}
+
+// ═══════════════════════════════════════
+const ALL_TABS = ['producers', 'upgrades', 'research', 'bonds', 'goals', 'stats', 'essence', 'lore'];
+const TAB_LABELS = { producers: 'Producers', upgrades: 'Upgrades', research: 'Research', bonds: 'Bonds', goals: 'Goals', lore: 'Lore', stats: 'Stats', essence: 'Mycelial Codex' };
+function switchTab(tab) { ALL_TABS.forEach(t => { document.getElementById('tab-btn-' + t).classList.toggle('active', t === tab); document.getElementById('tab-' + t).classList.toggle('active', t === tab); }); document.getElementById('tab-heading-text').textContent = TAB_LABELS[tab] || tab; }
 
 // ═══════════════════════════════════════
 //  MYCELIUM CANVAS
@@ -1216,10 +1506,10 @@ setInterval(() => {
     tickSeason(DT); tickSymbiosis(DT); tickEvents(DT);
     updateStats(); updateProducers();
     buildUpgrades(); updateUpgrades();
-    updateSymbiosis(); updateSporulateUI();
+    updateSymbiosis(); updateSporulateUI(); updateBondAlert();
     checkAchievements(); buildGoals();
     buildCodex(); buildResearch(); updateResearch();
-    updateBiomePath(); buildStats();
+    updateBiomePath(); buildStats(); buildEssence();
 }, 50);
 setInterval(() => { if (++msgTimer % 8 === 0 && !state.activeEvent) showMessage(); }, 1000);
 setInterval(saveGame, 30000);
@@ -1248,7 +1538,8 @@ document.addEventListener('beforeunload', () => { state.lastSeen = Date.now(); s
 const MAX_OFFLINE_SECONDS = 8 * 3600;
 function applyOfflineProgress() {
     if (!state.lastSeen) return;
-    const elapsed = Math.min((Date.now() - state.lastSeen) / 1000, MAX_OFFLINE_SECONDS);
+    const maxOffline = hasCodex('R3') ? 12 * 3600 : 8 * 3600;
+    const elapsed = Math.min((Date.now() - state.lastSeen) / 1000, maxOffline);
     state.lastSeen = 0;
     if (elapsed < 10) return;
     const sps = getSps(); if (sps <= 0) return;
@@ -1287,7 +1578,7 @@ document.getElementById('spore-btn').addEventListener('click', e => {
     _lastClickAt = now;
     _clickTs = _clickTs.filter(t => now - t < 10000); _clickTs.push(now);
     if (_clickTs.length >= 50) tryUnlockHidden('h1');
-    if (state.hivemindUnlocked) { state.hivemind = Math.min(100, state.hivemind + 0.5); if (state.hivemind >= 100) triggerPulse(); }
+    if (state.hivemindUnlocked) { state.hivemind = Math.min(100, state.hivemind + (hasCodex('P2') ? 0.65 : 0.5)); if (state.hivemind >= 100) triggerPulse(); }
     spawnBurst(e.clientX, e.clientY, gain); spawnPulseRing(); updateStats();
 });
 document.getElementById('subtab-available').addEventListener('click', () => switchUpgradeSub('available'));
@@ -1317,10 +1608,9 @@ document.getElementById('p-password-confirm').addEventListener('keydown', e => {
 function bootUI() {
     buildProducers(); buildSymbiosis(); buildOwned(); buildGoals(); buildCodex();
     updateStats(); updateProducers(); buildUpgrades(); updateUpgrades();
-    updateSymbiosis(); updateSeasonBar(); updateBiomePath(); updateSporulateUI();
+    updateSymbiosis(); updateSeasonBar(); updateBiomePath(); updateSporulateUI(); updateBondAlert();
     document.getElementById('mode-check').checked = state.disasterMode;
-    document.getElementById('event-toast').style.display = 'none';
-    buildResearch(); updateResearch(); buildStats();
+    buildResearch(); updateResearch(); buildStats(); buildEssence();
     if (state.totalEarned > 0) showMessage();
 }
 

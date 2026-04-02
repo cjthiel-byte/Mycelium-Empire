@@ -110,34 +110,27 @@
           <div class="stat-val" id="sps">0</div>
         </div>
       </div>
-      <div id="season-bar">
-        <div id="season-header">
-          <span id="season-name-row">🌱 Spring</span>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span id="season-time">1:30</span>
-            <span class="info-tip" id="season-tip-wrap"><span class="info-icon">ⓘ</span><span class="info-tooltip"
-                id="season-tooltip-text"></span></span>
-          </div>
+      <div id="status-strip">
+        <div class="spill" id="spill-season" onclick="toggleStatusPanel('season')">
+          <span id="strip-season-icon">🌱</span>
+          <span class="spill-text" id="strip-season-text">Spring</span>
+          <span class="spill-chev">▼</span>
         </div>
-        <div id="season-desc">Threads thrive · Fruiting blooms</div>
-        <div id="season-track">
-          <div id="season-fill"></div>
+        <div class="spill spill-event inactive" id="spill-event" onclick="toggleStatusPanel('event')">
+          <span id="strip-event-icon">·</span>
+          <span class="spill-text" id="strip-event-text">No event</span>
+          <span class="spill-chev">▼</span>
         </div>
-      </div>
-      <div id="event-toast">
-        <div id="event-header">
-          <span id="event-title">Event</span>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span id="event-timer">0s</span>
-            <span class="info-tip" id="event-tip-wrap"><span class="info-icon">ⓘ</span><span class="info-tooltip"
-                id="event-tooltip-text"></span></span>
-          </div>
-        </div>
-        <div id="event-desc-txt"></div>
-        <div id="event-bar-wrap">
-          <div id="event-bar-fill"></div>
+        <div class="spill spill-bond" id="spill-bond" onclick="toggleStatusPanel('bond')">
+          <span id="strip-bond-icon">🪱</span>
+          <span class="spill-text" id="strip-bond-text">—</span>
+          <div id="strip-bond-dot" class="spill-bond-dot" style="display:none"></div>
+          <span class="spill-chev">▼</span>
         </div>
       </div>
+      <div class="spanel" id="spanel-season"></div>
+      <div class="spanel" id="spanel-event"></div>
+      <div class="spanel" id="spanel-bond"></div>
       <svg id="biome-path" height="32" viewBox="0 0 260 32" xmlns="http://www.w3.org/2000/svg"
         style="display:none"></svg>
       <canvas id="mycelium-canvas"></canvas>
@@ -157,6 +150,7 @@
         <button id="sporulate-btn" onclick="toggleSporulatePanel()">🧬 Sporulate — Ascend &amp; Evolve</button>
         <div id="sporulate-panel">
           <div class="spor-row">Legacy multiplier: <strong id="spor-mult">—</strong></div>
+          <div class="spor-row">Essence earned: <strong id="spor-essence">—</strong></div>
           <div class="spor-row warn">Spores, producers, upgrades &amp; research reset. Achievements &amp; prestige
             multiplier are permanent.</div>
           <div id="spor-confirm-btns">
@@ -187,13 +181,19 @@
     <!-- Right panel -->
     <div id="right">
       <div id="tabs">
-        <button class="tab active" id="tab-btn-producers">Producers</button>
-        <button class="tab" id="tab-btn-upgrades">Upgrades</button>
-        <button class="tab" id="tab-btn-research">Research</button>
-        <button class="tab" id="tab-btn-bonds">Bonds</button>
-        <button class="tab" id="tab-btn-goals">Goals</button>
-        <button class="tab" id="tab-btn-lore">Lore</button>
-        <button class="tab" id="tab-btn-stats">Stats</button>
+        <div id="tab-icon-row">
+          <button class="tab active" id="tab-btn-producers" aria-label="Producers">🍄</button>
+          <button class="tab" id="tab-btn-upgrades" aria-label="Upgrades">⬆️</button>
+          <button class="tab" id="tab-btn-research" aria-label="Research">🔬</button>
+          <button class="tab" id="tab-btn-bonds" aria-label="Bonds">🪱</button>
+          <button class="tab" id="tab-btn-goals" aria-label="Goals">🏆</button>
+          <button class="tab" id="tab-btn-stats" aria-label="Stats">📊</button>
+          <button class="tab" id="tab-btn-essence" aria-label="Mycelial Codex">🧬</button>
+          <button class="tab" id="tab-btn-lore" aria-label="Lore">📖</button>
+        </div>
+        <div id="tab-heading-bar">
+          <span id="tab-heading-text">Producers</span>
+        </div>
       </div>
       <div id="tab-producers" class="tab-content active"></div>
       <div id="tab-upgrades" class="tab-content">
@@ -209,6 +209,7 @@
       <div id="tab-goals" class="tab-content"></div>
       <div id="tab-lore" class="tab-content"></div>
       <div id="tab-stats" class="tab-content"></div>
+      <div id="tab-essence" class="tab-content"></div>
     </div>
   </div>
 
