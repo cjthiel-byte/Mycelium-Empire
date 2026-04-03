@@ -26,6 +26,7 @@
   <div id="page-header">
     <h1>🍄 Mycelium Empire</h1>
     <div id="profile-area">
+      <button id="settings-btn" aria-label="Options">⚙️</button>
       <button id="profile-btn" aria-label="Account">
         <span id="profile-btn-icon">👤</span>
         <span id="profile-btn-label">Sign In</span>
@@ -82,6 +83,7 @@
         <button class="p-action-btn" id="p-save-now-btn" type="button">☁️ Save Now</button>
         <button class="p-action-btn" id="p-load-cloud-btn" type="button">⬇️ Load Last Save</button>
         <button class="p-reset-btn" id="p-reset-btn" type="button">🗑 Reset Game</button>
+        <button class="p-signout-btn" id="p-signout-modal-btn" type="button">Sign Out</button>
       </div>
 
       <!-- Firebase not configured notice -->
@@ -91,6 +93,53 @@
           Open <code>game.js</code> and fill in your Firebase config at the top of the file.
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ── Settings modal ── -->
+  <div id="settings-overlay" aria-hidden="true">
+    <div id="settings-modal" role="dialog" aria-modal="true" aria-label="Options">
+      <div class="settings-header">
+        <div class="settings-title">Options</div>
+        <button id="settings-modal-close" aria-label="Close">✕</button>
+      </div>
+
+      <div class="settings-section-hdr">Gameplay</div>
+
+      <!-- Events toggle -->
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <span class="settings-row-label">🌤 Events</span>
+          <span class="settings-row-desc">Random events that affect your colony</span>
+        </div>
+        <label class="settings-toggle-wrap">
+          <input type="checkbox" id="opt-events" />
+          <span class="settings-toggle-track"><span class="settings-toggle-thumb"></span></span>
+        </label>
+      </div>
+
+      <!-- Event tone: Colony / Disaster — only shown when events on -->
+      <div class="settings-subrow" id="settings-event-mode-row">
+        <span class="settings-subrow-label">Event tone</span>
+        <div class="settings-seg">
+          <button class="seg-btn" id="seg-colony" type="button">🌿 Colony</button>
+          <button class="seg-btn" id="seg-disaster" type="button">⚠️ Disaster</button>
+        </div>
+      </div>
+
+      <!-- Seasons toggle -->
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <span class="settings-row-label">🌱 Seasons</span>
+          <span class="settings-row-desc">Seasonal cycles that modify output</span>
+        </div>
+        <label class="settings-toggle-wrap">
+          <input type="checkbox" id="opt-seasons" />
+          <span class="settings-toggle-track"><span class="settings-toggle-thumb"></span></span>
+        </label>
+      </div>
+
+      <div class="settings-note">Settings are saved with your game</div>
     </div>
   </div>
 
@@ -151,6 +200,10 @@
         <div id="sporulate-panel">
           <div class="spor-row">Legacy multiplier: <strong id="spor-mult">—</strong></div>
           <div class="spor-row">Essence earned: <strong id="spor-essence">—</strong></div>
+          <div id="spor-biome-picker">
+            <div class="spor-biome-picker-label">🌍 Choose destination biome</div>
+            <div id="spor-biome-grid"></div>
+          </div>
           <div class="spor-row warn">Spores, producers, upgrades &amp; research reset. Achievements &amp; prestige
             multiplier are permanent.</div>
           <div id="spor-confirm-btns">
@@ -158,11 +211,6 @@
             <button id="spor-no" onclick="toggleSporulatePanel()">Cancel</button>
           </div>
         </div>
-      </div>
-      <div id="mode-row">
-        <span class="mode-label" id="mode-colony">Colony</span>
-        <label class="mode-switch"><input type="checkbox" id="mode-check" /><span class="mode-slider"></span></label>
-        <span class="mode-label" id="mode-disaster">Disaster</span>
       </div>
       <div id="biome-bar">
         <span id="biome-bar-label">Current Biome</span>
