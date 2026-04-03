@@ -233,7 +233,12 @@ white-space: nowrap;
     }
 
     #mycelium-canvas {
-        height: 60px;
+        width: 240px;
+        height: 240px;
+    }
+
+    #btn-wrap {
+        height: 240px;
     }
 
     .pulse-ring {
@@ -269,13 +274,11 @@ white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     max-height: 720px;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
     position: relative;
-    align-self: stretch;
-    /* always fills the grid row height */
-    min-height: 400px;
-    /* floor so it always reaches #left's bottom */
+    align-self: start;
 }
 
 /* Stats */
@@ -529,6 +532,21 @@ white-space: nowrap;
     color: #e07070;
 }
 
+.chain-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    background: #3a1a0a;
+    color: #EF9F27;
+    border: 1px solid #EF9F2760;
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin-left: 5px;
+    vertical-align: middle;
+    text-transform: uppercase;
+}
+
 .spanel-desc {
     font-size: 11px;
     color: #6a9d75;
@@ -677,19 +695,39 @@ white-space: nowrap;
 }
 
 #mycelium-canvas {
-    width: 100%;
-    height: 90px;
-    border-radius: 10px;
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
     display: block;
 }
 
 /* Spore button */
+@keyframes bio-idle-ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1.95);
+        opacity: 0;
+    }
+}
+
 #btn-wrap {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    width: 100%;
+    height: 340px;
+    overflow: hidden;
 }
 
 @keyframes bio-glow {
@@ -708,8 +746,8 @@ white-space: nowrap;
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    border: 2px solid #1D9E75;
-    background: #0a2218;
+    border: 2px solid rgb(var(--biome-n-rgb, 29, 158, 117));
+    background: radial-gradient(circle at 50% 40%, rgba(var(--biome-a-rgb, 29, 158, 117), 0.35) 0%, #0d1a10 60%, #080f09 100%);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -722,15 +760,29 @@ white-space: nowrap;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     animation: bio-glow 2.8s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
 }
 
 #spore-btn:hover {
-    background: #112d1a;
+    background: radial-gradient(circle at 50% 40%, rgba(var(--biome-a-rgb, 29, 158, 117), 0.5) 0%, #112415 60%, #0a1209 100%);
 }
 
 #spore-btn:active {
     transform: scale(0.91);
-    background: #1D9E7525;
+    background: radial-gradient(circle at 50% 40%, rgba(var(--biome-a-rgb, 29, 158, 117), 0.65) 0%, #1a3520 60%, #0f1a10 100%);
+}
+
+@keyframes spore-float {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-5px) scale(1.07);
+    }
 }
 
 #spore-icon {
@@ -738,6 +790,7 @@ white-space: nowrap;
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
+    animation: spore-float 3.4s ease-in-out infinite;
 }
 
 #click-label {
@@ -789,6 +842,33 @@ white-space: nowrap;
     color: #5DCAA5;
     width: 100%;
     text-align: center;
+}
+
+#pulse-streak {
+    font-size: 11px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.03em;
+}
+
+.pulse-streak-combo {
+    color: #EF9F27;
+}
+
+.pulse-streak-resonance {
+    color: #FFD080;
+    animation: resonance-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes resonance-pulse {
+    from {
+        opacity: 0.75;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 #pulse-locked {
@@ -956,7 +1036,10 @@ white-space: nowrap;
 }
 
 .tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
 }
 
 /* Upgrade subtabs */
@@ -1067,6 +1150,12 @@ white-space: nowrap;
     padding: 1px 5px;
     margin-left: 5px;
     vertical-align: middle;
+}
+
+.biome-badge {
+    background: #2a1a0a;
+    color: #EF9F27;
+    border-color: #EF9F2755;
 }
 
 /* ═══════════════════════════════════════
@@ -1693,7 +1782,7 @@ white-space: nowrap;
     width: 140px;
     height: 140px;
     border-radius: 50%;
-    border: 2px solid #1D9E75;
+    border: 2px solid rgba(var(--biome-a-rgb, 29, 158, 117), 0.85);
     animation: pulse-ring 0.7s ease-out forwards;
     pointer-events: none;
 }
@@ -1991,6 +2080,45 @@ white-space: nowrap;
     background: #2e1010;
     border-color: #e0707060;
     opacity: 1;
+}
+
+/* Export / Import */
+#p-savetools {
+    border-top: 1px solid #1D9E7520;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+#p-import-panel {
+    margin-top: 6px;
+}
+
+#p-import-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: #0a1209;
+    border: 1px solid #1D9E7535;
+    border-radius: 8px;
+    color: #9FE1CB;
+    font-size: 11px;
+    font-family: monospace;
+    padding: 8px 10px;
+    resize: vertical;
+    min-height: 72px;
+    margin-bottom: 6px;
+    outline: none;
+}
+
+#p-import-input:focus {
+    border-color: #1D9E7555;
+}
+
+#p-import-error {
+    font-size: 11px;
+    color: #e07070;
+    min-height: 16px;
+    margin-top: 2px;
+    text-align: center;
 }
 
 /* Firebase not configured */
@@ -2687,6 +2815,18 @@ white-space: nowrap;
     font-style: italic;
 }
 
+.lb-signin-msg {
+    padding: 16px 14px;
+    text-align: center;
+    font-size: 12px;
+    color: #4a7a55;
+    font-style: italic;
+    line-height: 1.5;
+    border: 1px dashed #1D9E7530;
+    border-radius: 8px;
+    margin: 4px 0 8px;
+}
+
 .lb-table {
     width: 100%;
     border-collapse: collapse;
@@ -2802,4 +2942,106 @@ white-space: nowrap;
     background: #0f2e1a;
     border-color: #1D9E7540;
     color: #9FE1CB;
+}
+
+/* ═══════════════════════════════════════
+   TUTORIAL
+═══════════════════════════════════════ */
+#tutorial-card {
+    position: fixed;
+    z-index: 502;
+    width: 230px;
+    top: 140px;
+    right: 16px;
+    background: #0b1e10;
+    border: 1px solid #1D9E7580;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px #1D9E7518;
+    display: none;
+    pointer-events: all;
+}
+
+/* On screens where the game fills the full width, drop to bottom-center */
+@media (max-width: 1020px) {
+    #tutorial-card {
+        width: calc(100vw - 32px);
+        max-width: 420px;
+        top: auto;
+        right: auto;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+#tutorial-inner {
+    padding: 13px 15px 11px;
+}
+
+#tutorial-step-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #3a7a55;
+    margin-bottom: 5px;
+}
+
+#tutorial-emoji {
+    font-size: 20px;
+    margin-bottom: 5px;
+    line-height: 1;
+}
+
+#tutorial-msg {
+    font-size: 11.5px;
+    color: #9FE1CB;
+    line-height: 1.5;
+    margin-bottom: 9px;
+}
+
+#tutorial-skip {
+    font-size: 11px;
+    background: transparent;
+    border: 1px solid #1D9E7540;
+    color: #5DCAA5;
+    border-radius: 7px;
+    padding: 4px 11px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+}
+
+#tutorial-skip:hover {
+    background: #1D9E7518;
+    border-color: #1D9E7570;
+}
+
+/* Arrows — hidden, focus ring does the job */
+#tutorial-arrow-up,
+#tutorial-arrow-down,
+#tutorial-arrow-right {
+    display: none !important;
+}
+
+/* Focus ring on highlighted element */
+.tutorial-focus {
+    outline: 2px solid rgba(29, 158, 117, 0.9) !important;
+    outline-offset: 3px;
+    border-radius: 8px;
+    animation: tut-focus-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes tut-focus-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0px rgba(29, 158, 117, 0.3), 0 0 14px rgba(29, 158, 117, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 4px rgba(29, 158, 117, 0.12), 0 0 22px rgba(29, 158, 117, 0.3);
+    }
 }

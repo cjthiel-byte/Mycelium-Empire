@@ -82,6 +82,7 @@
         <div id="p-sync-status"></div>
         <button class="p-action-btn" id="p-save-now-btn" type="button">☁️ Save Now</button>
         <button class="p-action-btn" id="p-load-cloud-btn" type="button">⬇️ Load Last Save</button>
+        <button class="p-action-btn" id="p-tutorial-btn" type="button">📖 Restart Tutorial</button>
         <button class="p-reset-btn" id="p-reset-btn" type="button">🗑 Reset Game</button>
         <button class="p-signout-btn" id="p-signout-modal-btn" type="button">Sign Out</button>
       </div>
@@ -91,6 +92,17 @@
         <div class="p-notice">
           Firebase is not configured yet.<br />
           Open <code>game.js</code> and fill in your Firebase config at the top of the file.
+        </div>
+      </div>
+
+      <!-- Export / Import — always visible regardless of auth state -->
+      <div id="p-savetools">
+        <button class="p-action-btn" id="p-export-btn" type="button">📤 Export Save</button>
+        <button class="p-action-btn" id="p-import-toggle-btn" type="button">📥 Import Save</button>
+        <div id="p-import-panel" style="display:none">
+          <textarea id="p-import-input" placeholder="Paste your save code here…" spellcheck="false"></textarea>
+          <button class="p-submit" id="p-import-confirm-btn" type="button">Load Save</button>
+          <div id="p-import-error"></div>
         </div>
       </div>
     </div>
@@ -182,8 +194,8 @@
       <div class="spanel" id="spanel-bond"></div>
       <svg id="biome-path" height="32" viewBox="0 0 260 32" xmlns="http://www.w3.org/2000/svg"
         style="display:none"></svg>
-      <canvas id="mycelium-canvas"></canvas>
       <div id="btn-wrap">
+        <canvas id="mycelium-canvas"></canvas>
         <button id="spore-btn" aria-label="Harvest spores">
           <span id="spore-icon">🍄</span>
           <span id="click-label">tap to pulse</span>
@@ -193,6 +205,7 @@
       <div id="progress-bar" style="display:none">
         <div id="progress-fill"></div>
       </div>
+      <div id="pulse-streak" style="display:none"></div>
       <div id="pulse-info" style="display:none"></div>
       <div id="pulse-locked">🔒 Unlock the Hivemind Pulse in Upgrades</div>
       <div id="sporulate-wrap">
@@ -259,6 +272,19 @@
       <div id="tab-stats" class="tab-content"></div>
       <div id="tab-essence" class="tab-content"></div>
     </div>
+  </div>
+
+  <!-- Tutorial -->
+  <div id="tutorial-card">
+    <div id="tutorial-arrow-up"></div>
+    <div id="tutorial-arrow-right"></div>
+    <div id="tutorial-inner">
+      <div id="tutorial-step-label"></div>
+      <div id="tutorial-emoji"></div>
+      <div id="tutorial-msg"></div>
+      <button id="tutorial-skip" type="button">Skip tutorial</button>
+    </div>
+    <div id="tutorial-arrow-down"></div>
   </div>
 
   <script src="game.js" defer></script>
