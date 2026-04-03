@@ -638,7 +638,10 @@ function saveGame() {
                     prestigeCount: state.prestigeCount,
                     lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
                 }).then(() => {
-                    _lbCache = null; _lbFetchedAt = 0; lastStatsKey = null;
+                    _lbCache = null; _lbFetchedAt = 0;
+                    // Re-fetch and re-render leaderboard now that our entry is written
+                    const lbWrap = document.getElementById('lb-wrap');
+                    if (lbWrap && currentUser && db) fetchLeaderboard(lbWrap);
                 }).catch(() => { });
             })
             .catch(() => { document.getElementById('save-info').textContent = 'Saved locally ' + new Date().toLocaleTimeString(); });
@@ -946,7 +949,9 @@ function doSporulate() {
     _clickTs = []; _hivemindZeroAt = Date.now(); _lastClickAt = Date.now(); _recentPulseTs = []; _runStartAt = Date.now();
     _pulseCombo = 0; _comboExpiresAt = 0; _resonanceUntil = 0;
     lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null;
+    _lbCache = null; _lbFetchedAt = 0;
     branches = []; lastTotal = -1; bootUI(); screenShake();
+    saveGame();
     tick('🧬 Sporulated! +' + essenceEarned + ' Essence. ' + BIOMES[state.biomeIdx].emoji + ' ' + BIOMES[state.biomeIdx].name + '. Legacy: ' + getPrestigeMult().toFixed(1) + '×', true);
 }
 function updateSporulateUI() {

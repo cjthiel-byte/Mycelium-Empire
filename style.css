@@ -273,7 +273,7 @@ white-space: nowrap;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    max-height: 720px;
+    max-height: min(900px, calc(100dvh - 80px));
     min-height: 400px;
     display: flex;
     flex-direction: column;
