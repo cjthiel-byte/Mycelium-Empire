@@ -639,7 +639,6 @@ function saveGame() {
                     lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
                 }).then(() => {
                     _lbCache = null; _lbFetchedAt = 0;
-                    // Re-fetch and re-render leaderboard now that our entry is written
                     const lbWrap = document.getElementById('lb-wrap');
                     if (lbWrap && currentUser && db) fetchLeaderboard(lbWrap);
                 }).catch(() => { });
@@ -971,10 +970,16 @@ function updateSporulateUI() {
         if (hasCodex('B5')) {
             picker.style.display = 'block';
             if (state.pendingBiomeChoice === null) state.pendingBiomeChoice = (state.biomeIdx + 1) % BIOMES.length;
-            grid.innerHTML = BIOMES.map((b, i) => {
-                const sel = i === state.pendingBiomeChoice ? ' selected' : '';
-                return `<button class="spor-biome-btn${sel}" type="button" onclick="selectBiomeChoice(${i})"><span class="spor-biome-btn-emoji">${b.emoji}</span><span class="spor-biome-btn-name">${b.name.split(' ')[0]}</span></button>`;
-            }).join('');
+            // Only rebuild the grid when the selection changes — not every 50ms tick.
+            // Constant innerHTML replacement destroys buttons mid-tap, swallowing clicks.
+            const builtFor = grid.dataset.builtFor;
+            if (builtFor !== String(state.pendingBiomeChoice) || grid.children.length !== BIOMES.length) {
+                grid.dataset.builtFor = state.pendingBiomeChoice;
+                grid.innerHTML = BIOMES.map((b, i) => {
+                    const sel = i === state.pendingBiomeChoice ? ' selected' : '';
+                    return `<button class="spor-biome-btn${sel}" type="button" data-biome-idx="${i}"><span class="spor-biome-btn-emoji">${b.emoji}</span><span class="spor-biome-btn-name">${b.name.split(' ')[0]}</span></button>`;
+                }).join('');
+            }
         } else {
             picker.style.display = 'none';
         }
@@ -2379,6 +2384,12 @@ function bootUI() {
     buildResearch(); updateResearch(); buildStats(); buildEssence();
     if (state.totalEarned > 0) showMessage();
 }
+
+// Biome picker — event delegation so clicks work regardless of DOM rebuilds or input type
+document.getElementById('spor-biome-grid').addEventListener('click', e => {
+    const btn = e.target.closest('[data-biome-idx]');
+    if (btn) selectBiomeChoice(parseInt(btn.dataset.biomeIdx, 10));
+});
 
 initFirebase();
 loadGame();

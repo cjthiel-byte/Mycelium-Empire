@@ -2757,7 +2757,7 @@ white-space: nowrap;
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    padding: 6px 2px;
+    padding: 10px 4px;
     background: #0a1209;
     border: 1px solid #1D9E7525;
     border-radius: 7px;
