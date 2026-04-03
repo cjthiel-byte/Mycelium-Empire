@@ -279,6 +279,7 @@ white-space: nowrap;
     flex-direction: column;
     position: relative;
     align-self: start;
+    padding-bottom: 20px;
 }
 
 /* Stats */
@@ -2801,10 +2802,14 @@ white-space: nowrap;
    LEADERBOARD (Stats tab)
 ═══════════════════════════════════════ */
 .lb-wrap {
-    margin: 0 10px 12px;
+    margin: 0 10px 16px;
     border: 1px solid #1D9E7525;
     border-radius: 10px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 240px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 .lb-loading {
