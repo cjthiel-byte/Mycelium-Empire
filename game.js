@@ -3085,18 +3085,34 @@ function applyOfflineProgress() {
 (function setupZoomReset() {
     if (!window.visualViewport) return;
     const btn = document.getElementById('zoom-reset-btn');
-    function checkZoom() {
-        btn.classList.toggle('visible', window.visualViewport.scale > 1.05);
+
+    function updateZoomBtn() {
+        const vv = window.visualViewport;
+        const zoomed = vv.scale > 1.05;
+        btn.classList.toggle('visible', zoomed);
+        if (zoomed) {
+            // Pin button to bottom-left of the visual viewport regardless of pan position
+            btn.style.left   = (vv.offsetLeft + 16) + 'px';
+            btn.style.top    = (vv.offsetTop + vv.height - 54) + 'px';
+            btn.style.bottom = 'auto';
+        } else {
+            btn.style.left   = '';
+            btn.style.top    = '';
+            btn.style.bottom = '';
+        }
     }
-    window.visualViewport.addEventListener('resize', checkZoom);
+
+    window.visualViewport.addEventListener('resize', updateZoomBtn);
+    window.visualViewport.addEventListener('scroll', updateZoomBtn);
+
     btn.addEventListener('click', () => {
         const vp = document.querySelector('meta[name=viewport]');
-        // Snap to scale 1 by briefly locking maximum-scale, then restore
         vp.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
         setTimeout(() => {
             vp.content = 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover';
+            btn.style.left = btn.style.top = btn.style.bottom = '';
         }, 50);
-    }, { passive: true });
+    });
 })();
 
 // ═══════════════════════════════════════
@@ -3129,7 +3145,10 @@ function applyOfflineProgress() {
         indicator.style.top = '';
         indicator.classList.remove('ptr-ready');
         pulling = false;
-        if (dy > 80) location.reload();
+        if (dy > 80) {
+            saveGame(); // flush state to localStorage before reloading
+            location.reload();
+        }
     }, { passive: true });
 })();
 
