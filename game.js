@@ -822,6 +822,7 @@ function buildSaveData() {
         prestigeCount: state.prestigeCount, biomeIdx: state.biomeIdx, biomesVisited: state.biomesVisited,
         achievementsUnlocked: state.achievementsUnlocked, allTimePulses: state.allTimePulses,
         winterSurvived: state.winterSurvived, eventCooldown: state.eventCooldown,
+        activeEvent: state.activeEvent ? { ...state.activeEvent } : null,
         lastSeen: Date.now(),
         allTimeSporesBase: state.allTimeSporesBase, allTimeClicks: state.allTimeClicks, clicksThisPrestige: state.clicksThisPrestige, pulsesThisPrestige: state.pulsesThisPrestige, revisitedBiome: state.revisitedBiome,
         peakSpsThisRun: state.peakSpsThisRun || 0, eventsThisRun: state.eventsThisRun || 0, upgradesBoughtThisRun: state.upgradesBoughtThisRun || 0, bondsActivatedThisRun: state.bondsActivatedThisRun || 0,
@@ -850,6 +851,10 @@ function applyGameData(sv) {
     if (sv.seenLoreIds) state.seenLoreIds = sv.seenLoreIds;
     if (sv.unreadLoreIds) state.unreadLoreIds = sv.unreadLoreIds;
     if (sv.achievementsUnlocked) state.achievementsUnlocked = sv.achievementsUnlocked;
+    // Restore active event; discard if it would already be expired
+    if (sv.activeEvent && sv.activeEvent.elapsed < sv.activeEvent.duration) {
+        state.activeEvent = sv.activeEvent;
+    }
     if (sv.biomesVisited) state.biomesVisited = sv.biomesVisited;
     if (sv.codexPurchased) state.codexPurchased = sv.codexPurchased;
     // Load settings object; migrate old flat disasterMode from V8 saves
