@@ -3081,7 +3081,8 @@ function applyOfflineProgress() {
 
 document.getElementById('reset-view-btn').addEventListener('click', () => {
     saveGame();
-    location.reload();
+    // Navigate (not reload) so iOS resets zoom — it only preserves zoom on reload
+    window.location.href = '/reset.html';
 });
 
 // ═══════════════════════════════════════
@@ -3116,8 +3117,8 @@ document.getElementById('reset-view-btn').addEventListener('click', () => {
         indicator.classList.remove('ptr-ready');
         pulling = false;
         if (dy > 80) {
-            saveGame(); // flush state to localStorage before reloading
-            location.reload();
+            saveGame();
+            window.location.href = '/reset.html';
         }
     }, { passive: true });
 })();
