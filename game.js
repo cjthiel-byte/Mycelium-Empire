@@ -3079,35 +3079,10 @@ function applyOfflineProgress() {
     });
 })();
 
-// ═══════════════════════════════════════
-//  ZOOM RESET (mobile)
-// ═══════════════════════════════════════
-(function setupZoomReset() {
-    if (!window.visualViewport) return;
-    const btn = document.getElementById('zoom-reset-btn');
-    function updateZoomBtn() {
-        const vv = window.visualViewport;
-        const zoomed = vv.scale > 1.05;
-        btn.classList.toggle('visible', zoomed);
-        if (zoomed) {
-            // Pin to bottom-left of visual viewport regardless of pan/zoom
-            btn.style.left   = (vv.offsetLeft + 16) + 'px';
-            btn.style.top    = (vv.offsetTop + vv.height - 54) + 'px';
-            btn.style.bottom = 'auto';
-        } else {
-            btn.style.left = btn.style.top = btn.style.bottom = '';
-        }
-    }
-
-    window.visualViewport.addEventListener('resize', updateZoomBtn);
-    window.visualViewport.addEventListener('scroll', updateZoomBtn);
-
-    btn.addEventListener('click', () => {
-        // iOS doesn't allow programmatic zoom reset — save state and reload instead
-        saveGame();
-        location.reload();
-    });
-})();
+document.getElementById('reset-view-btn').addEventListener('click', () => {
+    saveGame();
+    location.reload();
+});
 
 // ═══════════════════════════════════════
 //  PULL TO REFRESH (mobile)

@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Mycelium Empire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=13" />
+  <link rel="stylesheet" href="style.css?v=14" />
 
   <!-- Firebase SDK (compat mode — works without a build system) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -64,9 +64,6 @@
 
   <!-- Scroll-to-top (right panel) -->
   <button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
-
-  <!-- Zoom reset (mobile, appears when pinch-zoomed in) -->
-  <button id="zoom-reset-btn" aria-label="Reset zoom">⊡</button>
 
   <!-- ── Page header ── -->
   <div id="page-header">
@@ -223,6 +220,15 @@
           <input type="checkbox" id="opt-sound" />
           <span class="settings-toggle-track"><span class="settings-toggle-thumb"></span></span>
         </label>
+      </div>
+
+      <div class="settings-section-hdr" style="margin-top:16px">Display</div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <span class="settings-row-label">📐 Reset View</span>
+          <span class="settings-row-desc">Reload the page to fix zoom or display issues</span>
+        </div>
+        <button id="reset-view-btn" class="settings-action-btn" type="button">Reload</button>
       </div>
 
       <div class="settings-note">Settings are saved with your game</div>
