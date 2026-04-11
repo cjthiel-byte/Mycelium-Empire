@@ -3085,20 +3085,21 @@ function applyOfflineProgress() {
 (function setupZoomReset() {
     if (!window.visualViewport) return;
     const btn = document.getElementById('zoom-reset-btn');
+    const vpMeta = document.querySelector('meta[name=viewport]');
+    let resetting = false;
 
     function updateZoomBtn() {
+        if (resetting) return; // ignore events during the snap sequence
         const vv = window.visualViewport;
         const zoomed = vv.scale > 1.05;
         btn.classList.toggle('visible', zoomed);
         if (zoomed) {
-            // Pin button to bottom-left of the visual viewport regardless of pan position
+            // Pin to bottom-left of visual viewport regardless of pan/zoom
             btn.style.left   = (vv.offsetLeft + 16) + 'px';
             btn.style.top    = (vv.offsetTop + vv.height - 54) + 'px';
             btn.style.bottom = 'auto';
         } else {
-            btn.style.left   = '';
-            btn.style.top    = '';
-            btn.style.bottom = '';
+            btn.style.left = btn.style.top = btn.style.bottom = '';
         }
     }
 
@@ -3106,12 +3107,15 @@ function applyOfflineProgress() {
     window.visualViewport.addEventListener('scroll', updateZoomBtn);
 
     btn.addEventListener('click', () => {
-        const vp = document.querySelector('meta[name=viewport]');
-        vp.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+        resetting = true;
+        // Setting maximum-scale=1 forces iOS to snap zoom back to 1×
+        vpMeta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+        // Wait long enough for iOS to commit the zoom snap, then restore pinch-zoom
         setTimeout(() => {
-            vp.content = 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover';
-            btn.style.left = btn.style.top = btn.style.bottom = '';
-        }, 50);
+            vpMeta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover';
+            resetting = false;
+            updateZoomBtn();
+        }, 400);
     });
 })();
 
