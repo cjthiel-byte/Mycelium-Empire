@@ -933,8 +933,13 @@ function loadFromCloud(force = false) {
         const shouldLoad = force || (cloudData.totalEarned || 0) >= localEarned;
 
         if (shouldLoad) {
+            // Capture lastSeen BEFORE resetting state so offline calc uses the cloud value
+            const cloudLastSeen = cloudData.lastSeen || 0;
             state = defaultState();
             applyGameData(cloudData);
+            // Override lastSeen so applyOfflineProgress uses the cloud timestamp,
+            // not whatever was in local state (prevents double-showing the offline modal)
+            state.lastSeen = cloudLastSeen;
             invalidateMults();
             lastUpgradeKey = null; lastOwnedKey = null; lastSymKey = null; lastResearchKey = null; lastAchKey = null; lastCodexKey = null; lastStatsKey = null; _lastBiomeIdx = -1; _openPanel = null; _lastBondAlertKey = ""; _lastEssenceKey = ""; _lastDecisionKey = ''; _lastModKey = '';
             _clickTs = []; _hivemindZeroAt = Date.now(); _lastClickAt = Date.now(); _recentPulseTs = []; _runStartAt = Date.now(); _runClicks = 0; _lastEventAt = 0;
@@ -3018,7 +3023,7 @@ document.addEventListener('touchstart', e => { if (e.touches.length > 1) e.preve
 // ═══════════════════════════════════════
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') { state.lastSeen = Date.now(); saveGame(); }
-    else { applyOfflineProgress(); }
+    else { _offlineApplied = false; applyOfflineProgress(); }
 });
 document.addEventListener('pagehide', () => { state.lastSeen = Date.now(); saveGame(); });
 document.addEventListener('beforeunload', () => { state.lastSeen = Date.now(); saveGame(); });
@@ -3027,10 +3032,13 @@ document.addEventListener('beforeunload', () => { state.lastSeen = Date.now(); s
 //  OFFLINE PROGRESS
 // ═══════════════════════════════════════
 const MAX_OFFLINE_SECONDS = 8 * 3600;
+let _offlineApplied = false; // guard against double-run on login (local load + cloud load)
 function applyOfflineProgress() {
+    if (_offlineApplied) return;
     if (!state.lastSeen) return;
     const maxOffline = hasCodex('R3') ? 12 * 3600 : 8 * 3600;
     const elapsed = Math.min((Date.now() - state.lastSeen) / 1000, maxOffline);
+    _offlineApplied = true;
     state.lastSeen = 0;
     if (elapsed < 60) return;
     const sps = getSps(); if (sps <= 0) return;
