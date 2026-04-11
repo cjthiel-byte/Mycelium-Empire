@@ -3093,10 +3093,11 @@ document.getElementById('reset-view-btn').addEventListener('click', () => {
     let startY = 0, pulling = false;
 
     document.addEventListener('touchstart', e => {
-        if (window.scrollY === 0 && e.touches.length === 1) {
-            startY = e.touches[0].clientY;
-            pulling = true;
-        }
+        // Only start PTR when dragging from the header — prevents false triggers
+        // on scrollable game panels where scrollY is always 0
+        if (!e.target.closest('#page-header') || e.touches.length !== 1) return;
+        startY = e.touches[0].clientY;
+        pulling = true;
     }, { passive: true });
 
     document.addEventListener('touchmove', e => {
