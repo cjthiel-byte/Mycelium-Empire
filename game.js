@@ -1231,6 +1231,11 @@ function toggleSporulatePanel() {
     state.showSporulatePanel = !state.showSporulatePanel;
     if (!state.showSporulatePanel) state.pendingBiomeChoice = null;
     updateSporulateUI();
+    if (state.showSporulatePanel && window.innerWidth <= 640) {
+        setTimeout(() => {
+            document.getElementById('spor-confirm-btns')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
 }
 function selectBiomeChoice(idx) { state.pendingBiomeChoice = idx; updateSporulateUI(); }
 function doSporulate() {
@@ -3072,6 +3077,60 @@ function applyOfflineProgress() {
         // Also reset the right panel to its top
         rightPanel.scrollTo({ top: 0, behavior: 'smooth' });
     });
+})();
+
+// ═══════════════════════════════════════
+//  ZOOM RESET (mobile)
+// ═══════════════════════════════════════
+(function setupZoomReset() {
+    if (!window.visualViewport) return;
+    const btn = document.getElementById('zoom-reset-btn');
+    function checkZoom() {
+        btn.classList.toggle('visible', window.visualViewport.scale > 1.05);
+    }
+    window.visualViewport.addEventListener('resize', checkZoom);
+    btn.addEventListener('click', () => {
+        const vp = document.querySelector('meta[name=viewport]');
+        // Snap to scale 1 by briefly locking maximum-scale, then restore
+        vp.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+        setTimeout(() => {
+            vp.content = 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover';
+        }, 50);
+    }, { passive: true });
+})();
+
+// ═══════════════════════════════════════
+//  PULL TO REFRESH (mobile)
+// ═══════════════════════════════════════
+(function setupPullToRefresh() {
+    if (!('ontouchstart' in window)) return;
+    const indicator = document.getElementById('ptr-indicator');
+    let startY = 0, pulling = false;
+
+    document.addEventListener('touchstart', e => {
+        if (window.scrollY === 0 && e.touches.length === 1) {
+            startY = e.touches[0].clientY;
+            pulling = true;
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+        if (!pulling) return;
+        const dy = e.touches[0].clientY - startY;
+        if (dy <= 0) { pulling = false; indicator.style.top = ''; return; }
+        const pull = Math.min(dy * 0.5, 60);
+        indicator.style.top = (pull - 50) + 'px';
+        indicator.classList.toggle('ptr-ready', dy > 80);
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+        if (!pulling) return;
+        const dy = e.changedTouches[0].clientY - startY;
+        indicator.style.top = '';
+        indicator.classList.remove('ptr-ready');
+        pulling = false;
+        if (dy > 80) location.reload();
+    }, { passive: true });
 })();
 
 // ═══════════════════════════════════════
