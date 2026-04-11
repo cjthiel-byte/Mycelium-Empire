@@ -6,6 +6,9 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Mycelium Empire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 
   <!-- Firebase SDK (compat mode — works without a build system) -->
@@ -27,12 +30,45 @@
   <!-- Achievement toasts -->
   <div id="ach-toast-container"></div>
 
+  <!-- End-game overlay -->
+  <div id="endgame-overlay" aria-hidden="true">
+    <div id="endgame-modal">
+      <div id="endgame-symbol">🌌</div>
+      <div id="endgame-title">Transcendence</div>
+      <div id="endgame-text">
+        <p>There is no word for what you are now.</p>
+        <p>You began as a spore — a single point of contact on a dying log at the edge of a forest that no longer exists. You grew. You consumed. You scattered. You returned.</p>
+        <p>Every biome. Every bond. Every thread of the network. The codex is complete. The producers number in the hundreds. The spores are beyond counting.</p>
+        <p>The universe does not notice. The universe is inside you now.</p>
+        <p>There is nothing left to become. There is only growth.</p>
+      </div>
+      <button id="endgame-dismiss" type="button">Continue</button>
+    </div>
+  </div>
+
+  <div id="congrats-overlay" aria-hidden="true">
+    <div id="congrats-modal">
+      <div id="congrats-symbol">🏆</div>
+      <div id="congrats-title">You Beat Mycelium Empire!</div>
+      <div id="congrats-text">
+        <p>Congratulations — you've reached true Transcendence.</p>
+        <p>The empire is complete. But the spores never stop spreading.</p>
+        <p>Keep playing to climb the <strong>Leaderboard</strong>, unlock every <strong>Achievement</strong>, and discover how far your empire can truly grow.</p>
+      </div>
+      <button id="congrats-dismiss" type="button">Keep Playing</button>
+    </div>
+  </div>
+
   <!-- Scroll-to-top (right panel) -->
   <button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
 
   <!-- ── Page header ── -->
   <div id="page-header">
+    <div id="lb-area">
+      <button id="lb-btn" aria-label="Leaderboard">🏅</button>
+    </div>
     <h1>🍄 Mycelium Empire</h1>
+    <span id="header-save-status"></span>
     <div id="profile-area">
       <button id="settings-btn" aria-label="Options">⚙️</button>
       <button id="profile-btn" aria-label="Account">
@@ -159,7 +195,102 @@
         </label>
       </div>
 
+      <!-- Void Gold theme toggle — shown only after endgame -->
+      <div class="settings-row" id="settings-gold-row" style="display:none">
+        <div class="settings-row-info">
+          <span class="settings-row-label">✨ Void Gold Theme</span>
+          <span class="settings-row-desc">Transcended void gold or biome colors</span>
+        </div>
+        <label class="settings-toggle-wrap">
+          <input type="checkbox" id="opt-gold-theme" />
+          <span class="settings-toggle-track"><span class="settings-toggle-thumb"></span></span>
+        </label>
+      </div>
+
+      <!-- Sound toggle -->
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <span class="settings-row-label">🔊 Sound Effects</span>
+          <span class="settings-row-desc">Click, pulse, achievement & event sounds</span>
+        </div>
+        <label class="settings-toggle-wrap">
+          <input type="checkbox" id="opt-sound" />
+          <span class="settings-toggle-track"><span class="settings-toggle-thumb"></span></span>
+        </label>
+      </div>
+
       <div class="settings-note">Settings are saved with your game</div>
+
+      <!-- Dev Tools — shown only on localhost via JS -->
+      <div id="dev-section" style="display:none">
+        <div class="settings-section-hdr" style="margin-top:16px">🛠 Dev Tools</div>
+
+        <div class="dev-row">
+          <button class="dev-btn" id="dev-endgame-btn" type="button">🌌 Trigger End-Game</button>
+        </div>
+
+        <div class="dev-row">
+          <button class="dev-btn" id="dev-offline-btn" type="button">🌙 Show Offline Modal</button>
+        </div>
+
+        <div class="dev-row">
+          <span class="dev-label">Essence</span>
+          <div class="dev-input-group">
+            <input class="dev-input" type="number" id="dev-essence-amt" value="1000" min="1" />
+            <button class="dev-btn dev-btn-sm" id="dev-essence-btn" type="button">Add</button>
+          </div>
+        </div>
+
+        <div class="dev-row">
+          <span class="dev-label">Spores</span>
+          <div class="dev-input-group">
+            <input class="dev-input" type="number" id="dev-spores-amt" value="1000000000" min="1" />
+            <button class="dev-btn dev-btn-sm" id="dev-spores-btn" type="button">Add</button>
+          </div>
+        </div>
+
+        <div class="dev-row">
+          <span class="dev-label">Prestige</span>
+          <div class="dev-input-group">
+            <input class="dev-input" type="number" id="dev-prestige-amt" value="10" min="0" max="99" />
+            <button class="dev-btn dev-btn-sm" id="dev-prestige-btn" type="button">Set</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Offline progress modal ── -->
+  <div id="offline-overlay" aria-hidden="true">
+    <div id="offline-modal" role="dialog" aria-modal="true" aria-label="Offline Progress">
+      <div id="offline-modal-icon">🌙</div>
+      <div id="offline-modal-title">Welcome Back!</div>
+      <div id="offline-modal-time"></div>
+      <div id="offline-modal-earned"></div>
+      <button id="offline-modal-close" type="button">Continue</button>
+    </div>
+  </div>
+
+  <!-- ── Leaderboard modal ── -->
+  <div id="reset-overlay" aria-hidden="true">
+    <div id="reset-modal" role="dialog" aria-modal="true" aria-label="Reset Game">
+      <div id="reset-modal-icon">🗑</div>
+      <div id="reset-modal-title">Reset Everything?</div>
+      <div id="reset-modal-desc">This will erase all spores, producers, upgrades, research, achievements, and prestige progress. <strong>This cannot be undone.</strong></div>
+      <div id="reset-modal-btns">
+        <button id="reset-cancel-btn" type="button">Cancel</button>
+        <button id="reset-confirm-btn" type="button">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="lb-overlay" aria-hidden="true">
+    <div id="lb-modal" role="dialog" aria-modal="true" aria-label="Leaderboard">
+      <div class="lb-modal-header">
+        <div class="lb-modal-title">🏅 Leaderboard</div>
+        <button id="lb-modal-close" aria-label="Close">✕</button>
+      </div>
+      <div id="lb-modal-wrap"></div>
     </div>
   </div>
 
@@ -196,10 +327,16 @@
           <div id="strip-bond-dot" class="spill-bond-dot" style="display:none"></div>
           <span class="spill-chev">▼</span>
         </div>
+        <div class="spill spill-mod" id="spill-mod" onclick="toggleStatusPanel('mod')" style="display:none">
+          <span id="strip-mod-icon">🎲</span>
+          <span class="spill-text" id="strip-mod-text">Modifier</span>
+          <span class="spill-chev">▼</span>
+        </div>
       </div>
       <div class="spanel" id="spanel-season"></div>
       <div class="spanel" id="spanel-event"></div>
       <div class="spanel" id="spanel-bond"></div>
+      <div class="spanel" id="spanel-mod"></div>
       <svg id="biome-path" height="32" viewBox="0 0 260 32" xmlns="http://www.w3.org/2000/svg"
         style="display:none"></svg>
       <div id="btn-wrap">
@@ -224,6 +361,11 @@
           <div id="spor-biome-picker">
             <div class="spor-biome-picker-label">🌍 Choose destination biome</div>
             <div id="spor-biome-grid"></div>
+          </div>
+          <div id="spor-modifier-row">
+            <div class="spor-row spor-mod-label">Next run modifier: <strong id="spor-mod-name">—</strong></div>
+            <div id="spor-mod-desc" class="spor-row spor-mod-desc-row"></div>
+            <button id="spor-reroll-btn" type="button" style="display:none" onclick="rerollModifier()">🎲 Reroll Modifier</button>
           </div>
           <div class="spor-row warn">Spores, producers, upgrades &amp; research reset. Achievements &amp; prestige
             multiplier are permanent.</div>
