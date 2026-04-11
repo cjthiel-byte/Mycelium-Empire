@@ -3085,11 +3085,7 @@ function applyOfflineProgress() {
 (function setupZoomReset() {
     if (!window.visualViewport) return;
     const btn = document.getElementById('zoom-reset-btn');
-    const vpMeta = document.querySelector('meta[name=viewport]');
-    let resetting = false;
-
     function updateZoomBtn() {
-        if (resetting) return; // ignore events during the snap sequence
         const vv = window.visualViewport;
         const zoomed = vv.scale > 1.05;
         btn.classList.toggle('visible', zoomed);
@@ -3107,15 +3103,9 @@ function applyOfflineProgress() {
     window.visualViewport.addEventListener('scroll', updateZoomBtn);
 
     btn.addEventListener('click', () => {
-        resetting = true;
-        // Setting maximum-scale=1 forces iOS to snap zoom back to 1×
-        vpMeta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
-        // Wait long enough for iOS to commit the zoom snap, then restore pinch-zoom
-        setTimeout(() => {
-            vpMeta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover';
-            resetting = false;
-            updateZoomBtn();
-        }, 400);
+        // iOS doesn't allow programmatic zoom reset — save state and reload instead
+        saveGame();
+        location.reload();
     });
 })();
 
