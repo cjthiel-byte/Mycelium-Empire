@@ -1957,6 +1957,18 @@ white-space: nowrap;
     line-height: 1.4;
 }
 
+@media (max-width: 640px) {
+    /* Move toasts to bottom on mobile so they don't cover the header */
+    #ach-toast-container {
+        top: auto;
+        bottom: max(env(safe-area-inset-bottom), 5rem);
+        right: 50%;
+        transform: translateX(50%);
+        max-width: calc(100vw - 2rem);
+        align-items: center;
+    }
+}
+
 /* ── Unlocked hidden achievement card in Goals tab ── */
 .ach-card.golden-card {
     border-color: #c9a22740;
