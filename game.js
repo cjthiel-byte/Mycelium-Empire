@@ -1812,7 +1812,7 @@ function buildResearch() {
             const card = document.createElement('div'); card.className = 'rn-card' + (bought ? ' bought' : '') + ((!pre && !bought) ? ' locked' : ''); card.dataset.rid = def.id;
             card.innerHTML = `<div class="rn-name">${def.name}</div><div class="rn-desc">${def.desc}</div><div class="rn-cost">${bought ? '' : fmt(scaledCost) + ' sp'}</div>`;
             if (bought) { const b = document.createElement('div'); b.className = 'rn-bought-badge'; b.textContent = '✦ Researched'; card.appendChild(b); }
-            else if (pre) { const btn = document.createElement('button'); btn.className = 'rn-btn'; btn.type = 'button'; btn.textContent = 'Research'; btn.dataset.rcost = scaledCost; btn.disabled = state.spores < scaledCost; btn.addEventListener('click', () => buyResearch(def.id)); card.appendChild(btn); }
+            else if (pre) { const btn = document.createElement('button'); btn.className = 'rn-btn'; btn.type = 'button'; btn.textContent = 'Research'; btn.dataset.rcost = def.cost; btn.disabled = state.spores < scaledCost; btn.addEventListener('click', () => buyResearch(def.id)); card.appendChild(btn); }
             else { const lk = document.createElement('div'); lk.style.cssText = 'font-size:10px;color:#3a5e42;margin-top:3px'; lk.textContent = 'Requires: ' + def.prereqs.map(pid => RESEARCH_DEF.find(r => r.id === pid)?.name || pid).join(', '); card.appendChild(lk); }
             row.appendChild(card);
         });
@@ -1840,10 +1840,17 @@ function updateBiomePath() { /* biome stepper removed — current biome shown in
 // ═══════════════════════════════════════
 let buyQty = 1;
 
+// Total cost to buy n units of pr, including all active multipliers
+function getTotalCost(pr, n) {
+    const mult = getResearchMults().cost * getCodexCostMult() * getModifierCostMult();
+    let o = pr.owned, total = 0;
+    for (let i = 0; i < n; i++) total += Math.ceil(pr.baseCost * Math.pow(1.15, Math.min(o++, 100)) * mult);
+    return total;
+}
 function maxAffordable(pr) {
-    const cost = getCost(pr); if (state.spores < cost) return 0;
+    if (state.spores < getCost(pr)) return 0;
     let n = 0, lo = 1, hi = 10000;
-    while (lo <= hi) { const mid = Math.floor((lo + hi) / 2); let total = 0, o = pr.owned; for (let i = 0; i < mid; i++)total += Math.ceil(pr.baseCost * Math.pow(1.15, Math.min(o++, 100)) * getResearchMults().cost); if (total <= state.spores) { n = mid; lo = mid + 1; } else hi = mid - 1; }
+    while (lo <= hi) { const mid = Math.floor((lo + hi) / 2); if (getTotalCost(pr, mid) <= state.spores) { n = mid; lo = mid + 1; } else hi = mid - 1; }
     return n;
 }
 
@@ -1879,8 +1886,8 @@ function updateProducers() {
         const btn = document.querySelector(`#tab-producers [data-id="${pr.id}"]`); if (!btn) return;
         const singleCost = getCost(pr);
         let totalCost = singleCost, qty = 1, can = false;
-        if (buyQty === 'max') { qty = maxAffordable(pr); if (qty === 0) { totalCost = singleCost; can = false; } else { let o = pr.owned, total = 0; for (let i = 0; i < qty; i++)total += Math.ceil(pr.baseCost * Math.pow(1.15, Math.min(o++, 100)) * getResearchMults().cost); totalCost = total; can = true; } }
-        else { qty = buyQty; let o = pr.owned, total = 0; for (let i = 0; i < qty; i++)total += Math.ceil(pr.baseCost * Math.pow(1.15, Math.min(o++, 100)) * getResearchMults().cost); totalCost = total; can = state.spores >= total; }
+        if (buyQty === 'max') { qty = maxAffordable(pr); if (qty === 0) { totalCost = singleCost; can = false; } else { totalCost = getTotalCost(pr, qty); can = true; } }
+        else { qty = buyQty; totalCost = getTotalCost(pr, qty); can = state.spores >= totalCost; }
         btn.classList.toggle('disabled', !can); btn.classList.toggle('can-afford', can);
         btn.querySelector('[data-cost]').textContent = buyQty === 1 ? fmt(singleCost) + ' sp' : fmt(totalCost) + ' sp (×' + (buyQty === 'max' ? qty : buyQty) + ')';
         const sps = pr.baseSps * getSeasonMult(pr.id) * BIOMES[state.biomeIdx].prodMult * getPrestigeMult() * getResearchMults().prod * getAchievementMults().prod;
@@ -1895,9 +1902,7 @@ function buyProducer(id) {
     if (qty === 0) return;
     // For fixed quantities, verify the full cost is affordable before buying anything
     if (buyQty !== 'max') {
-        let o = pr.owned, total = 0;
-        for (let i = 0; i < qty; i++) total += Math.ceil(pr.baseCost * Math.pow(1.15, Math.min(o++, 100)) * getResearchMults().cost);
-        if (state.spores < total) return;
+        if (state.spores < getTotalCost(pr, qty)) return;
     }
     const _sb = state.spores;
     for (let i = 0; i < qty; i++) { const cost = getCost(pr); if (state.spores < cost) break; state.spores -= cost; pr.owned++; }
@@ -2775,6 +2780,8 @@ function buyCodex(id, cost) {
     if (state.essence < cost || state.codexPurchased.includes(id)) return;
     state.essence -= cost;
     state.codexPurchased.push(id);
+    // P1 hides the in-run pulse_unlock upgrade, so unlock hivemind immediately for the current run
+    if (id === 'P1') state.hivemindUnlocked = true;
     invalidateMults();
     _lastEssenceKey = '';
     buildEssence();
@@ -2795,6 +2802,7 @@ function switchTab(tab) {
 // ═══════════════════════════════════════
 const canvas = document.getElementById('mycelium-canvas'), ctx = canvas.getContext('2d');
 let branches = [], animTime = 0, lastTotal = -1, sporeParticles = [];
+let _animPaused = false, _lastFrameTime = 0, _lastCanvasW = 0, _lastCanvasH = 0, _cachedFade = null;
 let _biomeColors = BIOMES[0].colors;
 
 function makeBranch(x1, y1, angle, len, depth, delay) { return { x1, y1, angle, len, depth, delay, progress: 0, children: [] }; }
@@ -2880,12 +2888,18 @@ function drawBranch(b, t, alpha) {
     });
 }
 
-function animateMycelium() {
+function animateMycelium(now) {
+    if (_animPaused) return;
+    // Cap to ~30fps
+    if (now - _lastFrameTime < 33) { requestAnimationFrame(animateMycelium); return; }
+    _lastFrameTime = now;
+
     const W = canvas.offsetWidth || 340, H = canvas.offsetHeight || 340;
     const total = state.producers.reduce((s, x) => s + x.owned, 0);
     const maxArms = Math.min(5 + Math.floor(total / 2), 50);
     if (lastTotal === -1) {
         canvas.width = W; canvas.height = H;
+        _lastCanvasW = W; _lastCanvasH = H; _cachedFade = null;
         seedBranches(total); animTime = 0; lastTotal = total;
         sporeParticles = [];
     } else if (total > lastTotal && branches.length < maxArms) {
@@ -2895,8 +2909,12 @@ function animateMycelium() {
     } else {
         lastTotal = total;
     }
-    animTime += 0.016;
-    canvas.width = W; canvas.height = H;
+    animTime += 0.033;
+    // Only resize canvas when dimensions actually change
+    if (W !== _lastCanvasW || H !== _lastCanvasH) {
+        canvas.width = W; canvas.height = H;
+        _lastCanvasW = W; _lastCanvasH = H; _cachedFade = null;
+    }
     ctx.clearRect(0, 0, W, H);
     const cx = W / 2, cy = H / 2, cp = 0.5 + 0.5 * Math.sin(animTime * 2.5);
 
@@ -2942,13 +2960,15 @@ function animateMycelium() {
     });
 
     // Radial fade — branches dissolve to transparent instead of hard-clipping
-    const fadeR0 = Math.min(W, H) * 0.28;
-    const fadeR1 = Math.min(W * 0.54, H * 0.9);
-    const fade = ctx.createRadialGradient(cx, cy, fadeR0, cx, cy, fadeR1);
-    fade.addColorStop(0, 'rgba(0,0,0,1)');
-    fade.addColorStop(1, 'rgba(0,0,0,0)');
+    if (!_cachedFade) {
+        const fadeR0 = Math.min(W, H) * 0.28;
+        const fadeR1 = Math.min(W * 0.54, H * 0.9);
+        _cachedFade = ctx.createRadialGradient(cx, cy, fadeR0, cx, cy, fadeR1);
+        _cachedFade.addColorStop(0, 'rgba(0,0,0,1)');
+        _cachedFade.addColorStop(1, 'rgba(0,0,0,0)');
+    }
     ctx.globalCompositeOperation = 'destination-in';
-    ctx.fillStyle = fade;
+    ctx.fillStyle = _cachedFade;
     ctx.fillRect(0, 0, W, H);
     ctx.globalCompositeOperation = 'source-over';
 
@@ -3006,16 +3026,21 @@ let msgTimer = 0;
 function showMessage() { tick(MESSAGES[state.msgIdx % MESSAGES.length]); }
 
 const DT = 0.05;
+let _fastTick = 0;
 setInterval(() => {
     const sps = getSps(); if (sps > 0) { const g = sps * DT; state.spores += g; state.totalEarned += g; if (sps > (state.peakSpsThisRun || 0)) state.peakSpsThisRun = sps; }
     if (getRunMod()?.id === 'void_tithe') { const tithe = state.spores * 0.03 * DT; state.spores = Math.max(0, state.spores - tithe); }
     tickSeason(DT); tickSymbiosis(DT); tickEvents(DT);
-    updateStats(); updateProducers();
-    buildUpgrades(); updateUpgrades();
-    updateSymbiosis(); updateSporulateUI(); updateBondAlert();
-    checkAchievements(); buildGoals();
-    buildCodex(); buildResearch(); updateResearch();
-    updateBiomePath(); buildStats(); buildEssence();
+    updateStats();
+    // Producer costs/affordability updates 5×/s (every 4th tick) — saves querySelector churn
+    if (++_fastTick % 4 === 0) {
+        updateProducers();
+        buildUpgrades(); updateUpgrades();
+        updateSymbiosis(); updateSporulateUI(); updateBondAlert();
+        checkAchievements(); buildGoals();
+        buildCodex(); buildResearch(); updateResearch();
+        updateBiomePath(); buildStats(); buildEssence();
+    }
 }, 50);
 setInterval(() => { if (++msgTimer % 8 === 0 && !state.activeEvent) showMessage(); checkTutorial(); checkBiomeObjectives(); checkEndgame(); }, 1000);
 setInterval(saveGame, 30000);
@@ -3516,4 +3541,8 @@ if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
     });
 }
 applyOfflineProgress();
+document.addEventListener('visibilitychange', () => {
+    _animPaused = document.hidden;
+    if (!_animPaused) requestAnimationFrame(animateMycelium);
+});
 requestAnimationFrame(animateMycelium);
