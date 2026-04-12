@@ -1386,6 +1386,14 @@ function onSeasonChange() {
 function updateSeasonBar() {
     const biome = BIOMES[state.biomeIdx], season = SEASONS[state.seasonIdx];
     const ns = biome.noSeasons || !state.settings.seasonsEnabled;
+    const seasonPill = document.getElementById('spill-season');
+    // Hide pill entirely when seasons are disabled (settings off or biome has no seasons)
+    if (!state.settings.seasonsEnabled) {
+        seasonPill.style.display = 'none';
+        if (_openPanel === 'season') { document.getElementById('spanel-season').classList.remove('open'); seasonPill.classList.remove('s-active'); _openPanel = null; }
+        return;
+    }
+    seasonPill.style.display = '';
     const rem = ns ? 0 : Math.max(0, Math.ceil(season.duration - state.seasonTimer));
     const m = Math.floor(rem / 60), sec = rem % 60;
     // Update season pill
@@ -1414,20 +1422,14 @@ function updateSeasonBar() {
 // ═══════════════════════════════════════
 function tickEvents(dt) {
     const pill = document.getElementById('spill-event');
-    // If events are disabled (settings or deep_drought modifier), clear any active event and go dormant
+    // If events are disabled (settings or deep_drought modifier), hide pill entirely
     if (!state.settings.eventsEnabled || getRunMod()?.id === 'deep_drought') {
-        if (state.activeEvent) {
-            state.activeEvent = null;
-            pill.classList.add('inactive');
-            pill.style.borderColor = '';
-            document.getElementById('strip-event-icon').textContent = '·';
-            document.getElementById('strip-event-text').textContent = 'Events off';
-            if (_openPanel === 'event') { document.getElementById('spanel-event').classList.remove('open'); pill.classList.remove('s-active'); _openPanel = null; }
-        } else {
-            document.getElementById('strip-event-text').textContent = 'Events off';
-        }
+        state.activeEvent = null;
+        pill.style.display = 'none';
+        if (_openPanel === 'event') { document.getElementById('spanel-event').classList.remove('open'); pill.classList.remove('s-active'); _openPanel = null; }
         return;
     }
+    pill.style.display = '';
     if (state.activeEvent) {
         // ── Decision events: show choice UI while pending ──────────────────
         if (state.activeEvent.decisionPending) {
