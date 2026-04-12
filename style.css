@@ -359,12 +359,68 @@ white-space: nowrap;
     color: #9FE1CB;
 }
 
-/* Biome chip — bottom-left of left panel, text-sized */
+/* Biome chip row — biome left, run modifier right */
 #biome-bar {
-    align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    gap: 8px;
+}
+
+#biome-bar-left {
     display: flex;
     flex-direction: column;
     gap: 3px;
+}
+
+#mod-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+#mod-chip-label {
+    font-size: 10px;
+    color: #3a5e42;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding-right: 2px;
+}
+
+#mod-chip-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid #1D9E7530;
+    background: #0a1209;
+    position: relative;
+}
+
+#mod-chip-pill #mod-chip-emoji {
+    font-size: 13px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+#mod-chip-pill #mod-chip-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: #6a9d75;
+}
+
+/* Mod tooltip opens upward, anchors right */
+#mod-tip-wrap .info-tooltip {
+    bottom: calc(100% + 6px);
+    top: auto;
+    right: 0;
+    left: auto;
 }
 
 #biome-bar-label {

@@ -1350,7 +1350,7 @@ function updateSporulateUI() {
 // ═══════════════════════════════════════
 let _openPanel = null;
 function toggleStatusPanel(id) {
-    const panels = ['season', 'event', 'bond', 'mod'];
+    const panels = ['season', 'event', 'bond'];
     const isOpen = _openPanel === id;
     panels.forEach(p => {
         document.getElementById('spanel-' + p).classList.remove('open');
@@ -2108,18 +2108,16 @@ function updateModifierPill() {
     const key = mod?.id || 'none';
     if (key === _lastModKey) return;
     _lastModKey = key;
-    const pill = document.getElementById('spill-mod');
-    const panel = document.getElementById('spanel-mod');
-    if (!mod) { pill.style.display = 'none'; return; }
-    pill.style.display = '';
+    const chip = document.getElementById('mod-chip');
+    if (!mod) { chip.style.display = 'none'; return; }
+    chip.style.display = '';
     const typeColor = mod.type === 'buff' ? '#5DCAA5' : mod.type === 'twist' ? '#EF9F27' : '#C0524A';
-    document.getElementById('strip-mod-icon').textContent = mod.emoji;
-    document.getElementById('strip-mod-text').textContent = mod.name;
-    pill.style.borderColor = typeColor + '60';
-    let inner = panel.querySelector('.spanel-inner');
-    if (!inner) { inner = document.createElement('div'); inner.className = 'spanel-inner'; panel.appendChild(inner); }
     const typeLabel = mod.type === 'buff' ? '✦ Buff' : mod.type === 'twist' ? '⚡ Twist' : '☠ Handicap';
-    inner.innerHTML = `<div class="spanel-title" style="color:${typeColor}">${mod.emoji} ${mod.name} <span class="chain-badge" style="background:${typeColor}22;color:${typeColor}">${typeLabel}</span></div><div class="spanel-desc">${mod.desc}</div>`;
+    document.getElementById('mod-chip-emoji').textContent = mod.emoji;
+    document.getElementById('mod-chip-name').textContent = mod.name;
+    document.getElementById('mod-chip-name').style.color = typeColor;
+    document.getElementById('mod-chip-pill').style.borderColor = typeColor + '60';
+    document.getElementById('mod-tooltip-text').textContent = typeLabel + '\n' + mod.desc;
 }
 
 // ═══════════════════════════════════════

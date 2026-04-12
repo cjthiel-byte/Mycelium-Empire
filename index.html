@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=15" />
+  <link rel="stylesheet" href="style.css?v=16" />
 
   <!-- Firebase SDK (compat mode — works without a build system) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -339,16 +339,10 @@
           <div id="strip-bond-dot" class="spill-bond-dot" style="display:none"></div>
           <span class="spill-chev">▼</span>
         </div>
-        <div class="spill spill-mod" id="spill-mod" onclick="toggleStatusPanel('mod')" style="display:none">
-          <span id="strip-mod-icon">🎲</span>
-          <span class="spill-text" id="strip-mod-text">Modifier</span>
-          <span class="spill-chev">▼</span>
-        </div>
       </div>
       <div class="spanel" id="spanel-season"></div>
       <div class="spanel" id="spanel-event"></div>
       <div class="spanel" id="spanel-bond"></div>
-      <div class="spanel" id="spanel-mod"></div>
       <svg id="biome-path" height="32" viewBox="0 0 260 32" xmlns="http://www.w3.org/2000/svg"
         style="display:none"></svg>
       <div id="btn-wrap">
@@ -388,14 +382,27 @@
         </div>
       </div>
       <div id="biome-bar">
-        <span id="biome-bar-label">Current Biome</span>
-        <div id="biome-bar-chip">
-          <span id="biome-bar-emoji"></span>
-          <span id="biome-bar-name"></span>
-          <span class="info-tip" id="biome-tip-wrap">
-            <span class="info-icon">ⓘ</span>
-            <span class="info-tooltip" id="biome-tooltip-text"></span>
-          </span>
+        <div id="biome-bar-left">
+          <span id="biome-bar-label">Current Biome</span>
+          <div id="biome-bar-chip">
+            <span id="biome-bar-emoji"></span>
+            <span id="biome-bar-name"></span>
+            <span class="info-tip" id="biome-tip-wrap">
+              <span class="info-icon">ⓘ</span>
+              <span class="info-tooltip" id="biome-tooltip-text"></span>
+            </span>
+          </div>
+        </div>
+        <div id="mod-chip" style="display:none">
+          <span id="mod-chip-label">Run Modifier</span>
+          <div id="mod-chip-pill">
+            <span id="mod-chip-emoji">🎲</span>
+            <span id="mod-chip-name">Modifier</span>
+            <span class="info-tip" id="mod-tip-wrap">
+              <span class="info-icon">ⓘ</span>
+              <span class="info-tooltip" id="mod-tooltip-text"></span>
+            </span>
+          </div>
         </div>
       </div>
       <div id="save-info">Auto-saves every 30s</div>
