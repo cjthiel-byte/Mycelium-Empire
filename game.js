@@ -1818,8 +1818,24 @@ function buildResearch() {
         });
         c.appendChild(row);
     });
+    updateResearchTabBadge();
 }
-function updateResearch() { const scale = getPrestigeCostScale() * getModifierUpgradeCostMult(); document.querySelectorAll('#tab-research .rn-btn').forEach(btn => { const baseCost = Number(btn.dataset.rcost); const scaledCost = Math.ceil(baseCost * scale); btn.disabled = state.spores < scaledCost; }); }
+function updateResearch() {
+    const scale = getPrestigeCostScale() * getModifierUpgradeCostMult();
+    document.querySelectorAll('#tab-research .rn-btn').forEach(btn => { const baseCost = Number(btn.dataset.rcost); const scaledCost = Math.ceil(baseCost * scale); btn.disabled = state.spores < scaledCost; });
+    updateResearchTabBadge();
+}
+function updateResearchTabBadge() {
+    const scale = getPrestigeCostScale() * getModifierUpgradeCostMult();
+    const hasAffordable = RESEARCH_DEF.some(def => {
+        const sr = state.research.find(r => r.id === def.id);
+        if (sr?.bought) return false;
+        const prereqsMet = def.prereqs.every(pid => state.research.find(r => r.id === pid)?.bought);
+        if (!prereqsMet) return false;
+        return state.spores >= Math.ceil(def.cost * scale);
+    });
+    document.getElementById('tab-btn-research').classList.toggle('has-research', hasAffordable);
+}
 function buyResearch(id) {
     const def = RESEARCH_DEF.find(d => d.id === id), sr = state.research.find(r => r.id === id);
     const scaledCost = Math.ceil(def.cost * getPrestigeCostScale() * getModifierUpgradeCostMult());
@@ -2065,7 +2081,9 @@ function feedSymbiont(i) { const def = SYMBIONTS[i], sym = state.symbiosis[i]; i
 
 function updateBondTabBadge() {
     const hasAlert = state.symbiosis.some(sym => sym.hungry || sym.broken);
+    const canFormPact = !hasAlert && state.symbiosis.some((sym, i) => !sym.active && !sym.broken && state.spores >= SYMBIONTS[i].pactCost);
     document.getElementById('tab-btn-bonds').classList.toggle('has-alert', hasAlert);
+    document.getElementById('tab-btn-bonds').classList.toggle('has-bond-available', canFormPact);
 }
 
 let _lastBondAlertKey = '', _lastDecisionKey = '', _lastModKey = '';
@@ -2106,6 +2124,7 @@ function updateBondAlert() {
         });
         inner.innerHTML = html;
     }
+    updateBondTabBadge();
 }
 
 function updateModifierPill() {

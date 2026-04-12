@@ -754,12 +754,14 @@ white-space: nowrap;
 }
 
 /* Tab notification dots */
-#tab-btn-upgrades, #tab-btn-lore {
+#tab-btn-upgrades, #tab-btn-lore, #tab-btn-research, #tab-btn-bonds {
     position: relative;
 }
 
 #tab-btn-upgrades.has-upgrades::after,
-#tab-btn-lore.has-lore::after {
+#tab-btn-lore.has-lore::after,
+#tab-btn-research.has-research::after,
+#tab-btn-bonds.has-bond-available::after {
     content: '';
     position: absolute;
     top: 5px;
@@ -770,7 +772,9 @@ white-space: nowrap;
     border: 1.5px solid #0a1209;
     pointer-events: none;
 }
-#tab-btn-upgrades.has-upgrades::after {
+#tab-btn-upgrades.has-upgrades::after,
+#tab-btn-research.has-research::after,
+#tab-btn-bonds.has-bond-available::after {
     background: #5DCAA5;
 }
 #tab-btn-lore.has-lore::after {
