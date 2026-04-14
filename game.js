@@ -895,17 +895,17 @@ function saveGame() {
                 document.getElementById('save-info').textContent = '☁️ Saved ' + new Date().toLocaleTimeString();
                 document.getElementById('p-sync-status').textContent = 'Last saved: ' + new Date().toLocaleTimeString();
                 _showSaveIndicator();
-                // Update leaderboard entry alongside game save
-                db.collection('leaderboard').doc(currentUser.uid).set({
-                    username: currentUser.displayName || currentUsername || 'Unknown',
-                    allTimeSpores: allTimeTotal,
-                    prestigeCount: state.prestigeCount,
-                    lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
-                }).then(() => {
-                    _lbCache = null; _lbFetchedAt = 0;
-                    const lbWrap = document.getElementById('lb-modal-wrap');
-                    if (lbWrap && currentUser && db) fetchLeaderboard(lbWrap);
-                }).catch(() => { });
+                // Leaderboard disabled
+                // db.collection('leaderboard').doc(currentUser.uid).set({
+                //     username: currentUser.displayName || currentUsername || 'Unknown',
+                //     allTimeSpores: allTimeTotal,
+                //     prestigeCount: state.prestigeCount,
+                //     lastSaved: firebase.firestore.FieldValue.serverTimestamp(),
+                // }).then(() => {
+                //     _lbCache = null; _lbFetchedAt = 0;
+                //     const lbWrap = document.getElementById('lb-modal-wrap');
+                //     if (lbWrap && currentUser && db) fetchLeaderboard(lbWrap);
+                // }).catch(() => { });
             })
             .catch(() => { document.getElementById('save-info').textContent = 'Saved locally ' + new Date().toLocaleTimeString(); _showSaveIndicator(); });
     } else {
