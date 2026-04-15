@@ -74,7 +74,7 @@
     <span id="header-save-status"></span>
     <div id="profile-area">
       <button id="settings-btn" aria-label="Options">⚙️</button>
-      <button id="profile-btn" aria-label="Account">
+      <button id="profile-btn" aria-label="Account" style="display:none">
         <span id="profile-btn-icon">👤</span>
         <span id="profile-btn-label">Sign In</span>
       </button>
@@ -233,6 +233,30 @@
 
       <div class="settings-note">Settings are saved with your game</div>
 
+      <!-- Save Data -->
+      <div class="settings-section-hdr" style="margin-top:16px">Save Data</div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <span class="settings-row-label">📤 Export Save</span>
+          <span class="settings-row-desc">Copy your save to clipboard to back it up or transfer devices</span>
+        </div>
+        <button id="settings-export-btn" class="settings-action-btn" type="button">Export</button>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <span class="settings-row-label">📥 Import Save</span>
+          <span class="settings-row-desc">Paste a save code to restore your progress</span>
+        </div>
+        <button id="settings-import-toggle-btn" class="settings-action-btn" type="button">Import</button>
+      </div>
+      <div id="settings-import-panel" style="display:none; padding: 0 0 8px 0;">
+        <textarea id="settings-import-input" placeholder="Paste your save code here…" spellcheck="false" style="width:100%; min-height:80px; margin-top:6px; background:var(--bg2,#1a1a2e); color:var(--text,#e0e0e0); border:1px solid var(--border,#333); border-radius:6px; padding:8px; font-size:0.8rem; resize:vertical;"></textarea>
+        <div style="display:flex; gap:8px; margin-top:6px;">
+          <button class="p-submit" id="settings-import-confirm-btn" type="button" style="flex:1">Load Save</button>
+        </div>
+        <div id="settings-import-error" style="color:#ff6b6b; font-size:0.8rem; margin-top:4px;"></div>
+      </div>
+
       <!-- Dev Tools — shown only on localhost via JS -->
       <div id="dev-section" style="display:none">
         <div class="settings-section-hdr" style="margin-top:16px">🛠 Dev Tools</div>
@@ -268,6 +292,14 @@
             <button class="dev-btn dev-btn-sm" id="dev-prestige-btn" type="button">Set</button>
           </div>
         </div>
+      </div>
+
+      <!-- Ko-fi (shown in settings on mobile) -->
+      <div id="settings-kofi-row">
+        <a href="https://ko-fi.com/atlas_games" target="_blank" rel="noopener noreferrer" id="settings-kofi-btn">
+          <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="" style="width:18px;height:18px;object-fit:contain;">
+          Support on Ko-fi
+        </a>
       </div>
     </div>
   </div>

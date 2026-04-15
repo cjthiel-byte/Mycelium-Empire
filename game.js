@@ -3351,10 +3351,15 @@ function wireImportToggle(toggleId, panelId) {
     });
 }
 
-// Logged-in
+// Logged-in (profile modal, kept for reference)
 document.getElementById('p-export-btn').addEventListener('click', exportSave);
 wireImportToggle('p-import-toggle-btn', 'p-import-panel');
 document.getElementById('p-import-confirm-btn').addEventListener('click', () => importSave('p-import-input', 'p-import-error'));
+
+// Settings modal — export / import (no login required)
+document.getElementById('settings-export-btn').addEventListener('click', exportSave);
+wireImportToggle('settings-import-toggle-btn', 'settings-import-panel');
+document.getElementById('settings-import-confirm-btn').addEventListener('click', () => importSave('settings-import-input', 'settings-import-error'));
 
 // Allow Enter key in auth forms
 document.getElementById('p-password-login').addEventListener('keydown', e => { if (e.key === 'Enter') doSignIn(); });

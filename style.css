@@ -2873,6 +2873,8 @@ white-space: nowrap;
     padding: 20px;
     width: 300px;
     max-width: calc(100vw - 1.5rem);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
     margin-top: 44px;
     box-shadow: 0 8px 32px #00000080;
 }
@@ -4124,6 +4126,42 @@ body.transcended .particle.dot {
     bottom: 16px;
     right: 16px;
     z-index: 9999;
+}
+
+/* Ko-fi in settings modal — desktop: hidden, mobile: visible */
+#settings-kofi-row {
+    display: none;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+}
+
+#settings-kofi-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    background: #ff5e5b;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+#settings-kofi-btn:hover {
+    background: #ff3b38;
+}
+
+@media (max-width: 600px) {
+    #kofi-bar {
+        display: none;
+    }
+    #settings-kofi-row {
+        display: block;
+    }
 }
 
 #kofi-btn {
